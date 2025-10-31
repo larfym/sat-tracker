@@ -1,159 +1,190 @@
-#include "config.h"
-#include "servermanager.h"
-#include "main.h"
+#include "utils.h"
+#include "server.h"
+#include "currentMeasure.h"
+#include "reed.h"
+#include "motorDriver.h"
+#include "pid.h"
+#include "pins.h"
+
+static const char *TAG = "MAIN";
+
+unsigned long unixtime;
 
 Sgp4 satellite;
-TinyGPSPlus gps;
+Preferences config;
 HardwareSerial gpsSerial(GPS_UART);
+TinyGPSPlus gps;
 
-Preferences satellite_preferences;
-String estado = "";
-unsigned long unixtime = DEFAULT_UNIXTIME;
-volatile uint32_t gps_interval_sec = 0;
-double offset_az, offset_el;
+ServerHandler serverHandler(DEFAULT_SERVER_PORT);
+trackerStatus_t status;
+antennaPosition_t tar_angle, curr_angle, offsets;
 
-hw_timer_t *timer = NULL;
+void IRAM_ATTR reed_az_event_handler(void *arg);
+void IRAM_ATTR reed_el_event_handler(void *arg);
 
-bool gps_initialized = false, tle_initialized = false, time_initialized = false;
-bool gps_getData = false;
+/* Components*/
+MotorDriver motor_az(IN1_AZ, IN2_AZ, EN_AZ, LEDC_TIMER_0, LEDC_CHANNEL_0, PWM_FREQ_HZ);
+MotorDriver motor_el(IN1_EL, IN2_EL, EN_EL, LEDC_TIMER_0, LEDC_CHANNEL_1, PWM_FREQ_HZ);
+CurrentSensor i_el(ADC1_CHANNEL_0);
+CurrentSensor i_az(ADC1_CHANNEL_1);
+ReedSwitch reed_az(REED_AZ, PCNT_UNIT_0, PCNT_CHANNEL_0, -1, 1850, reed_az_event_handler);
+ReedSwitch reed_el(REED_EL, PCNT_UNIT_0, PCNT_CHANNEL_1, -1, 600, reed_el_event_handler);
 
-void initSecondTimer();
-void IRAM_ATTR secondTimer();
-unsigned long getUnixTimeFromGPS();
-void configSatellite();
+TaskHandle_t taskTracking_handle = NULL;
+
+void secondTimerISR(void *arg);
+
+void taskGPS(void *pvParameters);
+void taskTracking(void *pvParameters);
+void taskHome(void *pvParameters);
 
 void setup()
 {
-  Serial.begin(SERIAL_BAUDRATE);
-  gpsSerial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+    Serial.begin(SERIAL_BAUDRATE);
+    esp_log_level_set("*", ESP_LOG_INFO);
 
-  if (!SPIFFS.begin(true))
-  {
-    Serial.println("Error al montar SPIFFS");
-    ESP.restart();
-  }
+    gpsSerial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+    status.tle_inited = configSatellite(&satellite);
+    configSecondTimer(secondTimerISR);
 
-  configSatellite();
-  serverBegin();
-  serverHandle();
-  initSecondTimer();
+    xTaskCreate(taskGPS, "GPS Task", 2048, NULL, 10, NULL);
+    xTaskCreate(taskTracking, "TrackingTask", 8192, NULL, 15, &taskTracking_handle);
+
+    serverHandler.start();
 }
 
 void loop()
 {
-  if(gps_getData)
-  {
-    while(gpsSerial.available() > 0)
+    vTaskDelay(pdMS_TO_TICKS(1500));
+    if (status.tle_changed == true)
     {
-      gps.encode(gpsSerial.read());
+        if (configSatellite(&satellite))
+        {
+            status.tle_inited = true;
+        }
+        else
+        {
+            status.tle_inited = false;
+        }
+        status.tle_changed = false;
     }
-  }
+}
 
-  if(gps.time.isUpdated() && gps.date.isUpdated())
-  {
-    unixtime = getUnixTimeFromGPS();
-    time_initialized = true;
-  }
+void IRAM_ATTR secondTimerISR(void *arg)
+{
+    timer_group_clr_intr_status_in_isr(TIMER_GROUP_0, TIMER_1);
+    timer_group_enable_alarm_in_isr(TIMER_GROUP_0, TIMER_1);
 
-  if(gps.location.isUpdated())
-  {
-    if(gps.location.isValid())
+    unixtime++;
+
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    if (taskTracking_handle != NULL)
     {
-      gps_getData = false;
-      gps_initialized = true;
-      satellite.site(gps.location.lat(), gps.location.lng(), gps.altitude.meters());
-
-      Serial.print("Latitud: ");
-      Serial.println(gps.location.lat(), 6);
-      Serial.print("Longitud: ");
-      Serial.println(gps.location.lng(), 6);
-      Serial.print("Altitud: ");
-      Serial.print(gps.altitude.meters());
-      Serial.println(" m");
+        vTaskNotifyGiveFromISR(taskTracking_handle, &xHigherPriorityTaskWoken);
     }
-  }
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
 
-  if(tle_initialized)
-  {
-    if(gps_initialized)
+void taskTracking(void *pvParameters)
+{
+    for (;;)
     {
-      estado = "Trackeando";
-      satellite.findsat(unixtime);
-    }else
-    {
-      estado = "Obteniendo datos del GPS";
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        satellite.findsat(unixtime);
+        tar_angle.azimuth = satellite.satAz;
+        tar_angle.elevation = satellite.satEl;
     }
-  }else
-  {
-    configSatellite();
-    estado = "sin datos TLE";
-  }
-
 }
 
-void initSecondTimer()
+// TODO fix serial buffer update
+void taskGPS(void *pvParameters)
 {
-  timer = timerBegin(0, SECOND_TIMER_PREESCALER, true);
-  timerAttachInterrupt(timer, &secondTimer, true);
-  timerAlarmWrite(timer, SECOND_TIMER_ALARM_VALUE, true);
-  timerAlarmEnable(timer);
+    const TickType_t updatePeriodFix = pdMS_TO_TICKS(60000);
+    const TickType_t updatePeriodNoFix = pdMS_TO_TICKS(1000);
+
+    for (;;)
+    {
+
+        while (gpsSerial.available() > 0)
+        {
+            gps.encode(gpsSerial.read());
+        }
+
+        if (gps.time.isUpdated() && gps.date.isUpdated() && gps.time.isValid() && gps.date.isValid())
+        {
+            unixtime = getUnixTimeFromGPS(&gps);
+            ESP_LOGI(TAG, "Tiempo actualizado: %d:%d", gps.time.minute(), gps.time.second());
+        }
+
+        if (gps.location.isUpdated() && gps.location.isValid())
+        {
+            satellite.site(gps.location.lat(), gps.location.lng(), gps.altitude.meters());
+            ESP_LOGI(TAG, "GPS adquirido: Lat=%.6f, Lng=%.6f", gps.location.lat(), gps.location.lng());
+
+            if (status.gps_fix == false)
+            {
+                status.gps_fix = true;
+                TaskHandle_t currentTaskHandle = xTaskGetCurrentTaskHandle();
+                vTaskPrioritySet(currentTaskHandle, 2);
+            }
+        }
+
+        vTaskDelay(status.gps_fix ? updatePeriodFix : updatePeriodNoFix);
+    }
 }
 
-unsigned long getUnixTimeFromGPS()
+void taskHome(void *pvParameters)
 {
-  if(gps.date.isValid() && gps.time.isValid())
-  {
-    struct tm t;
-    t.tm_year = gps.date.year() - 1900;
-    t.tm_mon = gps.date.month() - 1;
-    t.tm_mday = gps.date.day();
-    t.tm_hour = gps.time.hour();
-    t.tm_min = gps.time.minute();
-    t.tm_sec = gps.time.second();
-    t.tm_isdst = 0;
-    time_t unix = mktime(&t);
-    return (unsigned long)unix;
-  }
-  return 0;
+    reed_az.stopCount();
+    reed_el.stopCount();
+    motor_az.setDuty(30);
+    motor_el.setDuty(30);
+    motor_az.stop();
+    motor_el.stop();
+
+    vTaskDelay(pdMS_TO_TICKS(500));
+    motor_az.setDuty(100);
+    motor_el.setDuty(100);
+    motor_az.setDirection(FORWARD);
+    motor_el.setDirection(FORWARD);
+    vTaskDelay(pdMS_TO_TICKS(1500));
+
+    motor_az.stop();
+    motor_el.stop();
+    motor_az.setDirection(BACKWARD);
+    motor_el.setDirection(BACKWARD);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    for (;;)
+    {
+        uint16_t current_az = i_az.getCurrent_mA();
+        uint16_t current_el = i_el.getCurrent_mA();
+        if(current_az < 150 && current_el < 150)
+        {   
+            motor_az.stop();
+            motor_el.stop();
+            motor_az.setDuty(0);
+            motor_el.setDuty(0);
+            motor_az.setDirection(FORWARD);
+            motor_el.setDirection(FORWARD);
+
+            reed_az.resetCount();
+            reed_el.resetCount();
+            reed_az.startCount();
+            reed_el.startCount();
+            ESP_LOGI(TAG, "Home Reached");
+            vTaskDelete(NULL);
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
 }
 
-void IRAM_ATTR secondTimer()
+void IRAM_ATTR reed_az_event_handler(void *arg)
 {
-  unixtime++;
-  if(gps_interval_sec == 0)
-  {
-    gps_getData = true;
-    gps_interval_sec = GPS_INTERVAL_SEC;
-  }
-  gps_interval_sec--;
+    //TODO Software endstops
 }
 
-void configSatellite()
+void IRAM_ATTR reed_el_event_handler(void *arg)
 {
-  satellite_preferences.begin("satellite", false);
-  String name = satellite_preferences.getString("name");
-  String line1 = satellite_preferences.getString("line1");
-  String line2 = satellite_preferences.getString("line2");
-
-  if(name == "" || line1 == "" || line2 == "")
-  {
-    tle_initialized = false;
-    return;
-  }
-
-  offset_az = satellite_preferences.getDouble("offset_az");
-  offset_el = satellite_preferences.getDouble("offset_el");
-
-  char nameBuf[32], line1Buf[80], line2Buf[80];
-
-  strncpy(nameBuf, name.c_str(), sizeof(nameBuf));
-  strncpy(line1Buf, line1.c_str(), sizeof(line1Buf));
-  strncpy(line2Buf, line2.c_str(), sizeof(line2Buf));
-
-  nameBuf[sizeof(nameBuf) - 1] = '\0';
-  line1Buf[sizeof(line1Buf) - 1] = '\0';
-  line2Buf[sizeof(line2Buf) - 1] = '\0';
-
-  satellite.init(nameBuf, line1Buf, line2Buf);
-  tle_initialized = true;
+    //TODO Software endstops
 }

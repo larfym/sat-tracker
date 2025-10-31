@@ -1,235 +1,535 @@
-<!-- index.html con entradas de offset y estado -->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Satellite Tracker</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      color: #fef9e6;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracker Satelital</title>
+    <style>
+        :root {
+            --bg-primary: #080808;
+            --bg-secondary: #141414;
+            --bg-terciary: #292929;
+            --text-primary: #C4C4C4;
+            --text-secondary: #A1A1A1;
+            --accent-blue: #1D7CA8;
+            --accent-red: #D9534F;
+        }
 
-    body {
-      background: linear-gradient(135deg, #0b1320, #1c2a3d);
-      padding: 2em;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Consolas;
+            list-style: none;
+            font-weight: bold;
+        }
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent url('fondo.jpg') repeat;
-      z-index: -1;
-      animation: starScroll 20s linear infinite;
-      opacity: 0.07;
-    }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-size: medium;
+        }
 
-    @keyframes starScroll {
-      0% { background-position: 0 0; }
-      100% { background-position: -1000px 500px; }
-    }
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 1em;
-      text-shadow: 5px 5px 5px #000;
-    }
+        .sidebar {
+            width: 150px;
+            background-color: var(--bg-secondary);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .glass {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border-radius: 1em;
-      padding: 1.5em;
-      margin: 1em;
-      width: 90%;
-      max-width: 800px;
-    }
+        .logo {
+            color: var(--accent-blue);
+            font-size: larger;
+            margin-bottom: 5vh;
+            text-align: center;
+        }
 
-    .tle_data {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+        .sidebar li {
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            transition: background-color 0.5s;
+            text-align: center;
+        }
 
-    textarea {
-      width: 100%;
-      height: 200px;
-      padding: 1em;
-      border: none;
-      border-radius: 0.7em;
-      font-size: 0.9em;
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-      resize: vertical;
-      margin-bottom: 1em;
-    }
+        .sidebar li.active {
+            background-color: var(--accent-blue);
+            color: var(--bg-secondary);
+        }
 
-    button, a {
-      color: #fef9e6;
-      margin: 0.3em;
-      padding: 0.5em 1em;
-      border-radius: 0.5em;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background 0.5s, transform 0.2s;
-      text-decoration: none;
-    }
+        .sidebar li:hover:not(.active) {
+            background-color: var(--bg-terciary);
+        }
 
-    button:active, a:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
+        .track-button {
+            margin-top: auto;
+            background-color: var(--accent-blue);
+            color: var(--bg-secondary);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: medium;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
 
-    input[type="number"] {
-      width: 100px;
-      padding: 0.5em;
-      margin: 0.3em;
-      border-radius: 0.5em;
-      border: none;
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-      color: #fef9e6;
-      text-align: center;
-    }
+        .track-button.tracking {
+            background-color: var(--accent-red);
+        }
 
-    .esp32-data h2 {
-      margin: 0 0 1em 0;
-      font-size: medium;
-      text-align: center;
-    }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5vh;
+        }
 
-    .data-field {
-      margin: 0.4em;
-    }
+        .top-header h2 {
+            font-size: x-large;
+            text-align: center;
+            color: var(--text-primary);
+            margin-top: 5vh;
+        }
 
-    .data-field span:first-child {
-      font-weight: bold;
-      margin-right: 0.5em;
-    }
+        .page-section {
+            display: none;
+            gap: 10px;
+        }
 
-    .column {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 1em;
-      flex-wrap: wrap;
-      width: 100%;
-      max-width: 900px;
-      margin-top: 1em;
-    }
+        .page-section.active {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .esp32-data {
-      flex: 1 1 50%;
-      min-width: 400px;
-    }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
 
-    #estado {
-      font-weight: bold;
-      font-size: 1.1em;
-      text-shadow: 1px 1px 2px #000;
-      margin: 0.5em;
-    }
-  </style>
+        @media (min-width: 700px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .card h3 {
+            text-align: center;
+            font-size: large;
+            color: var(--text-primary);
+            margin-bottom: 1vh;
+        }
+
+        .card li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0 5px 10px;
+            border-bottom: 1px dashed var(--bg-terciary);
+        }
+
+        .card li:last-child {
+            border-bottom: none;
+        }
+
+        .card li span {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            padding: 1vh;
+        }
+
+        .form-group textarea,
+        .form-group input {
+            width: 90%;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 10px;
+            padding: 1vh;
+            margin: 1vh;
+            font-size: medium;
+        }
+
+        .card li span.input-value {
+            color: var(--text-primary);
+            width: 30%;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .card li span.input-value input {
+            width: 80px;
+            padding: 5px;
+            margin: 0;
+            text-align: right;
+            font-weight: bold;
+            border: 1px solid var(--bg-terciary);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .send-button {
+            text-align: center;
+            background-color: var(--accent-blue);
+            color: var(--bg-secondary);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 250px;
+            align-self: center;
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">Tracker</div>
+            <ul>
+                <li class="nav-link active" data-page="Telemetría">Telemetría</li>
+                <li class="nav-link" data-page="configuracion">Configuración</li>
+                <li class="nav-link" data-page="manual">Control Manual</li>
+            </ul>
+            <button class="track-button" onclick="toggleTracking()">Trackear</button>
+        </aside>
 
-  <h1>Tracker Satelital</h1>
+        <main class="main-content">
+            <header class="top-header">
+                <h2 id="page-title">Telemetría</h2>
+            </header>
 
-  <div class="glass NORAD_data">
-    <h2>Configurar Satélite</h2>
-    <h3>TLE</h3>
-    <textarea id="tle" maxlength="256" placeholder="Colocar los datos TLE (3 líneas)"></textarea>
-    
-    <h3>Offsets</h3>
-    <input type="number" id="offset_azimuth" placeholder="Azimuth" value="0.0"/>
-    <input type="number" id="offset_elevacion" placeholder="Elevación" value="0.0"/>
-    
-    <div>
-      <button onclick="trackear()">Trackear</button>
+            <section id="Telemetría" class="page-section">
+                <div class="info-grid">
+                    <div class="card">
+                        <h3>Satélite</h3>
+                        <ul>
+                            <li><span>Nombre</span><span id="name">---</span></li>
+                            <li><span>Longitud</span><span id="s_lon">---</span></li>
+                            <li><span>Latitud</span><span id="s_lat">---</span></li>
+                            <li><span>Altitud</span><span id="s_alt">---</span></li>
+                            <li><span>Azimut</span><span id="s_az">---</span></li>
+                            <li><span>Elevación</span><span id="s_el">---</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Plataforma</h3>
+                        <ul>
+                            <li><span>Estado</span><span id="stat">---</span></li>
+                            <li><span>Longitud</span><span id="t_lon">---</span></li>
+                            <li><span>Latitud</span><span id="t_lat">---</span></li>
+                            <li><span>Altitud</span><span id="t_alt">---</span></li>
+                            <li><span>Tiempo</span><span id="t_tim">---</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Antena</h3>
+                        <ul>
+                            <li><span>Azimut</span><span id="a_az">---</span></li>
+                            <li><span>Elevación</span><span id="a_el">---</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="configuracion" class="page-section">
+                <div class="card">
+                    <h3>Satélite</h3>
+                    <div class="form-group">
+                        <textarea id="tle" rows="3" placeholder="TLE del satélite" maxlength="176"
+                            style="resize: none;"></textarea>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Antena</h3>
+                    <ul>
+                        <li><span>Azimut</span><span class="input-value"><input type="number" id="az-of"
+                                    value="0.0"></span></li>
+                        <li><span>Elevación</span><span class="input-value"><input type="number" id="el-of"
+                                    value="0.0"></span></li>
+                    </ul>
+                </div>
+                <button class="send-button" onclick="saveData()">Guardar</button>
+            </section>
+
+            <section id="manual" class="page-section">
+                <div class="card">
+                    <h3>Antena</h3>
+                    <ul>
+                        <li><span>Azimut</span><span class="input-value"><input type="number" id="m-az"
+                                    value="0.0"></span></li>
+                        <li><span>Elevación</span><span class="input-value"><input type="number" id="m-el"
+                                    value="0.0"></span></li>
+                    </ul>
+                </div>
+                <button class="send-button" onclick="sendManualData()">Enviar</button>
+            </section>
+        </main>
     </div>
-    
-    <br>
-    <a href="https://celestrak.org/NORAD/elements/table.php?GROUP=active&FORMAT=tle" target="_blank">
-      Obtener TLE
-    </a>
-  </div>
 
-  <div id="estado">Obteniendo datos de GPS...</div>
+    <script>
 
-  <div class="column">
-    <div class="glass esp32-data">
-      <h2>Satélite</h2>
-      <div class="data-field"><span>Nombre:</span> <span id="nombre">---</span></div>
-      <div class="data-field"><span>Latitud:</span> <span id="latitud_sat">---</span></div>
-      <div class="data-field"><span>Longitud:</span> <span id="longitud_sat">---</span></div>
-      <div class="data-field"><span>Altitud:</span> <span id="altitud_sat">---</span></div>
-    </div>
+        const DEFAULT_STR = "---";
+        let updateInterval = null;
+        let trackingState = false;
 
-    <div class="glass esp32-data">
-      <h2>Antena</h2>
-      <div class="data-field"><span>Tiempo:</span> <span id="tiempo">---</span></div>
-      <div class="data-field"><span>Azimuth:</span> <span id="azimuth">---</span></div>
-      <div class="data-field"><span>Elevación:</span> <span id="elevacion">---</span></div>
-      <h3>Ubicación: </h3>
-      <div class="data-field"><span>Latitud:</span> <span id="latitud_ant">---</span></div>
-      <div class="data-field"><span>Longitud:</span> <span id="longitud_ant">---</span></div>
-      <div class="data-field"><span>Altitud:</span> <span id="altitud_ant">---</span></div>
-    </div>
-  </div>
+        function toggleTracking() {
 
-  <script>
-    function trackear() {
-      const tle = document.getElementById("tle").value;
-      const az = document.getElementById("offset_azimuth").value;
-      const el = document.getElementById("offset_elevacion").value;
-      const tleLines = tle.trim().split('\n');
-      if (tle.trim() === "" || tleLines.length < 2)
-      {
-        alert("Por favor, ingrese un TLE válido.");
-        return;
-      }
-      fetch("/track", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({tle: tle, offset_az: az, offset_el: el })
-      }).then(res => {
-        alert(res.ok ? "Configuración Enviada" : "Error al enviar la Configuración");
-      });
-    }
+            const trackButton = document.querySelector('.track-button');
 
-    function actualizarDatos() {
-      fetch("/data")
-        .then(res => res.json())
-        .then(d => {
-          document.getElementById("nombre").textContent = d.nombre;
-          document.getElementById("latitud_sat").textContent = d.latitud_sat;
-          document.getElementById("longitud_sat").textContent = d.longitud_sat;
-          document.getElementById("altitud_sat").textContent = d.altitud_sat + "[km]";
-          document.getElementById("latitud_ant").textContent = d.latitud_ant;
-          document.getElementById("longitud_ant").textContent = d.longitud_ant;
-          document.getElementById("altitud_ant").textContent = d.altitud_ant + "[km]";
-          document.getElementById("tiempo").textContent = d.tiempo;
-          document.getElementById("azimuth").textContent = d.azimuth;
-          document.getElementById("elevacion").textContent = d.elevacion;
-          document.getElementById("estado").textContent = d.estado;
-        })
-        .catch(err => {
-          console.error("Error de conexión:", err);
+            fetch("/toggle_tracking", {
+                method: "POST"
+            }).then(res => {
+
+                if (!res.ok) {
+                    console.error("Tracking toggle failed:", res.status);
+                    alert("Error al cambiar el estado");
+                    throw new Error(`API failed: ${res.status}`);
+                }
+
+                return res.json();
+            })
+                .then(data => {
+                    trackingState = data.tracking_active;
+                    const reason = data.reason;
+
+                    trackButton.classList.toggle('tracking', trackingState);
+                    if (trackingState) {
+                        trackButton.textContent = "Parar";
+                        alert("Seguimiento iniciado ✅");
+                    } else {
+                        trackButton.textContent = "Trackear";
+                        if (reason == "none") {
+                            alert("Seguimiento detenido ✅");
+                        } else if (reason == "No_TLE") {
+                            alert("❌ Seguimiento detenido: No hay TLE");
+                        } else if (reason == "No_GPS") {
+                            alert("❌ Seguimiento detenido: No hay GPS");
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch err:", error);
+                    trackButton.textContent = "Error";
+                    trackButton.classList.remove('tracking');
+                });
+        }
+
+        function sendManualData() {
+            const az = document.getElementById('m-az').value;
+            const el = document.getElementById('m-el').value;
+
+            if (az < 0 || az > 360 || el < 0 || el > 90) {
+                alert("Az (0°-360°), El (0°-90°)");
+                return;
+            }
+
+            const payload = { manual_az: parseFloat(az), manual_el: parseFloat(el) };
+
+            fetch('/manual', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(res => {
+                if (res.ok) {
+                    const trackButton = document.querySelector('.track-button');
+                    trackingState = true;
+                    if (trackButton) {
+                        trackButton.classList.add('tracking');
+                        trackButton.textContent = "Parar";
+                    }
+                    alert("✅ Modo Manual Activado");
+                }
+                else {
+                    alert("Error al activar Modo Manual ❌");
+                }
+            }).catch(error => console.error('Error de red al enviar comando:', error));
+        }
+
+        function __checkSumTLE(str) {
+
+            let sum = 0;
+            const checkSumIndex = str.length - 1;
+
+            for (let i = 0; i < checkSumIndex; i++) {
+                const char = str.charAt(i);
+
+                if (char >= '0' && char <= '9') {
+                    sum += parseInt(char);
+                } else if (char === '-') {
+                    sum += 1;
+                }
+            }
+            const calculatedCheckSum = sum % 10;
+            const expectedCheckSum = parseInt(str.charAt(checkSumIndex));
+            return calculatedCheckSum === expectedCheckSum;
+        }
+
+        function isValidTLE(tleLines) {
+            if (tleLines.length !== 3) {
+                return false;
+            }
+
+            const name = tleLines[0].trim();
+            const line1 = tleLines[1].trim();
+            const line2 = tleLines[2].trim();
+
+            if (line1.length !== 69 || line2.length !== 69 || name.length > 24) {
+                return false;
+            }
+
+            if (line1.charAt(0) !== '1' || line2.charAt(0) !== '2') {
+                return false;
+            }
+
+            if (!__checkSumTLE(line1) || !__checkSumTLE(line2)) {
+                return false;
+            }
+            return true;
+        }
+
+        function saveData() {
+            const tleText = document.getElementById("tle").value;
+            const az = document.getElementById("az-of").value;
+            const el = document.getElementById("el-of").value;
+            const tleLines = tleText.trim().split('\n').filter(line => line.trim() !== '');
+
+            if (!isValidTLE(tleLines)) {
+                alert("TLE inválido ❌");
+                return;
+            }
+
+            const payload = {
+                name: tleLines[0].trim(),
+                line1: tleLines[1].trim(),
+                line2: tleLines[2].trim(),
+                offset_az: parseFloat(az),
+                offset_el: parseFloat(el)
+            };
+
+            fetch("/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(res => {
+                alert(res.ok ? "Configuración guardada ✅" : "Error al enviar ❌");
+            }).catch(error => console.error('Error Saving:', error));
+        }
+
+        function updateData() {
+            fetch("/data")
+                .then(response => {
+                    if (!response.ok) throw new Error('API no disponible');
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("name").textContent = data.name ?? DEFAULT_STR;
+                    document.getElementById("s_lon").textContent = data.s_lon ?? DEFAULT_STR;
+                    document.getElementById("s_lat").textContent = data.s_lat ?? DEFAULT_STR;
+                    document.getElementById("s_alt").textContent = (data.s_alt ?? DEFAULT_STR) + "[km]";
+                    document.getElementById("s_az").textContent = (data.s_az ?? DEFAULT_STR) + "[°]";
+                    document.getElementById("s_el").textContent = (data.s_el ?? DEFAULT_STR) + "[°]";
+                    document.getElementById("stat").textContent = data.stat ?? DEFAULT_STR;
+                    document.getElementById("t_lon").textContent = data.t_lon ?? DEFAULT_STR;
+                    document.getElementById("t_lat").textContent = data.t_lat ?? DEFAULT_STR;
+                    document.getElementById("t_alt").textContent = (data.t_alt ?? DEFAULT_STR) + "[km]";
+                    document.getElementById("a_az").textContent = (data.a_az ?? DEFAULT_STR) + "[°]";
+                    document.getElementById("a_el").textContent = (data.a_el ?? DEFAULT_STR) + "[°]";
+
+                    const t_tim_val = data.t_tim;
+                    if (data.t_tim) {
+                        document.getElementById("t_tim").textContent = formatUnixTime(t_tim_val);
+                    } else {
+                        document.getElementById("t_tim").textContent = DEFAULT_STR;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en datos:', error);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+            const pageTitle = document.getElementById('page-title');
+
+            function showPage(pageId) {
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                    updateInterval = null;
+                }
+
+                sections.forEach(section => section.classList.remove('active'));
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                const activeSection = document.getElementById(pageId);
+                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+
+                if (activeSection && activeLink) {
+                    activeSection.classList.add('active');
+                    activeLink.classList.add('active');
+                    pageTitle.textContent = activeLink.textContent.trim();
+
+                    if (pageId === 'Telemetría') {
+                        updateData();
+                        updateInterval = setInterval(updateData, 2000);
+                    }
+                }
+            }
+            showPage('Telemetría');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const pageId = e.currentTarget.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
         });
-    }
 
-    setInterval(actualizarDatos, 1000);
-  </script>
+        function formatUnixTime(unixTimestamp) {
 
+            const date = new Date(unixTimestamp * 1000);
+
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23',
+                timeZoneName: undefined
+            };
+            const formattedDate = new Intl.DateTimeFormat('sv-SE', options).format(date);
+
+            return formattedDate;
+        }
+
+    </script>
 </body>
+
 </html>
