@@ -1,0 +1,235 @@
+<!-- index.html con entradas de offset y estado -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Satellite Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      color: #fef9e6;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0b1320, #1c2a3d);
+      padding: 2em;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent url('fondo.jpg') repeat;
+      z-index: -1;
+      animation: starScroll 20s linear infinite;
+      opacity: 0.07;
+    }
+
+    @keyframes starScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: -1000px 500px; }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 1em;
+      text-shadow: 5px 5px 5px #000;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 1em;
+      padding: 1.5em;
+      margin: 1em;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .tle_data {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 1em;
+      border: none;
+      border-radius: 0.7em;
+      font-size: 0.9em;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+      resize: vertical;
+      margin-bottom: 1em;
+    }
+
+    button, a {
+      color: #fef9e6;
+      margin: 0.3em;
+      padding: 0.5em 1em;
+      border-radius: 0.5em;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.5s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    button:active, a:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    input[type="number"] {
+      width: 100px;
+      padding: 0.5em;
+      margin: 0.3em;
+      border-radius: 0.5em;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+      color: #fef9e6;
+      text-align: center;
+    }
+
+    .esp32-data h2 {
+      margin: 0 0 1em 0;
+      font-size: medium;
+      text-align: center;
+    }
+
+    .data-field {
+      margin: 0.4em;
+    }
+
+    .data-field span:first-child {
+      font-weight: bold;
+      margin-right: 0.5em;
+    }
+
+    .column {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1em;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 1em;
+    }
+
+    .esp32-data {
+      flex: 1 1 50%;
+      min-width: 400px;
+    }
+
+    #estado {
+      font-weight: bold;
+      font-size: 1.1em;
+      text-shadow: 1px 1px 2px #000;
+      margin: 0.5em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tracker Satelital</h1>
+
+  <div class="glass NORAD_data">
+    <h2>Configurar Satélite</h2>
+    <h3>TLE</h3>
+    <textarea id="tle" maxlength="256" placeholder="Colocar los datos TLE (3 líneas)"></textarea>
+    
+    <h3>Offsets</h3>
+    <input type="number" id="offset_azimuth" placeholder="Azimuth" value="0.0"/>
+    <input type="number" id="offset_elevacion" placeholder="Elevación" value="0.0"/>
+    
+    <div>
+      <button onclick="trackear()">Trackear</button>
+    </div>
+    
+    <br>
+    <a href="https://celestrak.org/NORAD/elements/table.php?GROUP=active&FORMAT=tle" target="_blank">
+      Obtener TLE
+    </a>
+  </div>
+
+  <div id="estado">Obteniendo datos de GPS...</div>
+
+  <div class="column">
+    <div class="glass esp32-data">
+      <h2>Satélite</h2>
+      <div class="data-field"><span>Nombre:</span> <span id="nombre">---</span></div>
+      <div class="data-field"><span>Latitud:</span> <span id="latitud_sat">---</span></div>
+      <div class="data-field"><span>Longitud:</span> <span id="longitud_sat">---</span></div>
+      <div class="data-field"><span>Altitud:</span> <span id="altitud_sat">---</span></div>
+    </div>
+
+    <div class="glass esp32-data">
+      <h2>Antena</h2>
+      <div class="data-field"><span>Tiempo:</span> <span id="tiempo">---</span></div>
+      <div class="data-field"><span>Azimuth:</span> <span id="azimuth">---</span></div>
+      <div class="data-field"><span>Elevación:</span> <span id="elevacion">---</span></div>
+      <h3>Ubicación: </h3>
+      <div class="data-field"><span>Latitud:</span> <span id="latitud_ant">---</span></div>
+      <div class="data-field"><span>Longitud:</span> <span id="longitud_ant">---</span></div>
+      <div class="data-field"><span>Altitud:</span> <span id="altitud_ant">---</span></div>
+    </div>
+  </div>
+
+  <script>
+    function trackear() {
+      const tle = document.getElementById("tle").value;
+      const az = document.getElementById("offset_azimuth").value;
+      const el = document.getElementById("offset_elevacion").value;
+      const tleLines = tle.trim().split('\n');
+      if (tle.trim() === "" || tleLines.length < 2)
+      {
+        alert("Por favor, ingrese un TLE válido.");
+        return;
+      }
+      fetch("/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({tle: tle, offset_az: az, offset_el: el })
+      }).then(res => {
+        alert(res.ok ? "Configuración Enviada" : "Error al enviar la Configuración");
+      });
+    }
+
+    function actualizarDatos() {
+      fetch("/data")
+        .then(res => res.json())
+        .then(d => {
+          document.getElementById("nombre").textContent = d.nombre;
+          document.getElementById("latitud_sat").textContent = d.latitud_sat;
+          document.getElementById("longitud_sat").textContent = d.longitud_sat;
+          document.getElementById("altitud_sat").textContent = d.altitud_sat + "[km]";
+          document.getElementById("latitud_ant").textContent = d.latitud_ant;
+          document.getElementById("longitud_ant").textContent = d.longitud_ant;
+          document.getElementById("altitud_ant").textContent = d.altitud_ant + "[km]";
+          document.getElementById("tiempo").textContent = d.tiempo;
+          document.getElementById("azimuth").textContent = d.azimuth;
+          document.getElementById("elevacion").textContent = d.elevacion;
+          document.getElementById("estado").textContent = d.estado;
+        })
+        .catch(err => {
+          console.error("Error de conexión:", err);
+        });
+    }
+
+    setInterval(actualizarDatos, 1000);
+  </script>
+
+</body>
+</html>
