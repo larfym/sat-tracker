@@ -48,6 +48,7 @@ private:
      */
     ledc_channel_t channel;
 
+    double lower_bound_percentage = 0.0;
 public:
     /**
      * @brief Constructor, Initializes GPIO pins and configures the LEDC channel (PWM) for speed.
@@ -62,11 +63,23 @@ public:
                 ledc_timer_t timer, ledc_channel_t channel, uint16_t frequency);
     
     /**
-     * @brief Sets the motor's duty cycle, controlling its speed.
+     * @brief Sets the PWM duty cycle
      * @param percentage The duty cycle percentage, from 0,0 to 100,0.
      */
     void setDuty(double percentage);
     
+    /**
+     * @brief Sets the lower bound (Duty to start spinning)(Non Linearity) of the motor.
+     * @param percentage The minimum duty cycle percentage, from 0.0 to 100.0.
+     */
+    void setMotorLowerBound(double percentage);
+
+    /**
+     * @brief Set the Motor Duty(starting from the lower bound).
+     * @param percentage The motor duty cycle percentage, from 0.0 to 100.0.
+     */
+    void setMotorDuty(double percentage);
+
     /**
      * @brief Sets the motor's direction of rotation (FORWARD or BACKWARD).
      * @param dir The new direction to set.

@@ -1,10 +1,10 @@
 #include "utils.h"
 #include "server.h"
-#include "currentMeasure.h"
+#include "currentSensor.h"
 #include "reed.h"
 #include "motorDriver.h"
 #include "pid.h"
-#include "pins.h"
+#include "configurations.h"
 
 static const char *TAG = "MAIN";
 
@@ -19,16 +19,16 @@ ServerHandler serverHandler(DEFAULT_SERVER_PORT);
 trackerStatus_t status;
 antennaPosition_t tar_angle, curr_angle, offsets;
 
-void IRAM_ATTR reed_az_event_handler(void *arg);
-void IRAM_ATTR reed_el_event_handler(void *arg);
+void IRAM_ATTR reedAz_event_handler(void *arg);
+void IRAM_ATTR reedEl_event_handler(void *arg);
 
-/* Components*/
-MotorDriver motor_az(IN1_AZ, IN2_AZ, EN_AZ, LEDC_TIMER_0, LEDC_CHANNEL_0, PWM_FREQ_HZ);
-MotorDriver motor_el(IN1_EL, IN2_EL, EN_EL, LEDC_TIMER_0, LEDC_CHANNEL_1, PWM_FREQ_HZ);
-CurrentSensor i_el(ADC1_CHANNEL_0);
-CurrentSensor i_az(ADC1_CHANNEL_1);
-ReedSwitch reed_az(REED_AZ, PCNT_UNIT_0, PCNT_CHANNEL_0, -1, 1850, reed_az_event_handler);
-ReedSwitch reed_el(REED_EL, PCNT_UNIT_0, PCNT_CHANNEL_1, -1, 600, reed_el_event_handler);
+/* Components */
+ReedSwitch reedAz(REED_AZ_PIN, PCNT_UNIT_0, PCNT_CHANNEL_0, REED_AZ_SOFT_LIMIT_LOW, REED_AZ_SOFT_LIMIT_HIGH, reedAz_event_handler);
+ReedSwitch reedEl(REED_EL_PIN, PCNT_UNIT_1, PCNT_CHANNEL_0, REED_EL_SOFT_LIMIT_LOW, REED_EL_SOFT_LIMIT_HIGH, reedEl_event_handler);
+MotorDriver motorAz(IN1_AZ_PIN, IN2_AZ_PIN, EN_AZ_PIN, LEDC_TIMER_0, LEDC_CHANNEL_0, PWM_FREQ);
+MotorDriver motorEl(IN1_EL_PIN, IN2_EL_PIN, EN_EL_PIN, LEDC_TIMER_0, LEDC_CHANNEL_1, PWM_FREQ);
+CurrentSensor currentAz(I_AZ_CHANNEL);
+CurrentSensor currentEl(I_EL_CHANNEL);
 
 TaskHandle_t taskTracking_handle = NULL;
 
@@ -135,43 +135,43 @@ void taskGPS(void *pvParameters)
 
 void taskHome(void *pvParameters)
 {
-    reed_az.stopCount();
-    reed_el.stopCount();
-    motor_az.setDuty(30);
-    motor_el.setDuty(30);
-    motor_az.stop();
-    motor_el.stop();
+    reedAz.stopCount();
+    reedEl.stopCount();
+    motorAz.setDuty(30);
+    motorEl.setDuty(30);
+    motorAz.stop();
+    motorEl.stop();
 
     vTaskDelay(pdMS_TO_TICKS(500));
-    motor_az.setDuty(100);
-    motor_el.setDuty(100);
-    motor_az.setDirection(FORWARD);
-    motor_el.setDirection(FORWARD);
+    motorAz.setDuty(100);
+    motorEl.setDuty(100);
+    motorAz.setDirection(FORWARD);
+    motorEl.setDirection(FORWARD);
     vTaskDelay(pdMS_TO_TICKS(1500));
 
-    motor_az.stop();
-    motor_el.stop();
-    motor_az.setDirection(BACKWARD);
-    motor_el.setDirection(BACKWARD);
+    motorAz.stop();
+    motorEl.stop();
+    motorAz.setDirection(BACKWARD);
+    motorEl.setDirection(BACKWARD);
     vTaskDelay(pdMS_TO_TICKS(1000));
 
     for (;;)
     {
-        uint16_t current_az = i_az.getCurrent_mA();
-        uint16_t current_el = i_el.getCurrent_mA();
+        uint16_t current_az = currentAz.getCurrent_mA();
+        uint16_t current_el = currentEl.getCurrent_mA();
         if(current_az < 150 && current_el < 150)
         {   
-            motor_az.stop();
-            motor_el.stop();
-            motor_az.setDuty(0);
-            motor_el.setDuty(0);
-            motor_az.setDirection(FORWARD);
-            motor_el.setDirection(FORWARD);
+            motorAz.stop();
+            motorEl.stop();
+            motorAz.setDuty(0);
+            motorEl.setDuty(0);
+            motorAz.setDirection(FORWARD);
+            motorEl.setDirection(FORWARD);
 
-            reed_az.resetCount();
-            reed_el.resetCount();
-            reed_az.startCount();
-            reed_el.startCount();
+            reedAz.resetCount();
+            reedEl.resetCount();
+            reedAz.startCount();
+            reedEl.startCount();
             ESP_LOGI(TAG, "Home Reached");
             vTaskDelete(NULL);
         }
@@ -179,12 +179,12 @@ void taskHome(void *pvParameters)
     }
 }
 
-void IRAM_ATTR reed_az_event_handler(void *arg)
+void IRAM_ATTR reedAz_event_handler(void *arg)
 {
     //TODO Software endstops
 }
 
-void IRAM_ATTR reed_el_event_handler(void *arg)
+void IRAM_ATTR reedEl_event_handler(void *arg)
 {
     //TODO Software endstops
 }

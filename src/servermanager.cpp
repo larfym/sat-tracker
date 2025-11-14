@@ -1,11 +1,8 @@
 #include "servermanager.h"
-#include "config.h"
+#include "configurations.h"
 #include "main.h"
 
 AsyncWebServer server(SERVER_PORT);
-
-const String default_wifi_ssid = DEFAULT_WIFI_SSID;
-const String default_wifi_password = DEFAULT_WIFI_PASSWORD;
 
 volatile bool apStarted = false;
 
@@ -33,7 +30,7 @@ void serverHandle()
 void __startAPMode()
 {
     WiFi.mode(WIFI_MODE_AP);
-    WiFi.softAP(default_wifi_ssid.c_str(), default_wifi_password.c_str());
+    WiFi.softAP(DEFAULT_WIFI_SSID, DEFAULT_WIFI_PASSWORD);
 }
 
 void __startTrackerServer()
@@ -208,5 +205,3 @@ String __formatUnixTime(unsigned long unix)
     strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", tmStruct);
     return String(buff);
 }
-
-

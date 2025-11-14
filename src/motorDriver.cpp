@@ -32,13 +32,13 @@ MotorDriver::MotorDriver(gpio_num_t IN1_pin, gpio_num_t IN2_pin, gpio_num_t PWM_
     ledc_timer_config(&pwm_tim);
 
     ledc_channel_config_t pwm_ch = {
-        .gpio_num   = PWM_pin,
+        .gpio_num = PWM_pin,
         .speed_mode = LEDC_LOW_SPEED_MODE,
-        .channel    = channel,
-        .intr_type  = LEDC_INTR_DISABLE,
-        .timer_sel  = timer,
-        .duty       = 0,
-        .hpoint     = 0,
+        .channel = channel,
+        .intr_type = LEDC_INTR_DISABLE,
+        .timer_sel = timer,
+        .duty = 0,
+        .hpoint = 0,
     };
     ledc_channel_config(&pwm_ch);
 
@@ -49,10 +49,12 @@ MotorDriver::MotorDriver(gpio_num_t IN1_pin, gpio_num_t IN2_pin, gpio_num_t PWM_
 
 void MotorDriver::setDuty(double percentage)
 {
-    if (percentage < 0.0) percentage = 0.0;
-    if (percentage > 100.0) percentage = 100.0;
+    if (percentage < 0.0)
+        percentage = 0.0;
+    if (percentage > 100.0)
+        percentage = 100.0;
 
-    uint32_t duty_val = (uint32_t)((percentage / 100.0) * 1023); 
+    uint32_t duty_val = (uint32_t)((percentage / 100.0) * 1023);
 
     ledc_set_duty(LEDC_LOW_SPEED_MODE, channel, duty_val);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, channel);
@@ -72,10 +74,9 @@ void MotorDriver::setDirection(direction dir)
         gpio_set_level(IN2_pin, 1);
         this->current_direction = BACKWARD;
     }
-    
+
     ESP_LOGD(TAG, "Motor %d direction set to: %s", instance_id, (this->current_direction == FORWARD ? "FORWARD" : "BACKWARD"));
 }
-
 
 void MotorDriver::toggleDirection()
 {
@@ -84,11 +85,28 @@ void MotorDriver::toggleDirection()
     ESP_LOGD(TAG, "Motor %d direction set to: %s", instance_id, (this->current_direction == FORWARD ? "FORWARD" : "BACKWARD"));
 }
 
-
 void MotorDriver::stop()
 {
     gpio_set_level(IN1_pin, 0);
     gpio_set_level(IN2_pin, 0);
 
     ESP_LOGD(TAG, "Motor %d stopped", instance_id);
+}
+
+void MotorDriver::setMotorLowerBound(double percentage)
+{
+    this->lower_bound_percentage = percentage;
+}
+
+
+void MotorDriver::setMotorDuty(double percentage)
+{
+    if(percentage == lower_bound_percentage)
+    {
+        this->setDuty(0.0);
+    }else
+    {
+        percentage = ((100.0 - lower_bound_percentage) * (percentage / 100.0)) + lower_bound_percentage;
+        this->setDuty(percentage);
+    }
 }
