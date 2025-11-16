@@ -6,21 +6,12 @@
 #include <Preferences.h>
 #include <Sgp4.h>
 #include <TinyGPSPlus.h>
+#include <sys/time.h>
 #include "driver/timer.h"
+#include "configurations.h"
 
 #include "esp_log.h"
 #include "esp_err.h"
-
-/** @brief UART port number used for the GPS module. */
-#define GPS_UART 1
-/** @brief Baud rate for the GPS module's serial communication. */
-#define GPS_BAUDRATE 9600
-
-/** @brief Baud rate for standard serial communication (e.g., for debugging). */
-#define SERIAL_BAUDRATE 115000
-
-/** @brief PWM Frequency in Hz for motor driver. */
-#define PWM_FREQ_HZ 5000
 
 /** @brief External reference to the global Preferences object for NVS (Non-Volatile Storage) access. */
 extern Preferences config;
@@ -84,8 +75,9 @@ unsigned long getUnixTimeFromGPS(TinyGPSPlus *gps);
 /**
  * @brief Configures the ESP32's hardware timer to fire an interrupt every second.
  * @param timerISR The callback function to execute upon the one-second timer interrupt.
+ * @param sample_time_us The timer interval in microseconds (default is 100000 for one 100 mS).
  */
-void configSecondTimer(void (*timerISR)(void *));
+void configControlTimer(void (*timerISR)(void *), uint64_t sample_time_us = DEFAULT_SAMPLE_TIME_US);
 
 /**
  * @brief Utility function to save TLE data (Two-Line Elements) to NVS and update Sgp4.

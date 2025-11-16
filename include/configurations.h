@@ -4,103 +4,165 @@
 
 /**
  * @file config.h
- * @brief Pin definitions, communication configurations (WiFi, GPS, Serial),
- * and control parameters for the tracking system (Tracker).
+ * @brief Centralized configuration file defining pins, communication
+ * parameters, timing constants, and control values for the satellite
+ * tracking system (Tracker).
  *
- * @note This file uses the #pragma once directive to ensure it is included only once.
+ * This file is included across multiple modules and provides:
+ * - Pin assignments for motors, sensors, and communication ports.
+ * - WiFi, Serial, GPS, and Timer configurations.
+ * - PID and system control constants.
+ *
+ * @note Uses #pragma once to avoid multiple inclusions.
  */
 
-/* PIN DEFINITIONS ------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                 PIN DEFINES                                */
+/* -------------------------------------------------------------------------- */
 
-/** @name Azimuth Motor Pins (AZ)
- * Definitions for the control and measurement pins of the Azimuth motor.
- */
-///@{
-#define IN1_AZ_PIN GPIO_NUM_13  /**< @brief Input pin 1 of the Azimuth motor driver. */
-#define EN_AZ_PIN GPIO_NUM_12   /**< @brief Enable (PWM) pin of the Azimuth motor driver. */
-#define IN2_AZ_PIN GPIO_NUM_27  /**< @brief Input pin 2 of the Azimuth motor driver. */
-#define I_AZ_PIN GPIO_NUM_39    /**< @brief Analog input pin (VN) for current measurement of the Azimuth motor. */
-#define I_AZ_CHANNEL ADC1_CHANNEL_3 /**< @brief ADC1 channel corresponding to the Azimuth current measurement pin. */
-///@}
-
-/** @name Elevation Motor Pins (EL)
- * Definitions for the control and measurement pins of the Elevation motor.
+/**
+ * @name Azimuth Motor Pins (AZ)
+ * @brief Control and measurement pins for the Azimuth motor driver.
  */
 ///@{
-#define IN1_EL_PIN GPIO_NUM_26  /**< @brief Input pin 1 of the Elevation motor driver. */
-#define EN_EL_PIN GPIO_NUM_33   /**< @brief Enable (PWM) pin of the Elevation motor driver. */
-#define IN2_EL_PIN GPIO_NUM_32  /**< @brief Input pin 2 of the Elevation motor driver. */
-#define I_EL_PIN GPIO_NUM_36    /**< @brief Analog input pin (VP) for current measurement of the Elevation motor. */
-#define I_EL_CHANNEL ADC1_CHANNEL_0 /**< @brief ADC1 channel corresponding to the Elevation current measurement pin. */
+#define IN1_AZ_PIN GPIO_NUM_13      /**< Input pin 1 of the Azimuth motor driver. */
+#define EN_AZ_PIN GPIO_NUM_12       /**< Enable/PWM pin for Azimuth motor. */
+#define IN2_AZ_PIN GPIO_NUM_27      /**< Input pin 2 of the Azimuth motor driver. */
+
+#define I_AZ_PIN GPIO_NUM_39        /**< Analog pin (VN) for Azimuth current sensing. */
+#define I_AZ_CHANNEL ADC1_CHANNEL_3 /**< ADC1 channel for Azimuth current sensing. */
 ///@}
 
-/** @name Communication and Sensor Pins
- * Definitions for external modules and limit switches.
+/**
+ * @name Elevation Motor Pins (EL)
+ * @brief Control and measurement pins for the Elevation motor driver.
  */
 ///@{
-#define GPS_RX_PIN 16           /**< @brief RX (Receiver) pin for Serial communication with the GPS module. */
-#define GPS_TX_PIN 17           /**< @brief TX (Transmitter) pin for Serial communication with the GPS module. */
+#define IN1_EL_PIN GPIO_NUM_26      /**< Input pin 1 of the Elevation motor driver. */
+#define EN_EL_PIN GPIO_NUM_33       /**< Enable/PWM pin for Elevation motor. */
+#define IN2_EL_PIN GPIO_NUM_32      /**< Input pin 2 of the Elevation motor driver. */
 
-#define REED_AZ_PIN GPIO_NUM_19 /**< @brief Pin for the Azimuth magnetic limit sensor (Reed switch). */
-#define REED_EL_PIN GPIO_NUM_18 /**< @brief Pin for the Elevation magnetic limit sensor (Reed switch). */
+#define I_EL_PIN GPIO_NUM_36        /**< Analog pin (VP) for Elevation current sensing. */
+#define I_EL_CHANNEL ADC1_CHANNEL_0 /**< ADC1 channel for Elevation current sensing. */
 ///@}
 
-/* WIFI CONFIGURATIONS --------------------------------------------------------- */
-
-/** @name WiFi and Server Configurations
- * Network and web server parameters.
+/**
+ * @name Communication & Sensor Pins
+ * @brief Pins for external modules (GPS) and reed switch.
  */
 ///@{
-#define DEFAULT_WIFI_SSID "ESP32_AP" /**< @brief Default WiFi network name (SSID). */
-#define DEFAULT_WIFI_PASSWORD ""     /**< @brief Default WiFi network password (empty). */
-#define DEFAULT_SERVER_PORT 80       /**< @brief Default port for the web server. */
-#define MDNS_SERVICE_NAME "Tracker"  /**< @brief mDNS (Multicast DNS) service name. */
-#define WIFI_CONNECT_TIMEOUT 10000   /**< @brief Maximum waiting time for WiFi connection (in ms). */
+#define GPS_RX_PIN 16 /**< GPS UART RX pin. */
+#define GPS_TX_PIN 17 /**< GPS UART TX pin. */
+
+#define REED_AZ_PIN GPIO_NUM_19 /**< Reed switch for Azimuth limit detection. */
+#define REED_EL_PIN GPIO_NUM_18 /**< Reed switch for Elevation limit detection. */
 ///@}
 
-/* SERIAL CONFIGURATIONS ------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                          WIFI & SERVER CONFIGURATION                       */
+/* -------------------------------------------------------------------------- */
 
-/** @name Serial Configurations
- * Parameters for serial debugging communication.
+/**
+ * @name WiFi Configuration
+ * @brief Default parameters for WiFi access point and mDNS service.
  */
 ///@{
-#define SERIAL_BAUDRATE 115200  /**< @brief Baud rate for serial (USB/monitor) communication. */
+#define DEFAULT_WIFI_SSID "ESP32_AP" /**< Default AP SSID. */
+#define DEFAULT_WIFI_PASSWORD ""     /**< Default AP password (empty = open AP). */
+#define DEFAULT_SERVER_PORT 80       /**< Web server port. */
+#define MDNS_SERVICE_NAME "Tracker"  /**< mDNS hostname. */
+#define WIFI_CONNECT_TIMEOUT 10000   /**< WiFi connection timeout in ms. */
 ///@}
 
-/* TIMER CONFIGURATIONS -------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                             SERIAL CONFIGURATION                           */
+/* -------------------------------------------------------------------------- */
 
-/** @name Timer Configurations
- * Parameters for internal timer setup.
+/**
+ * @name Serial Debugging
+ * @brief Default serial monitor parameters.
  */
 ///@{
-#define SECOND_TIMER_PREESCALER 80      /**< @brief Timer prescaler to achieve a 1 microsecond time base (80MHz / 80 = 1MHz). */
-#define SECOND_TIMER_ALARM_VALUE 1000000 /**< @brief Timer alarm value for a 1-second period (1,000,000 microseconds). */
+#define SERIAL_BAUDRATE 115200 /**< Baud rate for USB serial monitor. */
 ///@}
 
-/* GPS CONFIGURATIONS ---------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                             GPS CONFIGURATION                              */
+/* -------------------------------------------------------------------------- */
 
-/** @name GPS Configurations
- * Communication parameters and default location values.
+/**
+ * @name GPS Parameters
+ * @brief UART settings and default fallback position/time.
  */
 ///@{
-#define GPS_UART 1             /**< @brief UART number used for GPS communication. */
-#define GPS_BAUDRATE 9600      /**< @brief Baud rate for communication with the GPS module. */
-#define GPS_INTERVAL_SEC 120   /**< @brief Time interval (in seconds) to update the GPS position. */
-#define DEFAULT_LATITUD 37.7749 /**< @brief Default latitude (e.g., San Francisco, CA). */
-#define DEFAULT_LONGITUD -122.4194 /**< @brief Default longitude (e.g., San Francisco, CA). */
-#define DEFAULT_ALTITUD 0        /**< @brief Default altitude (in meters). */
-#define DEFAULT_UNIXTIME 1750015604 /**< @brief Default UNIX time (e.g., June 12, 2025). */
+#define GPS_UART 1                  /**< UART index used by GPS. */
+#define GPS_BAUDRATE 9600           /**< GPS communication baud rate. */
+#define GPS_INTERVAL_SEC 120        /**< GPS update interval in seconds. */
+
+#define DEFAULT_LATITUD 37.7749     /**< Default latitude (fallback). */
+#define DEFAULT_LONGITUD -122.4194  /**< Default longitude (fallback). */
+#define DEFAULT_ALTITUD 0           /**< Default altitude (meters). */
+#define DEFAULT_UNIXTIME 1750015604 /**< Default UNIX timestamp (fallback). */
 ///@}
 
-/* CONTROL CONFIGURATIONS ------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+/*                           CONTROL & PID CONSTANTS                          */
+/* -------------------------------------------------------------------------- */
 
-/** @name System Control Configurations
- * General operating parameters and limits.
+/**
+ * @name Motor Current Limits
+ * @brief Safety current limits for motor protection.
  */
 ///@{
-#define PWM_FREQ 10000          /**< @brief PWM frequency used for motor speed control (in Hz). */
-#define REED_AZ_SOFT_LIMIT_HIGH 1900 /**< @brief Upper soft limit position for Azimuth (in encoder/step units). */
-#define REED_EL_SOFT_LIMIT_HIGH 500  /**< @brief Upper soft limit position for Elevation (in encoder/step units). */
-#define REED_AZ_SOFT_LIMIT_LOW -1   /**< @brief Lower soft limit position for Azimuth (value -1 indicates unused or physical limit). */
-#define REED_EL_SOFT_LIMIT_LOW -1   /**< @brief Lower soft limit position for Elevation (value -1 indicates unused or physical limit). */
+#define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max current for Azimuth motor (mA). */
+#define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max current for Elevation motor (mA). */
+#define CURRENT_HOMING_mA 10.0          /**< Max current for considering the motor turned off. */
 ///@}
+
+/**
+ * @name Timing Parameters
+ * @brief Control-loop timing settings.
+ */
+///@{
+#define TIMER_PREESCALER 80                        /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
+#define DEFAULT_SAMPLE_TIME_US 1000000             /**< Default control loop sample time (µs). */
+#define SAMPLE_TIME_US 800000                      /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0) /**< Control loop sample time (s). */
+///@}
+
+/**
+ * @name PID Gains — Azimuth
+ * @brief Gains for the Azimuth axis PID controller.
+ */
+///@{
+#define KP_AZIMUTH 2.0 /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.5 /**< Integral gain (AZ). */
+#define KD_AZIMUTH 0.1 /**< Derivative gain (AZ). */
+///@}
+
+/**
+ * @name PID Gains — Elevation
+ * @brief Gains for the Elevation axis PID controller.
+ */
+///@{
+#define KP_ELEVATION 2.0 /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.5 /**< Integral gain (EL). */
+#define KD_ELEVATION 0.1 /**< Derivative gain (EL). */
+///@}
+
+/**
+ * @name Soft Limit Positions
+ * @brief Encoder/step limits for mechanical range enforcement.
+ */
+///@{
+#define REED_AZ_SOFT_LIMIT_HIGH 1900 /**< Upper soft limit for Azimuth. */
+#define REED_EL_SOFT_LIMIT_HIGH 500  /**< Upper soft limit for Elevation. */
+
+#define REED_AZ_SOFT_LIMIT_LOW -1    /**< Lower soft limit for Azimuth (-1 = unused). */
+#define REED_EL_SOFT_LIMIT_LOW -1    /**< Lower soft limit for Elevation (-1 = unused). */
+///@}
+
+/**
+ * @brief PWM frequency for PWM motor speed control (Hz).
+ */
+#define PWM_FREQ_HZ 10000

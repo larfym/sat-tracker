@@ -80,6 +80,7 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
     }
     if (status.gps_fix)
     {
+        unsigned long unixtime = time(NULL);
         snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLon);
         doc["t_lon"] = temp_float_buffer;
         snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLat);

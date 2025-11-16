@@ -11,7 +11,7 @@ bool configSatellite(Sgp4 *satellite)
 
     config.end();
 
-    ESP_LOGI(TAG, "Loaded TLE Data -> %s: tle1: %s, tle2: %s, offset_az: %f, offset_el: %f\n", name.c_str(), line1.c_str(), line2.c_str(), offset_az, offset_el);
+    ESP_LOGI(TAG, "Loaded TLE Data -> %s: tle1: %s, tle2: %s", name.c_str(), line1.c_str(), line2.c_str());
     if (name.length() == 0 || line1.length() == 0 || line2.length() == 0)
     {
         ESP_LOGI(TAG, "Error configuring satellite TLE");
@@ -69,19 +69,19 @@ unsigned long getUnixTimeFromGPS(TinyGPSPlus *gps)
     return 0;
 }
 
-void configSecondTimer(void (*timerISR)(void *))
+void configControlTimer(void (*timerISR)(void *), uint64_t sample_time_us)
 {
     timer_config_t t_cfg;
     t_cfg.alarm_en = TIMER_ALARM_EN;
     t_cfg.auto_reload = TIMER_AUTORELOAD_EN;
     t_cfg.counter_dir = TIMER_COUNT_UP;
     t_cfg.counter_en = TIMER_PAUSE;
-    t_cfg.divider = 80; // Prescaler → 80 MHz / 80 = 1 MHz → 1 tick = 1 µs
+    t_cfg.divider = TIMER_PREESCALER; // Prescaler → 80 MHz / 80 = 1 MHz → 1 tick = 1 µs
     t_cfg.intr_type = TIMER_INTR_LEVEL;
 
     timer_init(TIMER_GROUP_0, TIMER_1, &t_cfg);
     timer_set_counter_value(TIMER_GROUP_0, TIMER_1, 0);
-    timer_set_alarm_value(TIMER_GROUP_0, TIMER_1, 1000000ULL);
+    timer_set_alarm_value(TIMER_GROUP_0, TIMER_1, sample_time_us);
     timer_set_auto_reload(TIMER_GROUP_0, TIMER_1, TIMER_AUTORELOAD_EN);
     timer_enable_intr(TIMER_GROUP_0, TIMER_1);
     timer_isr_register(TIMER_GROUP_0, TIMER_1, timerISR, NULL, ESP_INTR_FLAG_IRAM, NULL);

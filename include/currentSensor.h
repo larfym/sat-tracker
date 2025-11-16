@@ -44,10 +44,10 @@
  */
 ///@{
 /** @brief Shunt resistor value in Ohms. */
-#define CURRENT_SHUNT_VALUE_OHM 0.22f
+#define DEFAULT_SHUNT_VALUE_OHM 0.22f
 
 /** @brief Operational amplifier gain. */
-#define CURRENT_OPAMP_GAIN 2.12f
+#define DEFAULT_OPAMP_GAIN 2.12f
 ///@}
 
 /**
@@ -64,7 +64,8 @@ private:
     adc1_channel_t channel; 			 /**< @brief Configured ADC channel for measurement. */
     esp_adc_cal_characteristics_t adc_chars; /**< @brief ADC calibration characteristics structure. */
     uint32_t offset_mV = 0;			 /**< @brief Voltage offset (in mV) measured under zero current condition. */
-
+    float shunt_ohm = DEFAULT_SHUNT_VALUE_OHM; /**< @brief Shunt resistor value in Ohms. */
+    float opamp_gain = DEFAULT_OPAMP_GAIN;   /**< @brief Operational amplifier gain. */
 public:
     /**
      * @brief Constructor for the CurrentSensor class.
@@ -113,6 +114,20 @@ public:
      * @return The offset value in millivolts (mV).
      */
     uint32_t getOffset_mV();
+
+    /**
+     * @brief Sets a new shunt resistor value.
+     *
+     * @param shunt_ohm New shunt resistor value in Ohms.
+     */
+    void setShuntValue(float shunt_ohm);
+    
+    /**
+     * @brief Sets a new operational amplifier gain.
+     *
+     * @param gain New operational amplifier gain.
+     */
+    void setOpAmpGain(float gain);
 };
 
 #endif // CURRENT_H

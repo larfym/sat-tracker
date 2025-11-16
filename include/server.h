@@ -8,18 +8,11 @@
 #include <Preferences.h>
 #include <Sgp4.h>
 #include <SPIFFS.h>
+#include <sys/time.h>
 #include "utils.h"
+#include "configurations.h"
 #include "esp_log.h"
 #include "esp_err.h"
-
-/** @brief Default port for the web server (HTTP). */
-#define DEFAULT_SERVER_PORT 80
-/** @brief mDNS service name for device discovery (e.g., "Tracker.local"). */
-#define MDNS_SERVICE_NAME "Tracker"
-/** @brief Default SSID for the ESP32's Access Point (AP) mode. */
-#define DEFAULT_WIFI_SSID "SatTracker"
-/** @brief Default password for the ESP32's Access Point (AP) mode. */
-#define DEFAULT_WIFI_PASSWORD "12345678"
 
 /** @brief Buffer size for formatting floating-point numbers as strings. */
 #define FLOAT_BUFFER_SIZE 16
@@ -37,8 +30,6 @@ extern trackerStatus_t status;
 extern antennaPosition_t tar_angle;
 /** @brief Global structure for the current (measured) antenna position. */
 extern antennaPosition_t curr_angle;
-/** @brief Global variable for the current Unixtime (seconds since 1970). */
-extern unsigned long unixtime;
 
 /** @brief Constant string for the default WiFi SSID. */
 const String default_wifi_ssid = DEFAULT_WIFI_SSID;

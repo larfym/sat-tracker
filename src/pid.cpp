@@ -1,10 +1,15 @@
 #include "pid.h"
 
+static const char *TAG = "PID";
+
 PID::PID(double kp, double ki, double kd)
 {
-    this->kd = kd;
-    this->ki = ki;
-    this->kp = kp;
+    this->setGains(kp, ki, kd);
+    this->SP = 0.0;
+    this->integral = 0.0;
+
+    this->min_I = -1e9;
+    this->max_I = 1e9;
 }
 
 void PID::setConstraintsAtIntegralError(double min, double max)
@@ -46,5 +51,10 @@ double PID::output(double value)
 
 double PID::outputAsPercent(double value, double min, double max)
 {
-    return PID::output(value) * 100 / (min - max);
+    double out = PID::output(value);
+    if(min == max) return 0.0;
+
+    double normalized = (out - min) / (max - min);
+
+    return normalized*100.0;
 }

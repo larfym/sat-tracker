@@ -19,7 +19,7 @@ uint32_t CurrentSensor::getShuntVoltage_mV()
     }
     raw /= ADC_MEASURE_SAMPLES;
     int32_t voltage_mV = esp_adc_cal_raw_to_voltage(raw, &adc_chars) - this->offset_mV;
-    if(voltage_mV < 0)
+    if (voltage_mV < 0)
     {
         return 0;
     }
@@ -28,7 +28,7 @@ uint32_t CurrentSensor::getShuntVoltage_mV()
 
 float CurrentSensor::getCurrent_mA()
 {
-    return this->getShuntVoltage_mV() / (float)(CURRENT_OPAMP_GAIN * CURRENT_SHUNT_VALUE_OHM);
+    return this->getShuntVoltage_mV() / (float)(this->opamp_gain * this->shunt_ohm);
 }
 
 void CurrentSensor::calibrateOffset(uint8_t samples)
@@ -45,4 +45,14 @@ void CurrentSensor::calibrateOffset(uint8_t samples)
 uint32_t CurrentSensor::getOffset_mV()
 {
     return this->offset_mV;
+}
+
+void CurrentSensor::setOpAmpGain(float gain)
+{
+    this->opamp_gain = gain;
+}
+
+void CurrentSensor::setShuntValue(float shunt_ohm)
+{
+    this->shunt_ohm = shunt_ohm;
 }
