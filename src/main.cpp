@@ -46,7 +46,8 @@ void setup()
 {
   esp_log_level_set("*", ESP_LOG_INFO);
   Serial.begin(SERIAL_BAUDRATE);
-
+  init_elevation_lut();
+  
   gpsSerial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
   status.tle_inited = configSatellite(&satellite);
   configControlTimer(controlTimerISR, SAMPLE_TIME_US);

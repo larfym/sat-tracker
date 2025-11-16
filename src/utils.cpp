@@ -1,6 +1,10 @@
 #include "utils.h"
 
 static const char *TAG = "UTILS";
+static const float A_CONST = 3.0f * PI_FLOAT / 2.0f - atan2f(C_ANT, D_ANT) - atan2f(F_ANT, E_ANT);
+static const float B_CONST = 2.0f * sqrtf((F_ANT * F_ANT + E_ANT * E_ANT) * (D_ANT * D_ANT + C_ANT * C_ANT));
+static const float C_CONST = F_ANT * F_ANT + E_ANT * E_ANT + D_ANT * D_ANT + C_ANT * C_ANT - A_ANT * A_ANT;
+static float elevation_lut[LUT_SIZE + 1];
 
 bool configSatellite(Sgp4 *satellite)
 {
@@ -86,4 +90,31 @@ void configControlTimer(void (*timerISR)(void *), uint64_t sample_time_us)
     timer_enable_intr(TIMER_GROUP_0, TIMER_1);
     timer_isr_register(TIMER_GROUP_0, TIMER_1, timerISR, NULL, ESP_INTR_FLAG_IRAM, NULL);
     timer_start(TIMER_GROUP_0, TIMER_1);
+}
+
+void init_elevation_lut()
+{
+    for (uint16_t i = 0; i <= LUT_SIZE; i++)
+    {
+        float ang = i * ANGLE_STEP;
+        elevation_lut[i] = sqrtf(C_CONST - B_CONST * cosf(A_CONST - ang)) - BP_ANT;
+    }
+}
+
+float get_distance_from_lut(float angle_deg)
+{
+    if (angle_deg <= 0.0f)
+        return elevation_lut[0];
+    if (angle_deg >= 90.0f)
+        return elevation_lut[LUT_SIZE];
+
+    float pos = angle_deg * INV_DEG_TO_LUT_POS;
+
+    uint16_t idx = (uint16_t)pos;
+    float frac = pos - (float)idx;
+
+    // Interpolación lineal: y = y0 + frac * (y1 - y0)
+    float y0 = elevation_lut[idx];
+    float y1 = elevation_lut[idx + 1];
+    return y0 + frac * (y1 - y0);
 }
