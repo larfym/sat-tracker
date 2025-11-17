@@ -31,9 +31,6 @@
 /** @brief Precomputed factor to convert degrees to LUT index. */
 #define INV_DEG_TO_LUT_POS ((float)LUT_SIZE / 90.0f)
 
-/** @brief Degrees-to-radians conversion factor. */
-#define DEG_TO_RAD (PI_FLOAT / 180.0f)
-
 // Antenna mechanical constants (mm)
 #define A_ANT 55.73f
 #define BP_ANT 105.45f

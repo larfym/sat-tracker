@@ -67,7 +67,7 @@
  * @brief Default parameters for WiFi access point and mDNS service.
  */
 ///@{
-#define DEFAULT_WIFI_SSID "ESP32_AP" /**< Default AP SSID. */
+#define DEFAULT_WIFI_SSID "TrackerLARFyM" /**< Default AP SSID. */
 #define DEFAULT_WIFI_PASSWORD ""     /**< Default AP password (empty = open AP). */
 #define DEFAULT_SERVER_PORT 80       /**< Web server port. */
 #define MDNS_SERVICE_NAME "Tracker"  /**< mDNS hostname. */

@@ -187,7 +187,7 @@ void taskGPS(void *pvParameters)
       settimeofday(&unix, NULL);
     }
 
-    if (gps.location.isUpdated() && gps.location.isValid() && gps.altitude.isUpdated())
+    if (gps.location.isUpdated() && gps.location.isValid() && gps.altitude.isUpdated() && gps.altitude.isValid())
     {
       satellite.site(gps.location.lat(), gps.location.lng(), gps.altitude.meters());
       ESP_LOGI(TAG, "GPS Fix: Lat=%.6f, Lng=%.6f, Alt=%.4f", gps.location.lat(), gps.location.lng(), gps.altitude.meters());
