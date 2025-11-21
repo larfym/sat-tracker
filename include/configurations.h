@@ -25,9 +25,9 @@
  * @brief Control and measurement pins for the Azimuth motor driver.
  */
 ///@{
-#define IN1_AZ_PIN GPIO_NUM_13      /**< Input pin 1 of the Azimuth motor driver. */
-#define EN_AZ_PIN GPIO_NUM_12       /**< Enable/PWM pin for Azimuth motor. */
-#define IN2_AZ_PIN GPIO_NUM_27      /**< Input pin 2 of the Azimuth motor driver. */
+#define IN1_AZ_PIN GPIO_NUM_13 /**< Input pin 1 of the Azimuth motor driver. */
+#define EN_AZ_PIN GPIO_NUM_12  /**< Enable/PWM pin for Azimuth motor. */
+#define IN2_AZ_PIN GPIO_NUM_27 /**< Input pin 2 of the Azimuth motor driver. */
 
 #define I_AZ_PIN GPIO_NUM_39        /**< Analog pin (VN) for Azimuth current sensing. */
 #define I_AZ_CHANNEL ADC1_CHANNEL_3 /**< ADC1 channel for Azimuth current sensing. */
@@ -38,9 +38,9 @@
  * @brief Control and measurement pins for the Elevation motor driver.
  */
 ///@{
-#define IN1_EL_PIN GPIO_NUM_26      /**< Input pin 1 of the Elevation motor driver. */
-#define EN_EL_PIN GPIO_NUM_33       /**< Enable/PWM pin for Elevation motor. */
-#define IN2_EL_PIN GPIO_NUM_32      /**< Input pin 2 of the Elevation motor driver. */
+#define IN1_EL_PIN GPIO_NUM_26 /**< Input pin 1 of the Elevation motor driver. */
+#define EN_EL_PIN GPIO_NUM_33  /**< Enable/PWM pin for Elevation motor. */
+#define IN2_EL_PIN GPIO_NUM_32 /**< Input pin 2 of the Elevation motor driver. */
 
 #define I_EL_PIN GPIO_NUM_36        /**< Analog pin (VP) for Elevation current sensing. */
 #define I_EL_CHANNEL ADC1_CHANNEL_0 /**< ADC1 channel for Elevation current sensing. */
@@ -68,10 +68,10 @@
  */
 ///@{
 #define DEFAULT_WIFI_SSID "TrackerLARFyM" /**< Default AP SSID. */
-#define DEFAULT_WIFI_PASSWORD ""     /**< Default AP password (empty = open AP). */
-#define DEFAULT_SERVER_PORT 80       /**< Web server port. */
-#define MDNS_SERVICE_NAME "Tracker"  /**< mDNS hostname. */
-#define WIFI_CONNECT_TIMEOUT 10000   /**< WiFi connection timeout in ms. */
+#define DEFAULT_WIFI_PASSWORD ""          /**< Default AP password (empty = open AP). */
+#define DEFAULT_SERVER_PORT 80            /**< Web server port. */
+#define MDNS_SERVICE_NAME "Tracker"       /**< mDNS hostname. */
+#define WIFI_CONNECT_TIMEOUT 10000        /**< WiFi connection timeout in ms. */
 ///@}
 
 /* -------------------------------------------------------------------------- */
@@ -95,9 +95,9 @@
  * @brief UART settings and default fallback position/time.
  */
 ///@{
-#define GPS_UART 1                  /**< UART index used by GPS. */
-#define GPS_BAUDRATE 9600           /**< GPS communication baud rate. */
-#define GPS_INTERVAL_SEC 120        /**< GPS update interval in seconds. */
+#define GPS_UART 1           /**< UART index used by GPS. */
+#define GPS_BAUDRATE 9600    /**< GPS communication baud rate. */
+#define GPS_INTERVAL_SEC 120 /**< GPS update interval in seconds. */
 
 #define DEFAULT_LATITUD 37.7749     /**< Default latitude (fallback). */
 #define DEFAULT_LONGITUD -122.4194  /**< Default longitude (fallback). */
@@ -110,6 +110,24 @@
 /* -------------------------------------------------------------------------- */
 
 /**
+ * @name Motor Duty to start spinning.
+ * @brief Motor non Linearity
+ */
+///@{
+#define M_AZ_DUTY_TO_START 40
+#define M_EL_DUTY_TO_START 40
+///@}
+
+/**
+ * @name Actuator pulses resolution
+ * @brief Resolution per pulses of reed.
+ */
+///@{
+#define AZIMUTH_RESOLUTION_angle 0.2
+#define ELEVATION_RESOLUTION_mm 0.85
+///@}
+
+/**
  * @name Motor Current Limits
  * @brief Safety current limits for motor protection.
  */
@@ -117,6 +135,7 @@
 #define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max current for Azimuth motor (mA). */
 #define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max current for Elevation motor (mA). */
 #define CURRENT_HOMING_mA 10.0          /**< Max current for considering the motor turned off. */
+#define CURRENT_OFFSETS_SAMPLES 100     /**< Samples for calculating current offset. */
 ///@}
 
 /**
@@ -126,8 +145,9 @@
 ///@{
 #define TIMER_PREESCALER 80                        /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
 #define DEFAULT_SAMPLE_TIME_US 1000000             /**< Default control loop sample time (µs). */
-#define SAMPLE_TIME_US 800000                      /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_US 1000000                     /**< Control loop sample time (µs). */
 #define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0) /**< Control loop sample time (s). */
+#define SAMPLE_TIME_SGP4_MS 500                    /**< SGP4 Trayectory estimation time(ms) */
 ///@}
 
 /**
@@ -135,9 +155,10 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 2.0 /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.5 /**< Integral gain (AZ). */
-#define KD_AZIMUTH 0.1 /**< Derivative gain (AZ). */
+#define KP_AZIMUTH 1.0  /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.05 /**< Integral gain (AZ). */
+#define KD_AZIMUTH 0.01  /**< Derivative gain (AZ). */
+#define INTEGRAL_CONSTRAIN_AZ 1000.0
 ///@}
 
 /**
@@ -145,9 +166,10 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 2.0 /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.5 /**< Integral gain (EL). */
-#define KD_ELEVATION 0.1 /**< Derivative gain (EL). */
+#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.05 /**< Integral gain (EL). */
+#define KD_ELEVATION 0.01  /**< Derivative gain (EL). */
+#define INTEGRAL_CONSTRAIN_EL 1000.0
 ///@}
 
 /**
@@ -158,8 +180,8 @@
 #define REED_AZ_SOFT_LIMIT_HIGH 1900 /**< Upper soft limit for Azimuth. */
 #define REED_EL_SOFT_LIMIT_HIGH 500  /**< Upper soft limit for Elevation. */
 
-#define REED_AZ_SOFT_LIMIT_LOW -1    /**< Lower soft limit for Azimuth (-1 = unused). */
-#define REED_EL_SOFT_LIMIT_LOW -1    /**< Lower soft limit for Elevation (-1 = unused). */
+#define REED_AZ_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Azimuth (-1 = unused). */
+#define REED_EL_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Elevation (-1 = unused). */
 ///@}
 
 /**

@@ -25,11 +25,23 @@
 /** @brief PI constant in float precision. */
 #define PI_FLOAT 3.1415926535f
 
+/** @brief Max extension in mm of the linear actuator */
+#define MAX_EXTENSION_mm 450 - BP_ANT
+
+/** @brief Max elevation in degrees */
+#define MAX_ELEVATION_deg 90.0f
+
 /** @brief Angular step in radians for the LUT (90° / LUT_SIZE). */
-#define ANGLE_STEP ((PI_FLOAT / 2.0f) / (float)LUT_SIZE)
+#define ANGLE_STEP (MAX_ELEVATION_deg / (float)LUT_SIZE)
+
+/** @brief step in mm for the LUT. */
+#define MM_STEP (MAX_EXTENSION_mm / (float)LUT_SIZE)
 
 /** @brief Precomputed factor to convert degrees to LUT index. */
-#define INV_DEG_TO_LUT_POS ((float)LUT_SIZE / 90.0f)
+#define INV_DEG_TO_LUT_POS ((float)LUT_SIZE / MAX_ELEVATION_deg)
+
+/** @brief Precomputed factor to convert mm to LUT index. */
+#define INV_MM_TO_LUT_POS ((float)LUT_SIZE / MAX_EXTENSION_mm)
 
 // Antenna mechanical constants (mm)
 #define A_ANT 55.73f
@@ -60,12 +72,12 @@ extern Preferences config;
  */
 typedef struct __attribute__((packed))
 {
-    uint8_t tle_inited : 1;     /**< True if TLE data has been successfully loaded. */
-    uint8_t gps_fix : 1;        /**< True if GPS has a valid fix. */
-    uint8_t tle_changed : 1;    /**< True if TLE data has been updated. */
-    uint8_t manual_track : 1;   /**< True if antenna is in manual control mode. */
-    uint8_t tracking : 1;       /**< True if automatic tracking is active. */
-    uint8_t error : 3;          /**< 3-bit internal error code. */
+    uint8_t tle_inited : 1;   /**< True if TLE data has been successfully loaded. */
+    uint8_t gps_fix : 1;      /**< True if GPS has a valid fix. */
+    uint8_t tle_changed : 1;  /**< True if TLE data has been updated. */
+    uint8_t manual_track : 1; /**< True if antenna is in manual control mode. */
+    uint8_t tracking : 1;     /**< True if automatic tracking is active. */
+    uint8_t error : 3;        /**< 3-bit internal error code. */
 } trackerStatus_t;
 
 /**
@@ -73,8 +85,8 @@ typedef struct __attribute__((packed))
  */
 typedef struct __attribute__((packed))
 {
-    float azimuth;      /**< Azimuth angle in degrees (0–360). */
-    float elevation;    /**< Elevation angle in degrees (0–90). */
+    float azimuth;   /**< Azimuth angle in degrees (0–360). */
+    float elevation; /**< Elevation angle in degrees (0–90). */
 } antennaPosition_t;
 
 /**
@@ -82,8 +94,8 @@ typedef struct __attribute__((packed))
  */
 typedef enum
 {
-    FORWARD,    /**< Positive direction. */
-    BACKWARD    /**< Negative direction. */
+    FORWARD, /**< Positive direction. */
+    BACKWARD /**< Negative direction. */
 } direction;
 
 // --------------------------------------------------------------------------------------
@@ -138,11 +150,35 @@ void saveTLEdata(String name, String line1, String line2, double offset_az, doub
 void init_elevation_lut();
 
 /**
+ * @brief Computes the non linearity of elevation.
+ *
+ * @param mm distance in mm.
+ * @return degrees.
+ */
+float elevation_deg_from_mm(float mm);
+
+/**
+ * @brief Computes the non linearity of elevation.
+ *
+ * @param deg angle in degrees.
+ * @return distance in mm.
+ */
+float elevation_mm_from_deg(float deg);
+
+/**
  * @brief Retrieves a distance value from the LUT based on the input angle.
  *
- * @param angle_deg Angle in degrees.
+ * @param deg Angle in degrees.
  * @return Interpolated distance from the LUT.
  */
-float get_distance_from_lut(float angle_deg);
+float elevation_mm_from_deg_lut(float deg);
+
+/**
+ * @brief Retrieves a degree value from the LUT based on the input mm.
+ *
+ * @param mm distance in mm.
+ * @return Interpolated degree from the LUT.
+ */
+float elevation_deg_from_mm_lut(float mm);
 
 #endif // UTILS_H
