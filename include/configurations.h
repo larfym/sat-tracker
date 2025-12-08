@@ -25,12 +25,12 @@
  * @brief Control and measurement pins for the Azimuth motor driver.
  */
 ///@{
-#define IN1_AZ_PIN GPIO_NUM_13 /**< Input pin 1 of the Azimuth motor driver. */
+#define IN1_AZ_PIN GPIO_NUM_25 /**< Input pin 1 of the Azimuth motor driver. */
 #define EN_AZ_PIN GPIO_NUM_12  /**< Enable/PWM pin for Azimuth motor. */
-#define IN2_AZ_PIN GPIO_NUM_27 /**< Input pin 2 of the Azimuth motor driver. */
+#define IN2_AZ_PIN GPIO_NUM_26 /**< Input pin 2 of the Azimuth motor driver. */
 
-#define I_AZ_PIN GPIO_NUM_39        /**< Analog pin (VN) for Azimuth current sensing. */
-#define I_AZ_CHANNEL ADC1_CHANNEL_3 /**< ADC1 channel for Azimuth current sensing. */
+#define I_AZ_PIN GPIO_NUM_36        /**< Analog pin (VP) for Azimuth current sensing. */
+#define I_AZ_CHANNEL ADC1_CHANNEL_0 /**< ADC1 channel for Azimuth current sensing. */
 ///@}
 
 /**
@@ -38,12 +38,12 @@
  * @brief Control and measurement pins for the Elevation motor driver.
  */
 ///@{
-#define IN1_EL_PIN GPIO_NUM_26 /**< Input pin 1 of the Elevation motor driver. */
-#define EN_EL_PIN GPIO_NUM_33  /**< Enable/PWM pin for Elevation motor. */
-#define IN2_EL_PIN GPIO_NUM_32 /**< Input pin 2 of the Elevation motor driver. */
+#define IN1_EL_PIN GPIO_NUM_27 /**< Input pin 1 of the Elevation motor driver. */
+#define EN_EL_PIN GPIO_NUM_13  /**< Enable/PWM pin for Elevation motor. */
+#define IN2_EL_PIN GPIO_NUM_14 /**< Input pin 2 of the Elevation motor driver. */
 
-#define I_EL_PIN GPIO_NUM_36        /**< Analog pin (VP) for Elevation current sensing. */
-#define I_EL_CHANNEL ADC1_CHANNEL_0 /**< ADC1 channel for Elevation current sensing. */
+#define I_EL_PIN GPIO_NUM_39        /**< Analog pin (VN) for Elevation current sensing. */
+#define I_EL_CHANNEL ADC1_CHANNEL_3 /**< ADC1 channel for Elevation current sensing. */
 ///@}
 
 /**
@@ -54,8 +54,8 @@
 #define GPS_RX_PIN 16 /**< GPS UART RX pin. */
 #define GPS_TX_PIN 17 /**< GPS UART TX pin. */
 
-#define REED_AZ_PIN GPIO_NUM_19 /**< Reed switch for Azimuth limit detection. */
-#define REED_EL_PIN GPIO_NUM_18 /**< Reed switch for Elevation limit detection. */
+#define REED_AZ_PIN GPIO_NUM_22 /**< Reed switch for Azimuth limit detection. */
+#define REED_EL_PIN GPIO_NUM_23 /**< Reed switch for Elevation limit detection. */
 ///@}
 
 /* -------------------------------------------------------------------------- */
@@ -106,16 +106,19 @@
 ///@}
 
 /* -------------------------------------------------------------------------- */
-/*                           CONTROL & PID CONSTANTS                          */
+/*                           CONTROL & PI CONSTANTS                          */
 /* -------------------------------------------------------------------------- */
 
 /**
- * @name Motor Duty to start spinning.
- * @brief Motor non Linearity
+ * @name DC Motor Configuration.
+ * @brief Non Linearity & Nominal Tension (Saturation)
  */
 ///@{
-#define M_AZ_DUTY_TO_START 40
-#define M_EL_DUTY_TO_START 40
+#define M_V_NOMINAL 36
+#define M_AZ_V_TO_START 7.5
+#define M_EL_V_TO_START 3
+#define M_AZ_DUTY_TO_START (100/M_V_NOMINAL)*M_AZ_V_TO_START
+#define M_EL_DUTY_TO_START (100/M_V_NOMINAL)*M_EL_V_TO_START
 ///@}
 
 /**
@@ -124,7 +127,7 @@
  */
 ///@{
 #define AZIMUTH_RESOLUTION_angle 0.2
-#define ELEVATION_RESOLUTION_mm 0.85
+#define ELEVATION_RESOLUTION_mm 0.80
 ///@}
 
 /**
@@ -132,8 +135,8 @@
  * @brief Safety current limits for motor protection.
  */
 ///@{
-#define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max current for Azimuth motor (mA). */
-#define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max current for Elevation motor (mA). */
+#define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max DC current for Azimuth motor (mA). */
+#define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max DC current for Elevation motor (mA). */
 #define CURRENT_HOMING_mA 10.0          /**< Max current for considering the motor turned off. */
 #define CURRENT_OFFSETS_SAMPLES 100     /**< Samples for calculating current offset. */
 ///@}
@@ -143,11 +146,11 @@
  * @brief Control-loop timing settings.
  */
 ///@{
-#define TIMER_PREESCALER 80                        /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
-#define DEFAULT_SAMPLE_TIME_US 1000000             /**< Default control loop sample time (µs). */
-#define SAMPLE_TIME_US 1000000                     /**< Control loop sample time (µs). */
-#define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0) /**< Control loop sample time (s). */
-#define SAMPLE_TIME_SGP4_MS 500                    /**< SGP4 Trayectory estimation time(ms) */
+#define TIMER_PREESCALER 80                         /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
+#define DEFAULT_SAMPLE_TIME_US 500                  /**< Default control loop sample time (µs). */
+#define SAMPLE_TIME_US 500                          /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0)  /**< Control loop sample time (s). */
+#define SAMPLE_TIME_SGP4_MS 500                     /**< SGP4 Trayectory estimation time(ms) */
 ///@}
 
 /**
@@ -155,10 +158,8 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 1.0  /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.05 /**< Integral gain (AZ). */
-#define KD_AZIMUTH 0.01  /**< Derivative gain (AZ). */
-#define INTEGRAL_CONSTRAIN_AZ 1000.0
+#define KP_AZIMUTH 100.0  /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.5 /**< Integral gain (AZ). */
 ///@}
 
 /**
@@ -166,10 +167,8 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.05 /**< Integral gain (EL). */
-#define KD_ELEVATION 0.01  /**< Derivative gain (EL). */
-#define INTEGRAL_CONSTRAIN_EL 1000.0
+#define KP_ELEVATION 100.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.5 /**< Integral gain (EL). */
 ///@}
 
 /**
@@ -180,11 +179,27 @@
 #define REED_AZ_SOFT_LIMIT_HIGH 1900 /**< Upper soft limit for Azimuth. */
 #define REED_EL_SOFT_LIMIT_HIGH 500  /**< Upper soft limit for Elevation. */
 
-#define REED_AZ_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Azimuth (-1 = unused). */
-#define REED_EL_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Elevation (-1 = unused). */
+#define REED_AZ_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Azimuth */
+#define REED_EL_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Elevation */
 ///@}
 
 /**
  * @brief PWM frequency for PWM motor speed control (Hz).
  */
-#define PWM_FREQ_HZ 10000
+#define PWM_FREQ_HZ 2000
+
+/* -------------------------------------------------------------------------- */
+/*                           SIGNAL ADAPTATION                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * @name Current signal Adaptation
+ * @brief gain & shunt value
+ */
+///@{
+#define SHUNT_AZ_OHM (1/3)
+#define CURRENT_GAIN_AZ 2.11988
+
+#define SHUNT_EL_OHM (0.27/3)
+#define CURRENT_GAIN_EL 7.07773
+///@}

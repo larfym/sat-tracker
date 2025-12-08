@@ -92,21 +92,3 @@ void MotorDriver::stop()
 
     ESP_LOGD(TAG, "Motor %d stopped", instance_id);
 }
-
-void MotorDriver::setMotorLowerBound(double percentage)
-{
-    this->lower_bound_percentage = percentage;
-}
-
-
-void MotorDriver::setMotorDuty(double percentage)
-{
-    if(percentage == lower_bound_percentage)
-    {
-        this->setDuty(0.0);
-    }else
-    {
-        percentage = ((100.0 - lower_bound_percentage) * (percentage / 100.0)) + lower_bound_percentage;
-        this->setDuty(percentage);
-    }
-}

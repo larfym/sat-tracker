@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "pid.h"
+#include "PI_Controller.h"
 #include "server.h"
 #include "currentSensor.h"
 #include "reed.h"
@@ -17,8 +17,8 @@ ServerHandler serverHandler(DEFAULT_SERVER_PORT);
 trackerStatus_t status;
 antennaPosition_t tar_angle, curr_angle, offsets_angle;
 
-PID pidAz(KP_AZIMUTH, KI_AZIMUTH, KD_AZIMUTH);
-PID pidEl(KP_ELEVATION, KI_ELEVATION, KD_ELEVATION);
+PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_V_NOMINAL);
+PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_V_NOMINAL);
 
 /* Reed Switch Handlers*/
 void IRAM_ATTR reedAz_event_handler(void *arg);
@@ -54,17 +54,28 @@ void setup()
 {
   esp_log_level_set("*", ESP_LOG_INFO);
   Serial.begin(SERIAL_BAUDRATE);
+
   init_elevation_lut();
+
+  /* Init Calibrations & Configs*/
+  currentAz.setShuntValue(SHUNT_AZ_OHM);
+  currentEl.setShuntValue(SHUNT_EL_OHM);
+  currentAz.setOpAmpGain(CURRENT_GAIN_AZ);
+  currentEl.setOpAmpGain(CURRENT_GAIN_EL);
   currentAz.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
   currentEl.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
   ESP_LOGI(TAG, "Current offset Az %d [mV], Current offset El %d [mV]", currentAz.getOffset_mV(), currentEl.getOffset_mV());
   offsets_angle = getSavedOffsets();
   ESP_LOGI(TAG, "Saved offset Az %.3f [°], Saved offset El %.3f [°]", offsets_angle.azimuth, offsets_angle.elevation);
-  
-  motorAz.setMotorLowerBound(M_AZ_DUTY_TO_START);
-  motorEl.setMotorLowerBound(M_EL_DUTY_TO_START);
-  pidAz.setConstraintsAtIntegralError(-INTEGRAL_CONSTRAIN_AZ, INTEGRAL_CONSTRAIN_AZ);
-  pidEl.setConstraintsAtIntegralError(-INTEGRAL_CONSTRAIN_EL, INTEGRAL_CONSTRAIN_EL);
+
+  /*Stop Motors At Start*/
+  motorAz.stop();
+  motorEl.stop();
+  motorAz.setDuty(0);
+  motorEl.setDuty(0);
+
+  controllerAz.setDeadZone(M_AZ_V_TO_START);
+  controllerEl.setDeadZone(M_EL_V_TO_START);
 
   gpsSerial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
   status.tle_inited = configSatellite(&satellite);
@@ -167,18 +178,18 @@ void taskMotionControl(void *pvParameters)
 
     curr_angle.elevation = elevation_deg_from_mm(extension_mm);
     curr_angle.azimuth = azimut_deg;
-    ESP_LOGI(TAG, "Az angl: %0.2f, El mm: %0.2f, El deg: %0.2f", curr_angle.azimuth, extension_mm, curr_angle.elevation);
 
-    pidEl.setPoint(elevation_mm_from_deg(tar_elevation));
-    pidAz.setPoint(tar_angle.azimuth);
+    controllerEl.setPoint(elevation_mm_from_deg(tar_elevation));
+    controllerAz.setPoint(tar_angle.azimuth);
 
-    double o_az = pidAz.output(curr_angle.azimuth);
-    double o_el = pidEl.output(extension_mm);
+    double o_az = controllerAz.output(curr_angle.azimuth);
+    double o_el = controllerEl.output(extension_mm);
 
     if(o_az > 0 && change_forward_az == false)
     {
       change_backward_az = false;
       change_forward_az = true;
+      motorAz.setDuty(10);
       motorAz.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
       motorAz.setDuty(0);
@@ -190,6 +201,7 @@ void taskMotionControl(void *pvParameters)
     {
       change_forward_az = false;
       change_backward_az = true;
+      motorAz.setDuty(10);
       motorAz.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
       motorAz.setDuty(0);
@@ -201,9 +213,10 @@ void taskMotionControl(void *pvParameters)
     {
       change_backward_el = false;
       change_forward_el = true;
+      motorAz.setDuty(10);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
-      motorEl.setDuty(0);
+      motorAz.setDuty(0);
       motorEl.setDirection(FORWARD);
       reedEl.countDirection(FORWARD);
     }
@@ -212,6 +225,7 @@ void taskMotionControl(void *pvParameters)
     {
       change_forward_az = false;
       change_backward_el = true;
+      motorAz.setDuty(10);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
       motorEl.setDuty(0);
@@ -219,10 +233,11 @@ void taskMotionControl(void *pvParameters)
       reedEl.countDirection(BACKWARD);
     }
 
-    ESP_LOGI(TAG, "o_az: %0.2f, o_el: %0.2f", o_az, o_el);
+    double o_az_percentage = abs(o_az) / (100.0f/M_V_NOMINAL);
+    double o_el_percentage = abs(o_el) / (100.0f/M_V_NOMINAL);
 
-    motorAz.setMotorDuty(abs(o_az));
-    motorAz.setMotorDuty(abs(o_el));
+    motorAz.setDuty(o_az_percentage);
+    motorAz.setDuty(o_el_percentage);
   }
 }
 
