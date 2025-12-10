@@ -44,12 +44,12 @@
 #define INV_MM_TO_LUT_POS ((float)LUT_SIZE / MAX_EXTENSION_mm)
 
 // Antenna mechanical constants (mm)
-#define A_ANT 55.73f
-#define BP_ANT 105.45f
-#define C_ANT 276.90f
-#define D_ANT 138.91f
+#define A_ANT 55.0f
+#define BP_ANT 230.00f
+#define C_ANT 260.00f
+#define D_ANT 155.0f
 #define E_ANT 80.0f
-#define F_ANT 262.27f
+#define F_ANT 260.00f
 
 // --------------------------------------------------------------------------------------
 //                                 GLOBAL REFERENCES

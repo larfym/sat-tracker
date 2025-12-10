@@ -17,8 +17,8 @@ ServerHandler serverHandler(DEFAULT_SERVER_PORT);
 trackerStatus_t status;
 antennaPosition_t tar_angle, curr_angle, offsets_angle;
 
-PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_V_NOMINAL);
-PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_V_NOMINAL);
+PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_V_NOMINAL, AZIMUT_ERROR_MAX_DEGREE);
+PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_V_NOMINAL, ELEVATION_ERROR_MAX_MM);
 
 /* Reed Switch Handlers*/
 void IRAM_ATTR reedAz_event_handler(void *arg);
@@ -52,14 +52,14 @@ bool home_done = false;
 
 void setup()
 {
-  esp_log_level_set("*", ESP_LOG_INFO);
+  esp_log_level_set("*", ESP_LOG_VERBOSE);
   Serial.begin(SERIAL_BAUDRATE);
 
   init_elevation_lut();
 
   /* Init Calibrations & Configs*/
-  currentAz.setShuntValue(SHUNT_AZ_OHM);
-  currentEl.setShuntValue(SHUNT_EL_OHM);
+  currentAz.setShuntValue(0.33333);
+  currentEl.setShuntValue(0.09);
   currentAz.setOpAmpGain(CURRENT_GAIN_AZ);
   currentEl.setOpAmpGain(CURRENT_GAIN_EL);
   currentAz.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
@@ -112,12 +112,12 @@ void loop()
     { 
       if(!status.manual_track && taskTrackingCalculation_handle == NULL)
       {
-        xTaskCreate(taskTrackingCalculation, "Tracking Task", 8192, NULL, 18, &taskTrackingCalculation_handle);
+        xTaskCreate(taskTrackingCalculation, "Starting Calculation Task", 8192, NULL, 13, &taskTrackingCalculation_handle);
       }
       if(taskMotionControl_handle == NULL)
       {
-        ESP_LOGI(TAG, "Starting Motion Task");
-        xTaskCreate(taskMotionControl, "Motion Control Task", 2048, NULL, 20, &taskMotionControl_handle);
+        ESP_LOGI(TAG, "Starting MOTION CONTROL Task");
+        xTaskCreate(taskMotionControl, "Motion Control Task", 8192, NULL, 14, &taskMotionControl_handle);
       }
     }
   }else
@@ -148,8 +148,8 @@ void taskMotionControl(void *pvParameters)
 {
   bool change_forward_az = false, change_backward_az = false;
   bool change_forward_el = false, change_backward_el = false;
-  float tar_elevation = 0.0;
-
+  float tar_elevation = 0.0, o_az = 0.0, o_el = 0.0;
+  
   for (;;)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -182,8 +182,8 @@ void taskMotionControl(void *pvParameters)
     controllerEl.setPoint(elevation_mm_from_deg(tar_elevation));
     controllerAz.setPoint(tar_angle.azimuth);
 
-    double o_az = controllerAz.output(curr_angle.azimuth);
-    double o_el = controllerEl.output(extension_mm);
+    o_az = controllerAz.output(curr_angle.azimuth);
+    o_el = controllerEl.output(extension_mm);
 
     if(o_az > 0 && change_forward_az == false)
     {
@@ -213,7 +213,7 @@ void taskMotionControl(void *pvParameters)
     {
       change_backward_el = false;
       change_forward_el = true;
-      motorAz.setDuty(10);
+      motorEl.setDuty(10);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
       motorAz.setDuty(0);
@@ -225,7 +225,7 @@ void taskMotionControl(void *pvParameters)
     {
       change_forward_az = false;
       change_backward_el = true;
-      motorAz.setDuty(10);
+      motorEl.setDuty(10);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
       motorEl.setDuty(0);
@@ -233,11 +233,8 @@ void taskMotionControl(void *pvParameters)
       reedEl.countDirection(BACKWARD);
     }
 
-    double o_az_percentage = abs(o_az) / (100.0f/M_V_NOMINAL);
-    double o_el_percentage = abs(o_el) / (100.0f/M_V_NOMINAL);
-
-    motorAz.setDuty(o_az_percentage);
-    motorAz.setDuty(o_el_percentage);
+    motorAz.setDuty(abs(o_az) * (100.0f/M_V_NOMINAL));
+    motorEl.setDuty(abs(o_el) * (100.0f/M_V_NOMINAL));
   }
 }
 
@@ -381,6 +378,7 @@ void taskHome(void *pvParameters)
     uint16_t current_az = currentAz.getCurrent_mA();
     uint16_t current_el = currentEl.getCurrent_mA();
     ESP_LOGI(TAG, "Curr_az %d, Curr_el %d", current_az, current_el);
+    ESP_LOGI(TAG, "MV_az %d, MV_el %d", currentAz.getShuntVoltage_mV(), currentEl.getShuntVoltage_mV());
     if (current_az < CURRENT_HOMING_mA && current_el < CURRENT_HOMING_mA)
     {
       motorAz.stop();

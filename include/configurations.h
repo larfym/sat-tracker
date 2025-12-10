@@ -158,8 +158,8 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 100.0  /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.5 /**< Integral gain (AZ). */
+#define KP_AZIMUTH 80.0  /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.5   /**< Integral gain (AZ). */
 ///@}
 
 /**
@@ -167,9 +167,12 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 100.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.5 /**< Integral gain (EL). */
+#define KP_ELEVATION 80.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.5   /**< Integral gain (EL). */
 ///@}
+
+#define AZIMUT_ERROR_MAX_DEGREE 0.6
+#define ELEVATION_ERROR_MAX_MM 1.6
 
 /**
  * @name Soft Limit Positions
