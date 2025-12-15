@@ -127,7 +127,7 @@
  */
 ///@{
 #define AZIMUTH_RESOLUTION_angle 0.2
-#define ELEVATION_RESOLUTION_mm 0.80
+#define ELEVATION_RESOLUTION_mm 1.6
 ///@}
 
 /**
@@ -148,7 +148,7 @@
 ///@{
 #define TIMER_PREESCALER 80                         /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
 #define DEFAULT_SAMPLE_TIME_US 500                  /**< Default control loop sample time (µs). */
-#define SAMPLE_TIME_US 500                          /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_US 500000                          /**< Control loop sample time (µs). */
 #define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0)  /**< Control loop sample time (s). */
 #define SAMPLE_TIME_SGP4_MS 500                     /**< SGP4 Trayectory estimation time(ms) */
 ///@}
@@ -158,7 +158,7 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 80.0  /**< Proportional gain (AZ). */
+#define KP_AZIMUTH 1.0  /**< Proportional gain (AZ). */
 #define KI_AZIMUTH 0.5   /**< Integral gain (AZ). */
 ///@}
 
@@ -167,12 +167,12 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 80.0  /**< Proportional gain (EL). */
+#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
 #define KI_ELEVATION 0.5   /**< Integral gain (EL). */
 ///@}
 
-#define AZIMUT_ERROR_MAX_DEGREE 0.6
-#define ELEVATION_ERROR_MAX_MM 1.6
+#define AZIMUT_ERROR_MAX_DEGREE 0.3
+#define ELEVATION_ERROR_MAX_MM 2.4
 
 /**
  * @name Soft Limit Positions
@@ -200,9 +200,9 @@
  * @brief gain & shunt value
  */
 ///@{
-#define SHUNT_AZ_OHM (1/3)
+#define SHUNT_AZ_OHM 0.3333333
 #define CURRENT_GAIN_AZ 2.11988
 
-#define SHUNT_EL_OHM (0.27/3)
+#define SHUNT_EL_OHM 0.09
 #define CURRENT_GAIN_EL 7.07773
 ///@}

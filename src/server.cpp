@@ -168,13 +168,13 @@ void ServerHandler::handleToggleTracking(AsyncWebServerRequest *request)
         {
             doc["tracking_active"] = false;
             doc["reason"] = "No_GPS";
-            ESP_LOGE(TAG, "Cannot start tracking: No GPS Fix");
+            ESP_LOGI(TAG, "Cannot start tracking: No GPS Fix");
         }
         else if (status.tle_inited == false)
         {
             doc["tracking_active"] = false;
             doc["reason"] = "No_TLE";
-            ESP_LOGE(TAG, "Cannot start tracking: TLE Not Initialized");
+            ESP_LOGI(TAG, "Cannot start tracking: TLE Not Initialized");
         }
     }
 
