@@ -27,9 +27,9 @@ extern Preferences config;
 /** @brief Global structure holding the current operational status of the tracker. */
 extern trackerStatus_t status;
 /** @brief Global structure for the target (commanded) antenna position. */
-extern antennaPosition_t tar_angle;
+extern esfericalAngles_t target, manual_target;
 /** @brief Global structure for the current (measured) antenna position. */
-extern antennaPosition_t curr_angle;
+extern esfericalAngles_t current;
 
 /** @brief Constant string for the default WiFi SSID. */
 const String default_wifi_ssid = DEFAULT_WIFI_SSID;

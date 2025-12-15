@@ -95,12 +95,12 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
     }
     if (status.gps_fix && status.tle_inited)
     {
-        doc["s_az"] = tar_angle.azimuth;
-        doc["s_el"] = tar_angle.elevation;
+        doc["s_az"] = target.azimuth;
+        doc["s_el"] = target.elevation;
     }
 
-    doc["a_az"] = curr_angle.azimuth;
-    doc["a_el"] = curr_angle.elevation;
+    doc["a_az"] = current.azimuth;
+    doc["a_el"] = current.elevation;
 
     if (status.tracking)
     {
@@ -200,8 +200,8 @@ void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *d
         status.tracking = true;
         float az = doc["manual_az"];
         float el = doc["manual_el"];
-        tar_angle.azimuth = az;
-        tar_angle.elevation = el;
+        manual_target.azimuth = az;
+        manual_target.elevation = el;
 
         ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
         request->send(200, "text/plain", "OK");

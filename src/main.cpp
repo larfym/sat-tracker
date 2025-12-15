@@ -6,21 +6,18 @@
 #include "motorDriver.h"
 #include "configurations.h"
 
-static const char *TAG = "MAIN";
-
+/* Library Objects */
 Sgp4 satellite;
 Preferences config;
 HardwareSerial gpsSerial(GPS_UART);
 TinyGPSPlus gps;
-
 ServerHandler serverHandler(DEFAULT_SERVER_PORT);
-trackerStatus_t status;
-antennaPosition_t tar_angle, offsets_angle, curr_angle;
 
+/* Discrete Controllers */
 PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_V_NOMINAL, AZIMUT_ERROR_MAX_DEGREE);
 PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_V_NOMINAL, ELEVATION_ERROR_MAX_MM);
 
-/* Reed Switch Handlers*/
+/* Reed Switch Handlers */
 void IRAM_ATTR reedAz_event_handler(void *arg);
 void IRAM_ATTR reedEl_event_handler(void *arg);
 
@@ -34,7 +31,7 @@ CurrentSensor currentEl(I_EL_CHANNEL);
 
 /* Task Handlers */
 TaskHandle_t taskHome_handle = NULL;
-TaskHandle_t taskTrackingCalculation_handle = NULL;
+TaskHandle_t taskSGP4Calculation_handle = NULL;
 TaskHandle_t taskMotionControl_handle = NULL;
 TaskHandle_t taskStopMotion_handle = NULL;
 
@@ -50,6 +47,9 @@ void taskHome(void *pvParameters);
 void taskCurrentMonitor(void *pvParameters);
 
 /* Global Variables */
+static const char *TAG = "MAIN";
+trackerStatus_t status;
+esfericalAngles_t target = {0.0, 0.0}, manual_target = {0.0, 0.0}, current = {0.0, 0.0}, offsets_ant = {0.0, 0.0};
 bool home_done = false, stopped = false;
 
 void setup()
@@ -67,8 +67,8 @@ void setup()
   currentAz.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
   currentEl.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
   ESP_LOGI(TAG, "Shunt off-Az %d [mV], Shunt off-El %d [mV]", currentAz.getOffset_mV(), currentEl.getOffset_mV());
-  offsets_angle = getSavedOffsets();
-  ESP_LOGI(TAG, "Antenna-Offsets: Az %.3f [°], El %.3f [°]", offsets_angle.azimuth, offsets_angle.elevation);
+  offsets_ant = getSavedOffsets();
+  ESP_LOGI(TAG, "Antenna-Offsets: Az %.3f [°], El %.3f [°]", offsets_ant.azimuth, offsets_ant.elevation);
 
   controllerAz.setDeadZone(M_AZ_V_TO_START);
   controllerEl.setDeadZone(M_EL_V_TO_START);
@@ -95,10 +95,10 @@ void loop()
   }
 
   // SGP4 Calculation Task When possible
-  if (status.tle_inited == true && status.gps_fix == true && taskTrackingCalculation_handle == NULL)
+  if (status.tle_inited == true && status.gps_fix == true && taskSGP4Calculation_handle == NULL)
   {
     ESP_LOGI(TAG, "Starting SGP4 Calculation Task");
-    xTaskCreate(taskTrackingCalculation, "Calculation Task", 8192, NULL, 14, &taskTrackingCalculation_handle);
+    xTaskCreate(taskTrackingCalculation, "Calculation Task", 8192, NULL, 14, &taskSGP4Calculation_handle);
   }
 
   // Tracking Management
@@ -149,40 +149,46 @@ void taskMotionControl(void *pvParameters)
 {
   bool change_forward_az = false, change_backward_az = false;
   bool change_forward_el = false, change_backward_el = false;
+
+  esfericalAngles_t set_angle = {0.0, 0.0};
+  float output_az = 0.0, output_el = 0.0;
   float extension_mm = 0.0, azimut_deg = 0.0;
-  float tar_elevation = 0.0, o_az = 0.0, o_el = 0.0;
 
   for (;;)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    // Constrain Elevation angle
-    if (tar_angle.elevation > MAX_ELEVATION_deg)
+    if(status.manual_track == true)
     {
-      tar_elevation = MAX_ELEVATION_deg;
+      set_angle.azimuth = manual_target.azimuth;
+      set_angle.elevation = manual_target.elevation;
+    }else{
+      set_angle.azimuth = target.azimuth;
+      set_angle.elevation = target.elevation;
     }
-    else if (tar_angle.elevation < 0.0)
+
+    //Constrain Elevation
+    if(set_angle.elevation < 0.0)
     {
-      tar_elevation = 0.0;
-    }
-    else
+      set_angle.elevation = 0.0;
+    } else if(set_angle.elevation > MAX_ELEVATION_deg)
     {
-      tar_elevation = tar_angle.elevation;
+      set_angle.elevation = MAX_ELEVATION_deg;
     }
 
     extension_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
     azimut_deg = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
 
-    curr_angle.elevation = elevation_deg_from_mm(extension_mm);
-    curr_angle.azimuth = azimut_deg;
+    current.elevation = elevation_deg_from_mm(extension_mm);
+    current.azimuth = azimut_deg;
 
-    controllerEl.setPoint(elevation_mm_from_deg(tar_elevation));
-    controllerAz.setPoint(tar_angle.azimuth);
+    controllerEl.setPoint(elevation_mm_from_deg(set_angle.elevation));
+    controllerAz.setPoint(set_angle.azimuth);
 
-    o_az = controllerAz.output(curr_angle.azimuth);
-    o_el = controllerEl.output(extension_mm);
+    output_az = controllerAz.output(azimut_deg);
+    output_el = controllerEl.output(extension_mm);
 
-    if (o_az > 0 && change_forward_az == false)
+    if (output_az > 0 && change_forward_az == false)
     {
       change_backward_az = false;
       change_forward_az = true;
@@ -194,7 +200,7 @@ void taskMotionControl(void *pvParameters)
       reedAz.countDirection(FORWARD);
     }
 
-    if (o_az < 0 && change_backward_az == false)
+    if (output_az < 0 && change_backward_az == false)
     {
       change_forward_az = false;
       change_backward_az = true;
@@ -206,7 +212,7 @@ void taskMotionControl(void *pvParameters)
       reedAz.countDirection(BACKWARD);
     }
 
-    if (o_el > 0 && change_forward_el == false)
+    if (output_el > 0 && change_forward_el == false)
     {
       change_backward_el = false;
       change_forward_el = true;
@@ -218,7 +224,7 @@ void taskMotionControl(void *pvParameters)
       reedEl.countDirection(FORWARD);
     }
 
-    if (o_el < 0 && change_backward_el == false)
+    if (output_el < 0 && change_backward_el == false)
     {
       change_forward_el = false;
       change_backward_el = true;
@@ -230,8 +236,8 @@ void taskMotionControl(void *pvParameters)
       reedEl.countDirection(BACKWARD);
     }
 
-    motorAz.setDuty(abs(o_az) * (100.0f / M_V_NOMINAL));
-    motorEl.setDuty(abs(o_el) * (100.0f / M_V_NOMINAL));
+    motorAz.setDuty(abs(output_az) * (100.0f / M_V_NOMINAL));
+    motorEl.setDuty(abs(output_el) * (100.0f / M_V_NOMINAL));
   }
 }
 
@@ -245,12 +251,6 @@ void taskTrackingCalculation(void *pvParameters)
   for (;;)
   {
 
-    if (!status.tracking)
-    {
-      taskTrackingCalculation_handle = NULL;
-      vTaskDelete(NULL);
-    }
-
     if (!status.manual_track)
     {
       unsigned long current_time_ms = millis();
@@ -262,13 +262,13 @@ void taskTrackingCalculation(void *pvParameters)
         double delta_s = (current_time_ms - time_ms_ref) / 1000.0;
         if (delta_s >= 1.0)
         {
-          tar_angle.azimuth = az[1];
-          tar_angle.elevation = el[1];
+          target.azimuth = az[1];
+          target.elevation = el[1];
         }
         else
         {
-          tar_angle.azimuth = az[0] + (az[1] - az[0]) * delta_s;
-          tar_angle.elevation = el[0] + (el[1] - el[0]) * delta_s;
+          target.azimuth = az[0] + (az[1] - az[0]) * delta_s;
+          target.elevation = el[0] + (el[1] - el[0]) * delta_s;
         }
       }
       else
@@ -297,8 +297,8 @@ void taskTrackingCalculation(void *pvParameters)
         last_unixTime = current_unixTime;
         time_ms_ref = current_time_ms;
 
-        tar_angle.azimuth = az[0];
-        tar_angle.elevation = el[0];
+        target.azimuth = az[0];
+        target.elevation = el[0];
       }
     }
     vTaskDelay(pdMS_TO_TICKS(SAMPLE_TIME_SGP4_MS));

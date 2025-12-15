@@ -33,9 +33,9 @@ bool configSatellite(Sgp4 *satellite)
     return true;
 }
 
-antennaPosition_t getSavedOffsets(void)
+esfericalAngles_t getSavedOffsets(void)
 {
-    antennaPosition_t offsets;
+    esfericalAngles_t offsets;
     config.begin("config", false);
     offsets.azimuth = config.getDouble("offset_az", 0.0);
     offsets.elevation = config.getDouble("offset_el", 0.0);

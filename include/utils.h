@@ -87,7 +87,7 @@ typedef struct __attribute__((packed))
 {
     float azimuth;   /**< Azimuth angle in degrees (0–360). */
     float elevation; /**< Elevation angle in degrees (0–90). */
-} antennaPosition_t;
+} esfericalAngles_t;
 
 /**
  * @brief Direction type for counting or motor rotation.
@@ -115,7 +115,7 @@ bool configSatellite(Sgp4 *satellite);
  *
  * @return A structure containing the stored azimuth and elevation offsets.
  */
-antennaPosition_t getSavedOffsets(void);
+esfericalAngles_t getSavedOffsets(void);
 
 /**
  * @brief Extracts the current Unix timestamp from a TinyGPSPlus instance.
