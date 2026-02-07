@@ -44,12 +44,12 @@
 #define INV_MM_TO_LUT_POS ((float)LUT_SIZE / MAX_EXTENSION_mm)
 
 // Antenna mechanical constants (mm)
-#define A_ANT 55.0f
+#define A_ANT 50.0f
 #define BP_ANT 230.00f
 #define C_ANT 260.00f
-#define D_ANT 155.0f
+#define D_ANT 156.0f
 #define E_ANT 80.0f
-#define F_ANT 260.00f
+#define F_ANT 257.00f
 
 // --------------------------------------------------------------------------------------
 //                                 GLOBAL REFERENCES
@@ -75,9 +75,10 @@ typedef struct __attribute__((packed))
     uint8_t tle_inited : 1;   /**< True if TLE data has been successfully loaded. */
     uint8_t gps_fix : 1;      /**< True if GPS has a valid fix. */
     uint8_t tle_changed : 1;  /**< True if TLE data has been updated. */
+    uint8_t offsets_changed : 1; /**< True if antenna offsets have been updated. */
     uint8_t manual_track : 1; /**< True if antenna is in manual control mode. */
     uint8_t tracking : 1;     /**< True if automatic tracking is active. */
-    uint8_t error : 3;        /**< 3-bit internal error code. */
+    uint8_t error : 2;        /**< 3-bit internal error code. */
 } trackerStatus_t;
 
 /**
@@ -134,15 +135,21 @@ unsigned long getUnixTimeFromGPS(TinyGPSPlus *gps);
 void configControlTimer(void (*timerISR)(void *), uint64_t sample_time_us = DEFAULT_SAMPLE_TIME_US);
 
 /**
- * @brief Saves TLE data to NVS and updates the Sgp4 object.
+ * @brief Saves TLE data to NVS.
  *
  * @param name Satellite name.
  * @param line1 First TLE line.
  * @param line2 Second TLE line.
+ */
+void saveTLE(String name, String line1, String line2);
+
+/**
+ * @brief Saves Offsets data to NVS.
+ *.
  * @param offset_az Azimuth offset to be saved.
  * @param offset_el Elevation offset to be saved.
  */
-void saveTLEdata(String name, String line1, String line2, double offset_az, double offset_el);
+void saveOffsets(double offset_az, double offset_el);
 
 /**
  * @brief Initializes the elevation lookup table (LUT).

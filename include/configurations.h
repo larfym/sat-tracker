@@ -154,12 +154,21 @@
 ///@}
 
 /**
+ * @name Reed Low Pass Filter Frequency
+ * @brief Filters Reed signal for smooth operation.
+ */
+///@{
+#define FREQUENCY_REED_AZ 0.5  /**< Low pass filter frequency (AZ). */
+#define FREQUENCY_REED_EL 0.5  /**< Low pass filter frequency (EL). */
+///@}
+
+/**
  * @name PID Gains — Azimuth
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 1.0  /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.5   /**< Integral gain (AZ). */
+#define KP_AZIMUTH 200.0  /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 1   /**< Integral gain (AZ). */
 ///@}
 
 /**
@@ -167,12 +176,9 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.5   /**< Integral gain (EL). */
+#define KP_ELEVATION 200.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 1   /**< Integral gain (EL). */
 ///@}
-
-#define AZIMUT_ERROR_MAX_DEGREE 0.3
-#define ELEVATION_ERROR_MAX_MM 2.4
 
 /**
  * @name Soft Limit Positions

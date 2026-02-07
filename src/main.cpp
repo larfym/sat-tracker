@@ -14,8 +14,8 @@ TinyGPSPlus gps;
 ServerHandler serverHandler(DEFAULT_SERVER_PORT);
 
 /* Discrete Controllers */
-PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_V_NOMINAL, AZIMUT_ERROR_MAX_DEGREE);
-PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_V_NOMINAL, ELEVATION_ERROR_MAX_MM);
+PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_AZ_V_TO_START, M_V_NOMINAL, FREQUENCY_REED_AZ);
+PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_EL_V_TO_START, M_V_NOMINAL, FREQUENCY_REED_EL);
 
 /* Reed Switch Handlers */
 void IRAM_ATTR reedAz_event_handler(void *arg);
@@ -31,6 +31,7 @@ CurrentSensor currentEl(I_EL_CHANNEL);
 
 /* Task Handlers */
 TaskHandle_t taskHome_handle = NULL;
+TaskHandle_t taskGPS_handle = NULL;
 TaskHandle_t taskSGP4Calculation_handle = NULL;
 TaskHandle_t taskMotionControl_handle = NULL;
 TaskHandle_t taskStopMotion_handle = NULL;
@@ -78,7 +79,6 @@ void setup()
   configControlTimer(controlTimerISR, SAMPLE_TIME_US);
 
   // Starting Tasks
-  xTaskCreate(taskGPS, "GPS Task", 2048, NULL, 15, NULL);
   xTaskCreate(taskStopMotion, "Stop Motion Task", 2048, NULL, 17, &taskStopMotion_handle);
   // xTaskCreate(taskCurrentMonitor, "Current Monitor Task", 2048, NULL, 12, NULL);
 
@@ -92,6 +92,21 @@ void loop()
   {
     status.tle_inited = (configSatellite(&satellite) ? true : false);
     status.tle_changed = false;
+  }
+
+  // Update Offsets if changed
+  if (status.offsets_changed == true)
+  {
+    offsets_ant = getSavedOffsets();
+    status.offsets_changed = false;
+    ESP_LOGI(TAG, "Updated Offsets - Az: %.3f [°], El: %.3f [°]", offsets_ant.azimuth, offsets_ant.elevation);
+  }
+
+  // GPS Task When no data
+  if (status.gps_fix == false && taskGPS_handle == NULL)
+  {
+    ESP_LOGI(TAG, "Starting GPS Task");
+    xTaskCreate(taskGPS, "GPS Task", 2048, NULL, 15, &taskGPS_handle);
   }
 
   // SGP4 Calculation Task When possible
@@ -121,7 +136,7 @@ void loop()
   // Stopping
   else
   {
-    if (taskStopMotion_handle == NULL && !stopped)
+    if (!stopped && taskStopMotion_handle == NULL)
     {
       ESP_LOGI(TAG, "Starting Stop Motion Task");
       xTaskCreate(taskStopMotion, "Stop Motion Task", 2048, NULL, 17, &taskStopMotion_handle);
@@ -158,20 +173,24 @@ void taskMotionControl(void *pvParameters)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    if(status.manual_track == true)
+    if (status.manual_track == true)
     {
       set_angle.azimuth = manual_target.azimuth;
       set_angle.elevation = manual_target.elevation;
-    }else{
-      set_angle.azimuth = target.azimuth;
-      set_angle.elevation = target.elevation;
+    }
+    else
+    {
+      //Apply Offsets
+      set_angle.azimuth = target.azimuth + offsets_ant.azimuth;
+      set_angle.elevation = target.elevation + offsets_ant.elevation;
     }
 
-    //Constrain Elevation
-    if(set_angle.elevation < 0.0)
+    // Constrain Elevation
+    if (set_angle.elevation < 0.0)
     {
       set_angle.elevation = 0.0;
-    } else if(set_angle.elevation > MAX_ELEVATION_deg)
+    }
+    else if (set_angle.elevation > MAX_ELEVATION_deg)
     {
       set_angle.elevation = MAX_ELEVATION_deg;
     }
@@ -182,11 +201,8 @@ void taskMotionControl(void *pvParameters)
     current.elevation = elevation_deg_from_mm(extension_mm);
     current.azimuth = azimut_deg;
 
-    controllerEl.setPoint(elevation_mm_from_deg(set_angle.elevation));
-    controllerAz.setPoint(set_angle.azimuth);
-
-    output_az = controllerAz.output(azimut_deg);
-    output_el = controllerEl.output(extension_mm);
+    output_az = controllerAz.output(azimut_deg, set_angle.azimuth);
+    output_el = controllerEl.output(extension_mm, elevation_mm_from_deg(set_angle.elevation));
 
     if (output_az > 0 && change_forward_az == false)
     {
@@ -219,7 +235,7 @@ void taskMotionControl(void *pvParameters)
       motorEl.setDuty(10);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(100));
-      motorAz.setDuty(0);
+      motorEl.setDuty(0);
       motorEl.setDirection(FORWARD);
       reedEl.countDirection(FORWARD);
     }
@@ -301,6 +317,7 @@ void taskTrackingCalculation(void *pvParameters)
         target.elevation = el[0];
       }
     }
+
     vTaskDelay(pdMS_TO_TICKS(SAMPLE_TIME_SGP4_MS));
   }
 }
@@ -310,6 +327,11 @@ void taskGPS(void *pvParameters)
   bool time_set = false;
   for (;;)
   {
+    if (status.gps_fix == true)
+    {
+      vTaskDelete(NULL);
+    }
+
     while (gpsSerial.available() > 0)
     {
       gps.encode(gpsSerial.read());
@@ -338,12 +360,7 @@ void taskGPS(void *pvParameters)
     {
       satellite.site(gps.location.lat(), gps.location.lng(), gps.altitude.meters());
       ESP_LOGI(TAG, "GPS Location: Lat=%.6f, Lng=%.6f, Alt=%.4f", gps.location.lat(), gps.location.lng(), gps.altitude.meters());
-
-      if (status.gps_fix == false)
-      {
-        status.gps_fix = true;
-        vTaskDelete(NULL);
-      }
+      status.gps_fix = true;
     }
     vTaskDelay(pdMS_TO_TICKS(100));
   }
@@ -403,8 +420,8 @@ void taskHome(void *pvParameters)
 // TODO
 void taskStopMotion(void *pvParameters)
 {
-  motorAz.setDuty(30);
-  motorEl.setDuty(30);
+  motorAz.setDuty(10);
+  motorEl.setDuty(10);
   motorAz.stop();
   motorEl.stop();
 

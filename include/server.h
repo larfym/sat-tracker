@@ -29,7 +29,7 @@ extern trackerStatus_t status;
 /** @brief Global structure for the target (commanded) antenna position. */
 extern esfericalAngles_t target, manual_target;
 /** @brief Global structure for the current (measured) antenna position. */
-extern esfericalAngles_t current;
+extern esfericalAngles_t current, offsets_ant;
 
 /** @brief Constant string for the default WiFi SSID. */
 const String default_wifi_ssid = DEFAULT_WIFI_SSID;
@@ -71,14 +71,24 @@ private:
     void handleData(AsyncWebServerRequest *request);
 
     /**
-     * @brief Handler for saving satellite configuration data (tle and offsets) (POST request).
+     * @brief Handler for saving satellite configuration data (tle) (POST request).
      * @param request The asynchronous request object.
      * @param data The received POST data payload.
      * @param len Length of the data payload.
      * @param index Current index of the received chunk (for large uploads).
      * @param total Total length of the expected payload.
      */
-    void handleSave(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+    void handleSaveTle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+
+    /**
+     * @brief Handler for saving antena configuration data (offsets) (POST request).
+     * @param request The asynchronous request object.
+     * @param data The received POST data payload.
+     * @param len Length of the data payload.
+     * @param index Current index of the received chunk (for large uploads).
+     * @param total Total length of the expected payload.
+     */
+    void handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     /**
      * @brief Handler for setting manual target angles for the platform (POST request).
@@ -96,6 +106,7 @@ private:
      */
     void handleToggleTracking(AsyncWebServerRequest *request);
 
+    void handleGeoTime(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
     /**
      * @brief Static handler for managing "404 Not Found" errors.
      * @param request The asynchronous request object.
@@ -108,6 +119,6 @@ private:
  * @param unix The Unix timestamp (in seconds).
  * @return A String containing the formatted time.
  */
-String __formatUnixTime(unsigned long unix);//TEST
+String __formatUnixTime(unsigned long unix); // TEST
 
 #endif // SERVER_HANDLER_H

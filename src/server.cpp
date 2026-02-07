@@ -29,15 +29,16 @@ esp_err_t ServerHandler::start()
     server.on("/toggle_tracking", HTTP_POST,
               std::bind(&ServerHandler::handleToggleTracking, this, std::placeholders::_1));
 
-    // Configuración (POST /save) - Requiere manejo de cuerpo (body)
-    server.on("/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, // Handler de inicio
-              NULL,                                                      // Handler de subida
-              std::bind(&ServerHandler::handleSave, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    // Configuración (POST /saveTle) - Requiere manejo de cuerpo (body)
+    server.on("/saveTle", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveTle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    
+        // Configuración (POST /saveOffsets) - Requiere manejo de cuerpo (body)
+    server.on("/saveOffsets", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveOffsets, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+
+    server.on("/geo_time", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleGeoTime, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
     // Control Manual (POST /manual) - Requiere manejo de cuerpo (body)
-    server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, // Handler de inicio
-              NULL,                                                        // Handler de subida
-              std::bind(&ServerHandler::handleManualTrack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleManualTrack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
     server.onNotFound(handleNotFound);
 
@@ -101,6 +102,8 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
 
     doc["a_az"] = current.azimuth;
     doc["a_el"] = current.elevation;
+    doc["az_off"] = offsets_ant.azimuth;
+    doc["el_off"] = offsets_ant.elevation;
 
     if (status.tracking)
     {
@@ -116,7 +119,7 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
     request->send(200, "application/json", res);
 }
 
-void ServerHandler::handleSave(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+void ServerHandler::handleSaveTle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     if (index == total - len && request->contentType() == "application/json")
     {
@@ -132,11 +135,31 @@ void ServerHandler::handleSave(AsyncWebServerRequest *request, uint8_t *data, si
         String name = doc["name"];
         String line1 = doc["line1"];
         String line2 = doc["line2"];
+
+        saveTLE(name, line1, line2);
+        status.tle_changed = true;
+        request->send(200, "text/plain", "OK");
+    }
+}
+
+void ServerHandler::handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, data, total);
+        if (err)
+        {
+            ESP_LOGE(TAG, "Failed to parse JSON: %s", err.c_str());
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
         String offset_az = doc["offset_az"];
         String offset_el = doc["offset_el"];
 
-        saveTLEdata(name, line1, line2, offset_az.toDouble(), offset_el.toDouble());
-        status.tle_changed = true;
+        saveOffsets(offset_az.toDouble(), offset_el.toDouble());
+        status.offsets_changed = true;
         request->send(200, "text/plain", "OK");
     }
 }
@@ -209,6 +232,36 @@ void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *d
     else
     {
         request->send(400, "text/plain", "Invalid Request");
+    }
+}
+
+void ServerHandler::handleGeoTime(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, (const char *)data);
+        if (err)
+        {
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
+        unsigned long unix_time = doc["unix"];
+        double latitude = doc["lat"];
+        double longitude = doc["lon"];
+        double altitude = doc["alt"];
+
+        struct timeval tv;
+        tv.tv_sec = unix_time;
+        tv.tv_usec = 0;
+        settimeofday(&tv, NULL);
+
+        satellite.site(latitude, longitude, altitude);
+        status.gps_fix = true;
+
+        ESP_LOGI(TAG, "GeoTime Updated - Time: %lu, Lat: %f, Lon: %f, Alt: %f", unix_time, latitude, longitude, altitude);
+        request->send(200, "text/plain", "OK");
     }
 }
 

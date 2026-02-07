@@ -43,16 +43,23 @@ esfericalAngles_t getSavedOffsets(void)
     return offsets;
 }
 
-void saveTLEdata(String name, String line1, String line2, double offset_az, double offset_el)
+void saveTLE(String name, String line1, String line2)
 {
     config.begin("config", false);
     config.putString("name", name);
     config.putString("line1", line1);
     config.putString("line2", line2);
+    config.end();
+    ESP_LOGI(TAG, "Data Saved - Name: %s tle1: %s, tle2: %s", name.c_str(), line1.c_str(), line2.c_str());
+}
+
+void saveOffsets(double offset_az, double offset_el)
+{
+    config.begin("config", false);
     config.putDouble("offset_az", offset_az);
     config.putDouble("offset_el", offset_el);
     config.end();
-    ESP_LOGI(TAG, "Data Saved - Name: %s tle1: %s, tle2: %s, offset_az: %f, offset_el: %f\n", name.c_str(), line1.c_str(), line2.c_str(), offset_az, offset_el);
+    ESP_LOGI(TAG, "Offsets Saved - offset_az: %f, offset_el: %f\n", offset_az, offset_el);
 }
 
 unsigned long getUnixTimeFromGPS(TinyGPSPlus *gps)
