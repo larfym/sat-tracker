@@ -117,8 +117,9 @@
 #define M_V_NOMINAL 36
 #define M_AZ_V_TO_START 7.5
 #define M_EL_V_TO_START 3
-#define M_AZ_DUTY_TO_START (100/M_V_NOMINAL)*M_AZ_V_TO_START
-#define M_EL_DUTY_TO_START (100/M_V_NOMINAL)*M_EL_V_TO_START
+#define M_STOP_DUTY 20
+#define M_AZ_SETTLING_TIME_MS 65
+#define M_EL_SETTLING_TIME_MS 100
 ///@}
 
 /**
@@ -148,9 +149,9 @@
 ///@{
 #define TIMER_PREESCALER 80                         /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
 #define DEFAULT_SAMPLE_TIME_US 500                  /**< Default control loop sample time (µs). */
-#define SAMPLE_TIME_US 500000                          /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_US 500                          /**< Control loop sample time (µs). */
 #define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0)  /**< Control loop sample time (s). */
-#define SAMPLE_TIME_SGP4_MS 500                     /**< SGP4 Trayectory estimation time(ms) */
+#define SAMPLE_TIME_SGP4_MS 200                     /**< SGP4 Trayectory estimation time(ms) */
 ///@}
 
 /**
@@ -158,8 +159,8 @@
  * @brief Filters Reed signal for smooth operation.
  */
 ///@{
-#define FREQUENCY_REED_AZ 0.5  /**< Low pass filter frequency (AZ). */
-#define FREQUENCY_REED_EL 0.5  /**< Low pass filter frequency (EL). */
+#define FREQUENCY_REED_AZ 0.6  /**< Low pass filter frequency (AZ). */
+#define FREQUENCY_REED_EL 0.2  /**< Low pass filter frequency (EL). */
 ///@}
 
 /**
@@ -176,8 +177,8 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 200.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 1   /**< Integral gain (EL). */
+#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.001   /**< Integral gain (EL). */
 ///@}
 
 /**

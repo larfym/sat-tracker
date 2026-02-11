@@ -34,41 +34,39 @@ void PI_Controller::setInputLowPassFilterFrequency(double frequency)
 
 float PI_Controller::output(double input, double setPoint)
 {
-    //Input Low Pass Filter
-    i_f = this->alpha * i_f + (1 - this->alpha) * input;
+    // -------- Input Low Pass Filter --------
+    i_f = alpha * i_f + (1 - alpha) * input;
 
-    // Tustin Bilinear
-    this->e[0] = setPoint - i_f;
-    this->u[0] = this->u[1] + this->e[0]*a + this->e[1]*b;
+    // -------- PI (Tustin) --------
+    e[0] = setPoint - i_f;
+    float u_pi = u[1] + e[0]*a + e[1]*b;
 
-    // Compensación Zona Muerta
-    if(this->u[0] > 0)
+    // -------- Dead-zone compensation --------
+    float u_dz;
+    if(u_pi > 0)
+        u_dz = u_pi + deadZone;
+    else if(u_pi < 0)
+        u_dz = u_pi - deadZone;
+    else
+        u_dz = 0;
+
+    // -------- Saturation --------
+    float u_sat;
+    if(u_dz > u_max)
+        u_sat = u_max;
+    else if(u_dz < -u_max)
+        u_sat = -u_max;
+    else
+        u_sat = u_dz;
+
+    // -------- Anti-windup --------
+    if(fabsf(u_dz) <= u_max)
     {
-        this->u[0] += this->deadZone;
-    }else if(this->u[0] < 0)
-    {
-        this->u[0] -= this->deadZone;
-    }else
-    {
-        this->u[0] = 0;
+        e[1] = e[0];
+        u[1] = u_pi;
     }
 
-    // Anti-Windup
-    if(abs(this->u[0]) < this->u_max)
-    {
-        this->e[1] = this->e[0];
-        this->u[1] = this->u[0];
-    }
-
-    // Saturación
-    if(this->u[0] > this->u_max)
-    {
-        this->u[0] = this->u_max;
-    }else if(this->u[0] < -this->u_max)
-    {
-        this->u[0] = -this->u_max;
-    }
-
-    return this->u[0];
+    return u_sat;
 }
+
 

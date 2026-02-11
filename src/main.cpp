@@ -127,9 +127,9 @@ void loop()
       xTaskCreate(taskHome, "Home Task", 2048, NULL, 16, &taskHome_handle);
     }
     // Home done
-    else if (taskMotionControl_handle == NULL)
+    else if (home_done && taskMotionControl_handle == NULL)
     {
-      ESP_LOGI(TAG, "Starting Motion Task");
+      ESP_LOGI(TAG, "Starting Motion Control Task");
       xTaskCreate(taskMotionControl, "Motion Control Task", 8192, NULL, 14, &taskMotionControl_handle);
     }
   }
@@ -208,9 +208,9 @@ void taskMotionControl(void *pvParameters)
     {
       change_backward_az = false;
       change_forward_az = true;
-      motorAz.setDuty(10);
+      motorAz.setDuty(M_STOP_DUTY);
       motorAz.stop();
-      vTaskDelay(pdMS_TO_TICKS(100));
+      vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
       motorAz.setDuty(0);
       motorAz.setDirection(FORWARD);
       reedAz.countDirection(FORWARD);
@@ -220,9 +220,9 @@ void taskMotionControl(void *pvParameters)
     {
       change_forward_az = false;
       change_backward_az = true;
-      motorAz.setDuty(10);
+      motorAz.setDuty(M_STOP_DUTY);
       motorAz.stop();
-      vTaskDelay(pdMS_TO_TICKS(100));
+      vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
       motorAz.setDuty(0);
       motorAz.setDirection(BACKWARD);
       reedAz.countDirection(BACKWARD);
@@ -232,9 +232,9 @@ void taskMotionControl(void *pvParameters)
     {
       change_backward_el = false;
       change_forward_el = true;
-      motorEl.setDuty(10);
+      motorEl.setDuty(M_STOP_DUTY);
       motorEl.stop();
-      vTaskDelay(pdMS_TO_TICKS(100));
+      vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
       motorEl.setDuty(0);
       motorEl.setDirection(FORWARD);
       reedEl.countDirection(FORWARD);
@@ -244,16 +244,16 @@ void taskMotionControl(void *pvParameters)
     {
       change_forward_el = false;
       change_backward_el = true;
-      motorEl.setDuty(10);
+      motorEl.setDuty(M_STOP_DUTY);
       motorEl.stop();
-      vTaskDelay(pdMS_TO_TICKS(100));
+      vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
       motorEl.setDuty(0);
       motorEl.setDirection(BACKWARD);
       reedEl.countDirection(BACKWARD);
     }
 
-    motorAz.setDuty(abs(output_az) * (100.0f / M_V_NOMINAL));
-    motorEl.setDuty(abs(output_el) * (100.0f / M_V_NOMINAL));
+    motorAz.setDuty(fabsf(output_az) * (100.0f / M_V_NOMINAL));
+    motorEl.setDuty(fabsf(output_el) * (100.0f / M_V_NOMINAL));
   }
 }
 
@@ -417,11 +417,10 @@ void taskHome(void *pvParameters)
   }
 }
 
-// TODO
 void taskStopMotion(void *pvParameters)
 {
-  motorAz.setDuty(10);
-  motorEl.setDuty(10);
+  motorAz.setDuty(M_STOP_DUTY);
+  motorEl.setDuty(M_STOP_DUTY);
   motorAz.stop();
   motorEl.stop();
 
