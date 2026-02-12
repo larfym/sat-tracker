@@ -2,13 +2,12 @@
 
 static const char *TAG = "PI_Controller";
 
-PI_Controller::PI_Controller(double kp, double ki, double sampleTime, double deadZone, double u_max, double inputLowPassFrequency)
+PI_Controller::PI_Controller(double kp, double ki, double sampleTime, double deadZone, double u_max)
 {
     this->setGains(kp, ki);
     this->sampleTime = sampleTime;
     this->deadZone = deadZone;
     this->u_max = u_max;
-    this->setInputLowPassFilterFrequency(inputLowPassFrequency);
 }
 
 void PI_Controller::setGains(double kp, double ki)
@@ -27,26 +26,26 @@ void PI_Controller::setDeadZone(double deadZone)
     this->deadZone = deadZone;
 }
 
-void PI_Controller::setInputLowPassFilterFrequency(double frequency)
+void PI_Controller::reset()
 {
-    this->alpha = exp(-2 * M_PI * frequency * this->sampleTime);
+    e[0] = 0.0f;
+    e[1] = 0.0f;
+    u[0] = 0.0f;
+    u[1] = 0.0f;
 }
 
 float PI_Controller::output(double input, double setPoint)
 {
-    // -------- Input Low Pass Filter --------
-    i_f = alpha * i_f + (1 - alpha) * input;
-
     // -------- PI (Tustin) --------
-    e[0] = setPoint - i_f;
-    float u_pi = u[1] + e[0]*a + e[1]*b;
+    e[0] = setPoint - input;
+    u[0] = u[1] + e[0]*a + e[1]*b;
 
     // -------- Dead-zone compensation --------
     float u_dz;
-    if(u_pi > 0)
-        u_dz = u_pi + deadZone;
-    else if(u_pi < 0)
-        u_dz = u_pi - deadZone;
+    if(u[0] > 0)
+        u_dz = u[0] + deadZone;
+    else if(u[0] < 0)
+        u_dz = u[0] - deadZone;
     else
         u_dz = 0;
 
@@ -60,10 +59,10 @@ float PI_Controller::output(double input, double setPoint)
         u_sat = u_dz;
 
     // -------- Anti-windup --------
-    if(fabsf(u_dz) <= u_max)
+    if(fabsf(u_sat - u_dz) <= 1e-6)
     {
         e[1] = e[0];
-        u[1] = u_pi;
+        u[1] = u[0];
     }
 
     return u_sat;
