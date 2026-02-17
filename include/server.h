@@ -114,11 +114,4 @@ private:
     static void handleNotFound(AsyncWebServerRequest *request);
 };
 
-/**
- * @brief Helper function to format a Unix timestamp into a readable string (e.g., for logging/debugging).
- * @param unix The Unix timestamp (in seconds).
- * @return A String containing the formatted time.
- */
-String __formatUnixTime(unsigned long unix); // TEST
-
 #endif // SERVER_HANDLER_H

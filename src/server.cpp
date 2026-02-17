@@ -29,15 +29,16 @@ esp_err_t ServerHandler::start()
     server.on("/toggle_tracking", HTTP_POST,
               std::bind(&ServerHandler::handleToggleTracking, this, std::placeholders::_1));
 
-    // Configuración (POST /saveTle) - Requiere manejo de cuerpo (body)
+    // Configuración (POST /saveTle)
     server.on("/saveTle", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveTle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
     
-        // Configuración (POST /saveOffsets) - Requiere manejo de cuerpo (body)
+    // Configuración (POST /saveOffsets)
     server.on("/saveOffsets", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveOffsets, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
+    // GeoTime (POST /geo_time)
     server.on("/geo_time", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleGeoTime, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
-    // Control Manual (POST /manual) - Requiere manejo de cuerpo (body)
+    // Control Manual (POST /manual)
     server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleManualTrack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
     server.onNotFound(handleNotFound);
@@ -96,8 +97,14 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
     }
     if (status.gps_fix && status.tle_inited)
     {
-        doc["s_az"] = target.azimuth;
-        doc["s_el"] = target.elevation;
+        if(status.manual_track == false)
+        {
+            doc["s_az"] = target.azimuth;
+            doc["s_el"] = target.elevation;
+        }else{
+            doc["s_az"] = manual_target.azimuth;
+            doc["s_el"] = manual_target.elevation;
+        }
     }
 
     doc["a_az"] = current.azimuth;
@@ -166,12 +173,13 @@ void ServerHandler::handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *d
 
 void ServerHandler::handleToggleTracking(AsyncWebServerRequest *request)
 {
-    JsonDocument doc;
+    JsonDocument res;
     if (status.tracking == true)
     {
-        doc["tracking_active"] = false;
-        doc["reason"] = "none";
         status.tracking = false;
+        res["tracking"] = false;
+        res["reason"] = "none";
+        
         if (status.manual_track == true)
         {
             status.manual_track = false;
@@ -183,28 +191,28 @@ void ServerHandler::handleToggleTracking(AsyncWebServerRequest *request)
         if (status.gps_fix == true && status.tle_inited == true)
         {
             status.tracking = true;
-            doc["tracking_active"] = status.tracking;
-            doc["reason"] = "none";
+            res["tracking"] = status.tracking;
+            res["reason"] = "none";
             ESP_LOGI(TAG, "Tracking Started");
         }
         else if (status.gps_fix == false)
         {
-            doc["tracking_active"] = false;
-            doc["reason"] = "No_GPS";
+            res["tracking"] = false;
+            res["reason"] = "No_GPS";
             ESP_LOGI(TAG, "Cannot start tracking: No GPS Fix");
         }
         else if (status.tle_inited == false)
         {
-            doc["tracking_active"] = false;
-            doc["reason"] = "No_TLE";
+            res["tracking"] = false;
+            res["reason"] = "No_TLE";
             ESP_LOGI(TAG, "Cannot start tracking: TLE Not Initialized");
         }
     }
 
     ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_track, status.gps_fix, status.tle_inited);
-    String res;
-    serializeJson(doc, res);
-    request->send(200, "application/json", res);
+    String _res;
+    serializeJson(res, _res);
+    request->send(200, "application/json", _res);
 }
 
 void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
@@ -227,6 +235,8 @@ void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *d
         manual_target.elevation = el;
 
         ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
+
+
         request->send(200, "text/plain", "OK");
     }
     else

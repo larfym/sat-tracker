@@ -71,7 +71,6 @@
 #define DEFAULT_WIFI_PASSWORD ""          /**< Default AP password (empty = open AP). */
 #define DEFAULT_SERVER_PORT 80            /**< Web server port. */
 #define MDNS_SERVICE_NAME "Tracker"       /**< mDNS hostname. */
-#define WIFI_CONNECT_TIMEOUT 10000        /**< WiFi connection timeout in ms. */
 ///@}
 
 /* -------------------------------------------------------------------------- */
@@ -95,14 +94,8 @@
  * @brief UART settings and default fallback position/time.
  */
 ///@{
-#define GPS_UART 1           /**< UART index used by GPS. */
-#define GPS_BAUDRATE 9600    /**< GPS communication baud rate. */
-#define GPS_INTERVAL_SEC 120 /**< GPS update interval in seconds. */
-
-#define DEFAULT_LATITUD 37.7749     /**< Default latitude (fallback). */
-#define DEFAULT_LONGITUD -122.4194  /**< Default longitude (fallback). */
-#define DEFAULT_ALTITUD 0           /**< Default altitude (meters). */
-#define DEFAULT_UNIXTIME 1750015604 /**< Default UNIX timestamp (fallback). */
+#define GPS_UART 1        /**< UART index used by GPS. */
+#define GPS_BAUDRATE 9600 /**< GPS communication baud rate. */
 ///@}
 
 /* -------------------------------------------------------------------------- */
@@ -114,12 +107,12 @@
  * @brief Non Linearity & Nominal Tension (Saturation)
  */
 ///@{
-#define M_V_NOMINAL 36
-#define M_AZ_V_TO_START 7.5
-#define M_EL_V_TO_START 3
-#define M_STOP_DUTY 20
-#define M_AZ_SETTLING_TIME_MS 65
-#define M_EL_SETTLING_TIME_MS 100
+#define M_V_NOMINAL 36            /**< Nominal voltage for motors (V). */
+#define M_AZ_V_TO_START 7.5       /**< Minimum voltage to overcome static friction (Azimuth). */
+#define M_EL_V_TO_START 3         /**< Minimum voltage to overcome static friction (Elevation). */
+#define M_STOP_DUTY 20            /**< Duty cycle to apply for stopping the motors (0-100%). */
+#define M_AZ_SETTLING_TIME_MS 65  /**< Settling time for Azimuth motor (ms). */
+#define M_EL_SETTLING_TIME_MS 100 /**< Settling time for Elevation motor (ms). */
 ///@}
 
 /**
@@ -127,8 +120,8 @@
  * @brief Resolution per pulses of reed.
  */
 ///@{
-#define AZIMUTH_RESOLUTION_angle 0.2
-#define ELEVATION_RESOLUTION_mm 1.6
+#define AZIMUTH_RESOLUTION_angle 0.2 /**< Degrees per reed pulse for Azimuth. */
+#define ELEVATION_RESOLUTION_mm 1.6  /**< Millimeters per reed pulse for Elevation. */
 ///@}
 
 /**
@@ -139,7 +132,7 @@
 #define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max DC current for Azimuth motor (mA). */
 #define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max DC current for Elevation motor (mA). */
 #define CURRENT_HOMING_mA 10.0          /**< Max current for considering the motor turned off. */
-#define CURRENT_OFFSETS_SAMPLES 100     /**< Samples for calculating current offset. */
+#define CURRENT_OFFSETS_SAMPLES 100     /**< Number of samples for averaging measurements. */
 ///@}
 
 /**
@@ -147,11 +140,11 @@
  * @brief Control-loop timing settings.
  */
 ///@{
-#define TIMER_PREESCALER 80                         /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
-#define DEFAULT_SAMPLE_TIME_US 500                  /**< Default control loop sample time (µs). */
-#define SAMPLE_TIME_US 500                          /**< Control loop sample time (µs). */
-#define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0)  /**< Control loop sample time (s). */
-#define SAMPLE_TIME_SGP4_MS 200                     /**< SGP4 Trayectory estimation time(ms) */
+#define TIMER_PREESCALER 80                        /**< Prescaler → 1 MHz timer base (80 MHz / 80). */
+#define DEFAULT_SAMPLE_TIME_US 500                 /**< Default control loop sample time (µs). */
+#define SAMPLE_TIME_US 500                         /**< Control loop sample time (µs). */
+#define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0) /**< Control loop sample time (s). */
+#define SAMPLE_TIME_SGP4_MS 200                    /**< SGP4 Trayectory estimation time (ms). */
 ///@}
 
 /**
@@ -159,8 +152,8 @@
  * @brief Filters Reed signal for smooth operation.
  */
 ///@{
-#define FREQUENCY_REED_AZ 0.6  /**< Low pass filter frequency (AZ). */
-#define FREQUENCY_REED_EL 0.2  /**< Low pass filter frequency (EL). */
+#define FREQUENCY_REED_AZ 0.6 /**< Low pass filter frequency (Reed-AZ). */
+#define FREQUENCY_REED_EL 0.2 /**< Low pass filter frequency (Reed-EL). */
 ///@}
 
 /**
@@ -168,8 +161,8 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 200.0  /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 1   /**< Integral gain (AZ). */
+#define KP_AZIMUTH 40.0 /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.8  /**< Integral gain (AZ). */
 ///@}
 
 /**
@@ -177,8 +170,8 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 1.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.001   /**< Integral gain (EL). */
+#define KP_ELEVATION 10.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.005 /**< Integral gain (EL). */
 ///@}
 
 /**
@@ -207,9 +200,9 @@
  * @brief gain & shunt value
  */
 ///@{
-#define SHUNT_AZ_OHM 0.3333333
-#define CURRENT_GAIN_AZ 2.11988
+#define SHUNT_AZ_OHM 0.3333333  /**< Shunt resistor value for Azimuth current sensing (Ohms). */
+#define CURRENT_GAIN_AZ 2.11988 /**< Signal Adaptation gain for Azimuth current sensing. */
 
-#define SHUNT_EL_OHM 0.09
-#define CURRENT_GAIN_EL 7.07773
+#define SHUNT_EL_OHM 0.09       /**< Shunt resistor value for Elevation current sensing (Ohms). */
+#define CURRENT_GAIN_EL 7.07773 /**< Signal Adaptation gain for Elevation current sensing. */
 ///@}

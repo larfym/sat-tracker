@@ -77,7 +77,7 @@ typedef struct __attribute__((packed))
     uint8_t tle_changed : 1;  /**< True if TLE data has been updated. */
     uint8_t offsets_changed : 1; /**< True if antenna offsets have been updated. */
     uint8_t manual_track : 1; /**< True if antenna is in manual control mode. */
-    uint8_t tracking : 1;     /**< True if automatic tracking is active. */
+    uint8_t tracking : 1;     /**< True if movement is active. */
     uint8_t error : 2;        /**< 3-bit internal error code. */
 } trackerStatus_t;
 
