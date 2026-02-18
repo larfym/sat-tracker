@@ -1,0 +1,15 @@
+clc; clear all; close all;
+
+s = tf("s");
+G1 = tf([151.3236],[1, 1.0231e3, 9.6070e4])
+G2 = G1*1/s
+p = pole(G2)
+
+C = (s+abs(p(3)/20))/s
+
+G = minreal(G2*C)
+
+rlocus(G)
+
+
+
