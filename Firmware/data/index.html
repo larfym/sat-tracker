@@ -341,33 +341,34 @@
                 <div class="card">
                     <h3>Satélite</h3>
                     <ul>
-                        <li><span>ID</span><span id="name">---</span></li>
-                        <li><span>Latitud</span><span id="s_lat">---</span></li>
-                        <li><span>Longitud</span><span id="s_lon">---</span></li>
-                        <li><span>Altitud</span><span id="s_alt">---</span></li>
-                        <li><span>θ</span><span id="s_az">---</span></li>
-                        <li><span>α</span><span id="s_el">---</span></li>
+                        <li><span>ID</span><span id="s_n">---</span></li>
+                        <li><span>Latitud</span><span id="s_la">---</span></li>
+                        <li><span>Longitud</span><span id="s_lo">---</span></li>
+                        <li><span>Altitud</span><span id="s_al">---</span></li>
+                        <li><span>θ</span><span id="s_a">---</span></li>
+                        <li><span>α</span><span id="s_e">---</span></li>
+                        <li><span>Visibilidad</span><span id="s_v">---</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Estación Terrena</h3>
                     <ul>
-                        <li><span>Estado</span><span id="stat">---</span></li>
-                        <li><span>Latitud</span><span id="t_lat">---</span></li>
-                        <li><span>Longitud</span><span id="t_lon">---</span></li>
-                        <li><span>Altitud</span><span id="t_alt">---</span></li>
-                        <li><span>Hora Local</span><span id="t_tim">---</span></li>
+                        <li><span>Estado</span><span id="p_st">---</span></li>
+                        <li><span>Latitud</span><span id="p_la">---</span></li>
+                        <li><span>Longitud</span><span id="p_lo">---</span></li>
+                        <li><span>Altitud</span><span id="p_al">---</span></li>
+                        <li><span>Hora Local</span><span id="p_t">---</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Antena</h3>
                     <ul>
-                        <li><span>θ</span><span id="a_az">---</span></li>
-                        <li><span>α</span><span id="a_el">---</span></li>
-                        <li><span>Offset θ</span><span id="az_off">---</span></li>
-                        <li><span>Offset α</span><span id="el_off">---</span></li>
+                        <li><span>θ</span><span id="a_a">---</span></li>
+                        <li><span>α</span><span id="a_e">---</span></li>
+                        <li><span>Offset θ</span><span id="a_of_a">---</span></li>
+                        <li><span>Offset α</span><span id="a_of_e">---</span></li>
                     </ul>
                 </div>
 
@@ -495,7 +496,7 @@
                             alert("❌ No hay GPS Fix.");
                         }
                     }
-                    
+
                     updateBtnState(tracking);
                 })
                 .catch(error => {
@@ -588,33 +589,67 @@
                         document.getElementById(id).textContent = (value !== undefined && value !== null) ? value + suffix : DEF_STR;
                     };
 
-                    setText("name", data.name);
-                    setText("s_lon", data.s_lon);
-                    setText("s_lat", data.s_lat);
-                    setText("s_alt", data.s_alt, "[km]");
-                    setText("s_az", data.s_az, "[°]");
-                    setText("s_el", data.s_el, "[°]");
-                    setText("stat", data.stat);
-                    setText("t_lon", data.t_lon);
-                    setText("t_lat", data.t_lat);
-                    setText("t_alt", data.t_alt, "[km]");
-                    setText("a_az", data.a_az, "[°]");
-                    setText("a_el", data.a_el, "[°]");
-                    setText("az_off", data.az_off, "[°]");
-                    setText("el_off", data.el_off, "[°]");
+                    // Datos del satélite
+                    const s = data.s || {};
+                    setText("s_n", s.n);
+                    setText("s_la", s.la);
+                    setText("s_lo", s.lo);
+                    setText("s_al", s.al, "[km]");
+                    setText("s_a", s.a, "[°]");
+                    setText("s_e", s.e, "[°]");
+                    setText("s_v", s.v);
 
-                    const t_tim_val = data.t_tim;
-                    if (t_tim_val) {
-                        document.getElementById("t_tim").textContent = formatUnixTime(t_tim_val);
+                    // Estado
+                    const st = data.st || {};
+                    if (!st.err) {
+                        if (st.man) {
+                            setText("p_st", "Control Manual");
+                        } else {
+                            if (st.tr) {
+                                setText("p_st", "Rastreando");
+                            } else {
+                                if (!st.gps) {
+                                    setText("p_st", "No GPS Fix");
+                                }
+                                else if (!st.tle) {
+                                    setText("p_st", "No TLE");
+                                }
+                                else {
+                                    setText("p_st", "Detenido");
+                                }
+                            }
+                        }
                     } else {
-                        document.getElementById("t_tim").textContent = DEF_STR;
+                        setText("p_st", "Error: " + st.err);
                     }
 
-                    pushBuffer(x, formatUnixTimeMMSS(data.t_tim));
-                    pushBuffer(az1, data.s_az + data.az_off);
-                    pushBuffer(az2, data.a_az);
-                    pushBuffer(el1, data.s_el + data.el_off);
-                    pushBuffer(el2, data.a_el);
+                    // Estación Terrena
+                    const p = data.p || {};
+                    setText("p_la", p.la);
+                    setText("p_lo", p.lo);
+                    setText("p_al", p.al, "[km]");
+                    const t_tim_val = p.t;
+                    if (t_tim_val) {
+                        document.getElementById("p_t").textContent = formatUnixTime(t_tim_val);
+                    } else {
+                        document.getElementById("p_t").textContent = DEF_STR;
+                    }
+
+                    const a = data.a || {};
+                    const az_ant = Number(p.az ?? 0) + Number(a.o_a ?? 0);
+                    const el_ant = Number(p.el ?? 0) + Number(a.o_e ?? 0);
+
+                    setText("a_a", az_ant, "[°]");
+                    setText("a_e", el_ant, "[°]");
+                    setText("a_of_a", a.o_a, "[°]");
+                    setText("a_of_e", a.o_e, "[°]");
+
+                    // Gráficos
+                    pushBuffer(x, formatUnixTimeMMSS(t_tim_val));
+                    pushBuffer(az1, st.a);
+                    pushBuffer(az2, p.az);
+                    pushBuffer(el1, st.e);
+                    pushBuffer(el2, p.el);
 
                     drawLineChart("chart_az", x, az1, az2);
                     drawLineChart("chart_el", x, el1, el2);

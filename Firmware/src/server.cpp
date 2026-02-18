@@ -62,68 +62,78 @@ esp_err_t ServerHandler::start()
 
 void ServerHandler::handleData(AsyncWebServerRequest *request)
 {
-    StaticJsonDocument<JSON_BUFFER_SIZE> doc;
-    char jsonbuffer[JSON_BUFFER_SIZE];
+    JsonDocument json;
     char temp_float_buffer[FLOAT_BUFFER_SIZE];
 
-    if (status.tle_inited)
-    {
-        doc["name"] = satellite.satName;
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLon);
-        doc["s_lon"] = temp_float_buffer;
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLat);
-        doc["s_lat"] = temp_float_buffer;
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.4f", satellite.satAlt);
-        doc["s_alt"] = temp_float_buffer;
-    }
-    else
-    {
-        doc["stat"] = "No TLE";
-    }
-    if (status.gps_fix)
-    {
-        unsigned long unixtime = time(NULL);
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLon);
-        doc["t_lon"] = temp_float_buffer;
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLat);
-        doc["t_lat"] = temp_float_buffer;
-        snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.4f", satellite.siteAlt);
-        doc["t_alt"] = temp_float_buffer;
-        doc["t_tim"] = unixtime;
-    }
-    else
-    {
-        doc["stat"] = "No GPS";
-    }
-    if (status.gps_fix && status.tle_inited)
-    {
-        if(status.manual_track == false)
-        {
-            doc["s_az"] = target.azimuth;
-            doc["s_el"] = target.elevation;
-        }else{
-            doc["s_az"] = manual_target.azimuth;
-            doc["s_el"] = manual_target.elevation;
-        }
-    }
+    JsonObject sat = json["s"].to<JsonObject>(); //Satellite Data
+    sat["n"] = satellite.satName;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLat);
+    sat["la"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLon);
+    sat["lo"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", satellite.satAlt);
+    sat["al"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.3f", satellite.satAz);
+    sat["a"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.3f", satellite.satEl);
+    sat["e"] = temp_float_buffer;
+    
+    bool notdark;
+    double deltaphi;
+    int16_t vis = satellite.visible(notdark, deltaphi);
 
-    doc["a_az"] = current.azimuth;
-    doc["a_el"] = current.elevation;
-    doc["az_off"] = offsets_ant.azimuth;
-    doc["el_off"] = offsets_ant.elevation;
-
-    if (status.tracking)
-    {
-        doc["stat"] = "TRACKING";
+    if (satellite.satEl <= 0) {
+        sat["v"] = "No visible";
     }
-    if (status.manual_track)
-    {
-        doc["stat"] = "MANUAL";
+    else if (notdark) {
+        sat["v"] = "Iluminado";
     }
+    else if (vis == 0) {
+        sat["v"] = "Eclipse";
+    }
+    else if (vis < 1000) {
+        sat["v"] = "Penumbra";
+    }
+    else {
+        sat["v"] = "Visible";
+    }
+    
+    JsonObject stat = json["st"].to<JsonObject>(); //Status Data
+    stat["tle"] = status.tle_inited;
+    stat["gps"] = status.gps_fix;
+    stat["man"] = status.manual_track;
+    stat["tr"] = status.tracking;
+    stat["err"] = status.error;
+    stat["a"] = set_angle.azimuth;
+    stat["e"] = set_angle.elevation;
+    
+    JsonObject ant = json["a"].to<JsonObject>(); //Antenna Data
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", offsets_ant.azimuth);
+    ant["o_a"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", offsets_ant.elevation);
+    ant["o_e"] = temp_float_buffer;
 
-    String res;
-    serializeJson(doc, res);
-    request->send(200, "application/json", res);
+    unsigned long unixtime = time(NULL);
+    JsonObject platform = json["p"].to<JsonObject>(); //Platform Data
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", current.azimuth);
+    platform["az"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", current.elevation);
+    platform["el"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLat);
+    platform["la"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLon);
+    platform["lo"] = temp_float_buffer;
+    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", satellite.siteAlt);
+    platform["al"] = temp_float_buffer;
+    if(status.gps_fix){
+        platform["t"] = unixtime;
+    }else{
+        platform["t"] = 0;
+    }
+    
+    char buffer[JSON_BUFFER_SIZE];
+    serializeJson(json, buffer);
+    request->send(200, "application/json", buffer);
 }
 
 void ServerHandler::handleSaveTle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)

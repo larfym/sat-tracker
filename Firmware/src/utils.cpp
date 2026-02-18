@@ -40,6 +40,7 @@ esfericalAngles_t getSavedOffsets(void)
     offsets.azimuth = config.getDouble("offset_az", 0.0);
     offsets.elevation = config.getDouble("offset_el", 0.0);
     config.end();
+    ESP_LOGI(TAG, "Updated Offsets - Az: %.3f [°], El: %.3f [°]", offsets.azimuth, offsets.elevation);
     return offsets;
 }
 

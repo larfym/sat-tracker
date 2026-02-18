@@ -45,7 +45,7 @@
 
 // Antenna mechanical constants (mm)
 #define A_ANT 50.0f
-#define BP_ANT 230.00f
+#define BP_ANT 230.66f
 #define C_ANT 260.00f
 #define D_ANT 156.0f
 #define E_ANT 80.0f

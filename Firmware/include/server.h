@@ -27,7 +27,7 @@ extern Preferences config;
 /** @brief Global structure holding the current operational status of the tracker. */
 extern trackerStatus_t status;
 /** @brief Global structure for the target (commanded) antenna position. */
-extern esfericalAngles_t target, manual_target;
+extern esfericalAngles_t target, manual_target, set_angle;
 /** @brief Global structure for the current (measured) antenna position. */
 extern esfericalAngles_t current, offsets_ant;
 

@@ -50,8 +50,8 @@ void taskCurrentMonitor(void *pvParameters);
 /* Global Variables */
 static const char *TAG = "MAIN";
 trackerStatus_t status;
-esfericalAngles_t target = {0.0, 0.0}, manual_target = {0.0, 0.0}, current = {0.0, 0.0}, offsets_ant = {0.0, 0.0};
-bool home_done = false, stopped = false;
+esfericalAngles_t target = {0.0, 0.0}, manual_target = {0.0, 0.0}, current = {0.0, 0.0}, offsets_ant = {0.0, 0.0}, set_angle = {0.0, 0.0};
+bool home_done = false, stopped = false, pred_done = false;
 
 void setup()
 {
@@ -92,6 +92,7 @@ void loop()
   {
     status.tle_inited = (configSatellite(&satellite) ? true : false);
     status.tle_changed = false;
+    pred_done = false;
   }
 
   // Update Offsets if changed
@@ -99,7 +100,7 @@ void loop()
   {
     offsets_ant = getSavedOffsets();
     status.offsets_changed = false;
-    ESP_LOGI(TAG, "Updated Offsets - Az: %.3f [°], El: %.3f [°]", offsets_ant.azimuth, offsets_ant.elevation);
+    pred_done = false;
   }
 
   // GPS Task When no data
@@ -165,9 +166,9 @@ void taskMotionControl(void *pvParameters)
   bool change_forward_az = false, change_backward_az = false;
   bool change_forward_el = false, change_backward_el = false;
 
-  esfericalAngles_t set_angle = {0.0, 0.0};
   float output_az = 0.0, output_el = 0.0;
   float extension_mm = 0.0, azimut_deg = 0.0;
+  const uint8_t search_iterations = 30;
 
   for (;;)
   {
@@ -180,19 +181,32 @@ void taskMotionControl(void *pvParameters)
     }
     else
     {
-      //Apply Offsets
-      set_angle.azimuth = target.azimuth + offsets_ant.azimuth;
-      set_angle.elevation = target.elevation + offsets_ant.elevation;
-    }
+      //Below Horizon - Next Pass Prediction
+      if(target.elevation < offsets_ant.elevation)
+      {
+        if(!pred_done)
+        {
+          passinfo next_pass;
+          if(satellite.nextpass(&next_pass, search_iterations, false, offsets_ant.elevation))
+          {
+            set_angle.azimuth = next_pass.azstart - offsets_ant.azimuth;
+            set_angle.elevation = 0.0;
+            ESP_LOGI(TAG, "Next Pass - Azimuth: %.2f [°], Elevation: %.2f [°]", set_angle.azimuth, set_angle.elevation);
+          }else
+          {
+            ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
+            set_angle.azimuth = 0.0;
+            set_angle.elevation = 90.0;
+          }
+          pred_done = true;
+        }
+      }else
+      {
+        pred_done = false;
+        set_angle.azimuth = target.azimuth - offsets_ant.azimuth;
+        set_angle.elevation = target.elevation - offsets_ant.elevation;
+      }
 
-    // Constrain Elevation
-    if (set_angle.elevation < 0.0)
-    {
-      set_angle.elevation = 0.0;
-    }
-    else if (set_angle.elevation > MAX_ELEVATION_deg)
-    {
-      set_angle.elevation = MAX_ELEVATION_deg;
     }
 
     extension_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
@@ -266,7 +280,7 @@ void taskTrackingCalculation(void *pvParameters)
   bool first_run = true;
   for (;;)
   {
-
+    
     if (!status.manual_track)
     {
       unsigned long current_time_ms = millis();
