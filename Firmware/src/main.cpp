@@ -14,8 +14,8 @@ TinyGPSPlus gps;
 ServerHandler serverHandler(DEFAULT_SERVER_PORT);
 
 /* Discrete Controllers */
-PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_AZ_V_TO_START, M_V_NOMINAL, FREQUENCY_REED_AZ);
-PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_EL_V_TO_START, M_V_NOMINAL, FREQUENCY_REED_EL);
+PI_Controller controllerAz(KP_AZIMUTH, KI_AZIMUTH, SAMPLE_TIME_S, M_AZ_V_TO_START, M_V_NOMINAL);
+PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_EL_V_TO_START, M_V_NOMINAL);
 
 /* Reed Switch Handlers */
 void IRAM_ATTR reedAz_event_handler(void *arg);
@@ -163,17 +163,20 @@ void IRAM_ATTR controlTimerISR(void *arg)
 // PID & Movement
 void taskMotionControl(void *pvParameters)
 {
-  bool change_forward_az = false, change_backward_az = false;
-  bool change_forward_el = false, change_backward_el = false;
-
-  float output_az = 0.0, output_el = 0.0;
-  float extension_mm = 0.0, azimut_deg = 0.0;
+  constexpr float DUTY_SCALE = 100.0f / M_V_NOMINAL;
+  const float ALPHA_AZ = expf(-2.0f * M_PI * FREQUENCY_REED_AZ * SAMPLE_TIME_S);
+  const float ALPHA_EL = expf(-2.0f * M_PI * FREQUENCY_REED_EL * SAMPLE_TIME_S);
   const uint8_t search_iterations = 30;
+
+  float az_f = 0.0f, el_mm_f = 0.0f, el_mm = 0.0f;
+  float output_az = 0.0, output_el = 0.0;
+  int new_dir_az = 0, new_dir_el = 0, current_dir_az = 0, current_dir_el = 0;
 
   for (;;)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
+    // SETPOINT Calculation with Offsets
     if (status.manual_track == true)
     {
       set_angle.azimuth = manual_target.azimuth;
@@ -209,65 +212,51 @@ void taskMotionControl(void *pvParameters)
 
     }
 
-    extension_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
-    azimut_deg = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
+    el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
+    current.elevation = elevation_deg_from_mm(el_mm);
+    current.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
+    // Filtering
+    az_f = ALPHA_AZ * az_f + (1 - ALPHA_AZ) * current.azimuth;
+    el_mm_f = ALPHA_EL * el_mm_f + (1 - ALPHA_EL) * el_mm;
 
-    current.elevation = elevation_deg_from_mm(extension_mm);
-    current.azimuth = azimut_deg;
+    // PID Controller
+    output_az = controllerAz.output(az_f, set_angle.azimuth);
+    output_el = controllerEl.output(el_mm_f, elevation_mm_from_deg(set_angle.elevation));
 
-    output_az = controllerAz.output(azimut_deg, set_angle.azimuth);
-    output_el = controllerEl.output(extension_mm, elevation_mm_from_deg(set_angle.elevation));
+    // CONTROL ACTION
+    new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD
+                                                             : current_dir_az;
+    new_dir_el = (output_el > 0) ? FORWARD : (output_el < 0) ? BACKWARD
+                                                             : current_dir_el;
 
-    if (output_az > 0 && change_forward_az == false)
+    // Azimut
+    if (new_dir_az != current_dir_az)
     {
-      change_backward_az = false;
-      change_forward_az = true;
+      controllerAz.reset();
       motorAz.setDuty(M_STOP_DUTY);
       motorAz.stop();
       vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
       motorAz.setDuty(0);
-      motorAz.setDirection(FORWARD);
-      reedAz.countDirection(FORWARD);
+      motorAz.setDirection((direction)new_dir_az);
+      reedAz.countDirection((direction)new_dir_az);
+      current_dir_az = new_dir_az;
     }
 
-    if (output_az < 0 && change_backward_az == false)
+    // Elevación
+    if (new_dir_el != current_dir_el)
     {
-      change_forward_az = false;
-      change_backward_az = true;
-      motorAz.setDuty(M_STOP_DUTY);
-      motorAz.stop();
-      vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
-      motorAz.setDuty(0);
-      motorAz.setDirection(BACKWARD);
-      reedAz.countDirection(BACKWARD);
-    }
-
-    if (output_el > 0 && change_forward_el == false)
-    {
-      change_backward_el = false;
-      change_forward_el = true;
+      controllerEl.reset();
       motorEl.setDuty(M_STOP_DUTY);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
       motorEl.setDuty(0);
-      motorEl.setDirection(FORWARD);
-      reedEl.countDirection(FORWARD);
+      motorEl.setDirection((direction)new_dir_el);
+      reedEl.countDirection((direction)new_dir_el);
+      current_dir_el = new_dir_el;
     }
 
-    if (output_el < 0 && change_backward_el == false)
-    {
-      change_forward_el = false;
-      change_backward_el = true;
-      motorEl.setDuty(M_STOP_DUTY);
-      motorEl.stop();
-      vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
-      motorEl.setDuty(0);
-      motorEl.setDirection(BACKWARD);
-      reedEl.countDirection(BACKWARD);
-    }
-
-    motorAz.setDuty(fabsf(output_az) * (100.0f / M_V_NOMINAL));
-    motorEl.setDuty(fabsf(output_el) * (100.0f / M_V_NOMINAL));
+    motorAz.setDuty(fabsf(output_az) * DUTY_SCALE);
+    motorEl.setDuty(fabsf(output_el) * DUTY_SCALE);
   }
 }
 
