@@ -160,7 +160,7 @@ void IRAM_ATTR controlTimerISR(void *arg)
   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
-// PID & Movement
+// PI & Movement
 void taskMotionControl(void *pvParameters)
 {
   constexpr float DUTY_SCALE = 100.0f / M_V_NOMINAL;

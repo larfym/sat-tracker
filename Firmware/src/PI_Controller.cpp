@@ -12,8 +12,8 @@ PI_Controller::PI_Controller(double kp, double ki, double sampleTime, double dea
 
 void PI_Controller::setGains(double kp, double ki)
 {
-    this->a = kp + ki*this->sampleTime/2;
-    this->b = -kp + ki*this->sampleTime/2;
+    this->a = kp + ki*this->sampleTime;
+    this->b = -kp;
 }
 
 void PI_Controller::setMaxOutput(double u_max)
@@ -34,35 +34,27 @@ void PI_Controller::reset()
     u[1] = 0.0f;
 }
 
-float PI_Controller::output(double input, double setPoint)
+float PI_Controller::output(float input, float setPoint)
 {
-    // -------- PI (Tustin) --------
+    // -------- PI (Backward Euler) --------
     e[0] = setPoint - input;
     u[0] = u[1] + e[0]*a + e[1]*b;
 
     // -------- Dead-zone compensation --------
-    float u_dz;
+    float u_dz = u[0];
     if(u[0] > 0)
-        u_dz = u[0] + deadZone;
+        u_dz += deadZone;
     else if(u[0] < 0)
-        u_dz = u[0] - deadZone;
-    else
-        u_dz = 0;
+        u_dz -= deadZone;
 
     // -------- Saturation --------
-    float u_sat;
-    if(u_dz > u_max)
-        u_sat = u_max;
-    else if(u_dz < -u_max)
-        u_sat = -u_max;
-    else
-        u_sat = u_dz;
+    float u_sat = fminf(fmaxf(u_dz, -u_max), u_max);
 
     // -------- Anti-windup --------
-    if(fabsf(u_sat - u_dz) <= 1e-6)
+    if(u_dz == u_sat)   // Only update the integral term if the output is not saturated
     {
-        e[1] = e[0];
         u[1] = u[0];
+        e[1] = e[0];
     }
 
     return u_sat;

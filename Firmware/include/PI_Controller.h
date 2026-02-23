@@ -16,5 +16,5 @@ public:
     void setMaxOutput(double u_max);
     void setDeadZone(double deadZone);
     void reset();
-    float output(double input, double setPoint);
+    float output(float input, float setPoint);
 };
