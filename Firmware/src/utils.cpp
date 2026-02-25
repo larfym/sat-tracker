@@ -54,11 +54,11 @@ void saveTLE(String name, String line1, String line2)
     ESP_LOGI(TAG, "Data Saved - Name: %s tle1: %s, tle2: %s", name.c_str(), line1.c_str(), line2.c_str());
 }
 
-void saveOffsets(double offset_az, double offset_el)
+void saveOffsets(float offset_az, float offset_el)
 {
     config.begin("config", false);
-    config.putDouble("offset_az", offset_az);
-    config.putDouble("offset_el", offset_el);
+    config.putFloat("offset_az", offset_az);
+    config.putFloat("offset_el", offset_el);
     config.end();
     ESP_LOGI(TAG, "Offsets Saved - offset_az: %f, offset_el: %f\n", offset_az, offset_el);
 }

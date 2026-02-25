@@ -175,7 +175,7 @@ void ServerHandler::handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *d
         String offset_az = doc["offset_az"];
         String offset_el = doc["offset_el"];
 
-        saveOffsets(offset_az.toDouble(), offset_el.toDouble());
+        saveOffsets(offset_az.toFloat(), offset_el.toFloat());
         status.offsets_changed = true;
         request->send(200, "text/plain", "OK");
     }
@@ -245,8 +245,7 @@ void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *d
         manual_target.elevation = el;
 
         ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
-
-
+        ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_track, status.gps_fix, status.tle_inited);
         request->send(200, "text/plain", "OK");
     }
     else

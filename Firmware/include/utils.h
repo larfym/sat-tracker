@@ -43,14 +43,6 @@
 /** @brief Precomputed factor to convert mm to LUT index. */
 #define INV_MM_TO_LUT_POS ((float)LUT_SIZE / MAX_EXTENSION_mm)
 
-// Antenna mechanical constants (mm)
-#define A_ANT 50.0f
-#define BP_ANT 230.66f
-#define C_ANT 260.00f
-#define D_ANT 156.0f
-#define E_ANT 80.0f
-#define F_ANT 255.00f
-
 // --------------------------------------------------------------------------------------
 //                                 GLOBAL REFERENCES
 // --------------------------------------------------------------------------------------
@@ -78,8 +70,16 @@ typedef struct __attribute__((packed))
     uint8_t offsets_changed : 1; /**< True if antenna offsets have been updated. */
     uint8_t manual_track : 1; /**< True if antenna is in manual control mode. */
     uint8_t tracking : 1;     /**< True if movement is active. */
-    uint8_t error : 2;        /**< 3-bit internal error code. */
+    uint8_t error : 2;        /**< 2-bit internal error code. */
 } trackerStatus_t;
+
+typedef enum
+{
+    NO_ERROR = 0,
+    SOFT_ENDSTOP_TRIGGERED = 1,
+    OVERCURRENT_ERROR = 2,
+    UNKNOWN_ERROR = 3
+} errorCode_t;
 
 /**
  * @brief Represents the angular position of the antenna.
@@ -149,7 +149,7 @@ void saveTLE(String name, String line1, String line2);
  * @param offset_az Azimuth offset to be saved.
  * @param offset_el Elevation offset to be saved.
  */
-void saveOffsets(double offset_az, double offset_el);
+void saveOffsets(float offset_az, float offset_el);
 
 /**
  * @brief Initializes the elevation lookup table (LUT).

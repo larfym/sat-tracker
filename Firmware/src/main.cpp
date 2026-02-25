@@ -50,7 +50,11 @@ void taskCurrentMonitor(void *pvParameters);
 /* Global Variables */
 static const char *TAG = "MAIN";
 trackerStatus_t status;
-esfericalAngles_t target = {0.0, 0.0}, manual_target = {0.0, 0.0}, current = {0.0, 0.0}, offsets_ant = {0.0, 0.0}, set_angle = {0.0, 0.0};
+esfericalAngles_t target        = {0};
+esfericalAngles_t manual_target = {0};
+esfericalAngles_t current       = {0};
+esfericalAngles_t offsets_ant   = {0};
+esfericalAngles_t set_angle     = {0};
 bool home_done = false, stopped = false, pred_done = false;
 
 void setup()
@@ -460,10 +464,13 @@ void taskCurrentMonitor(void *pvParameters)
     if (current_az > CURRENT_AZIMUTH_MAX_mA)
     {
       ESP_LOGW(TAG, "Azimuth Motor Overcurrent: %.2f mA", current_az);
+      status.tracking = false;
+      status.error = OVERCURRENT_ERROR;
     }
     if (current_el > CURRENT_ELEVATION_MAX_mA)
     {
       ESP_LOGW(TAG, "Elevation Motor Overcurrent: %.2f mA", current_el);
+      status.error = OVERCURRENT_ERROR;
     }
 
     vTaskDelay(pdMS_TO_TICKS(3000));
@@ -472,10 +479,14 @@ void taskCurrentMonitor(void *pvParameters)
 
 void IRAM_ATTR reedAz_event_handler(void *arg)
 {
+  status.tracking = false;
+  status.error = SOFT_ENDSTOP_TRIGGERED;
   // TODO Software endstops
 }
 
 void IRAM_ATTR reedEl_event_handler(void *arg)
 {
+  status.tracking = false;
+  status.error = SOFT_ENDSTOP_TRIGGERED;
   // TODO Software endstops
 }

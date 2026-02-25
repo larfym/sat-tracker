@@ -407,13 +407,13 @@
                 <h3>Offsets de Antena</h3>
                 <ul>
                     <li><span>Declinación Magnética</span><span class="input-value"><input type="number" id="mag-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
                     <li><span>Offset Antena</span><span class="input-value"><input type="number" id="ant-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
                     <li><span>Offset Azimut</span><span class="input-value"><input type="number" id="az-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
                     <li><span>Offset Elevación</span><span class="input-value"><input type="number" id="el-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
                 </ul>
                 <button class="send-button" onclick="saveOffsets()">
                     <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
@@ -537,8 +537,8 @@
         }
 
         function saveOffsets() {
-            const az = parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value);
-            const el = parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value);
+            const az = Number(parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value)).toFixed(2);
+            const el = Number(parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value)).toFixed(2);
 
             if (!checkAngles(el, az))
                 return;
@@ -808,20 +808,39 @@
         }
 
         function drawLineChart(svgId, x, y1, y2) {
-            const margin = { top: 5, right: 15, bottom: 20, left: 25 };
+            const margin = { top: 5, right: 15, bottom: 20, left: 35 };
             const svg = document.getElementById(svgId);
             const W = svg.clientWidth;
             const H = svg.clientHeight;
             const iw = W - margin.left - margin.right;
             const ih = H - margin.top - margin.bottom;
-            const ticks = 5;
-            const minY = Math.min(...y1, ...y2);
-            const maxY = Math.max(...y1, ...y2);
+
+            let minY = Math.min(...y1, ...y2);
+            let maxY = Math.max(...y1, ...y2);
+
+            let rangeY = maxY - minY;
+
+            if (rangeY === 0) {
+                rangeY = Math.abs(maxY) * 0.1 || 1;
+            }
+
+            const padding = rangeY * 0.2;
+            minY = Math.max(0, minY - padding);
+            maxY += padding;
+
+            if (maxY <= minY) {
+                maxY = minY + 1;
+            }
+
+            const targetPixelPerTick = 30;
+            const ticks = Math.max(6, Math.floor(ih / targetPixelPerTick));
 
             const scaleX = i =>
                 margin.left + (i / (x.length - 1)) * iw;
+
             const scaleY = v =>
                 margin.top + ih - ((v - minY) / (maxY - minY)) * ih;
+
             const line = y =>
                 y.map((v, i) => `${scaleX(i)},${scaleY(v)}`).join(" ");
 
@@ -833,15 +852,17 @@
                 const yPos = scaleY(yVal);
 
                 grid += `
-                <line x1="${margin.left}" y1="${yPos}"
+                    <line x1="${margin.left}" y1="${yPos}"
                         x2="${W - margin.right}" y2="${yPos}"
                         stroke="#333" stroke-dasharray="2 4"/>
                 `;
 
                 labels += `
-                <text x="25" y="${yPos + 4}"
+                    <text x="${margin.left - 5}" y="${yPos + 4}"
                         font-size="10" fill="#f0f0f0"
-                        text-anchor="end">${yVal.toFixed(1)}</text>
+                        text-anchor="end">
+                        ${yVal.toFixed(2)}
+                    </text>
                 `;
             }
 
@@ -849,15 +870,17 @@
                 const xPos = scaleX(i);
 
                 grid += `
-                <line x1="${xPos}" y1="${margin.top}"
+                    <line x1="${xPos}" y1="${margin.top}"
                         x2="${xPos}" y2="${H - margin.bottom}"
                         stroke="#333" stroke-dasharray="2 4"/>
                 `;
 
                 labels += `
-                <text x="${xPos}" y="${H - 5}"
+                    <text x="${xPos}" y="${H - 5}"
                         font-size="10" fill="#f0f0f0"
-                        text-anchor="middle">${label}</text>
+                        text-anchor="middle">
+                        ${label}
+                    </text>
                 `;
             });
 
@@ -877,10 +900,12 @@
 
                 <!-- Líneas -->
                 <polyline fill="none" stroke="#007bff"
-                        stroke-width="2" points="${line(y1)}"/>
+                        stroke-width="2"
+                        points="${line(y1)}"/>
 
                 <polyline fill="none" stroke="#dc3545"
-                        stroke-width="2" points="${line(y2)}"/>
+                        stroke-width="2"
+                        points="${line(y2)}"/>
             `;
         }
 
