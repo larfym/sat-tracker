@@ -73,22 +73,21 @@ void MotorDriver::setDirection(direction dir)
         gpio_set_level(IN1_pin, 0);
         gpio_set_level(IN2_pin, 1);
         this->current_direction = BACKWARD;
+    }else if (dir == STOPPED)
+    {
+        gpio_set_level(IN1_pin, 0);
+        gpio_set_level(IN2_pin, 0);
+        this->current_direction = STOPPED;
     }
 
-    ESP_LOGD(TAG, "Motor %d direction set to: %s", instance_id, (this->current_direction == FORWARD ? "FORWARD" : "BACKWARD"));
-}
-
-void MotorDriver::toggleDirection()
-{
-    direction new_dir = (this->current_direction == FORWARD) ? BACKWARD : FORWARD;
-    setDirection(new_dir);
-    ESP_LOGD(TAG, "Motor %d direction set to: %s", instance_id, (this->current_direction == FORWARD ? "FORWARD" : "BACKWARD"));
+    ESP_LOGD(TAG, "Motor %d direction set to: %s", instance_id, (this->current_direction == FORWARD ? "FORWARD" : (this->current_direction == BACKWARD ? "BACKWARD" : "STOPPED")));
 }
 
 void MotorDriver::stop()
 {
     gpio_set_level(IN1_pin, 0);
     gpio_set_level(IN2_pin, 0);
+    this->current_direction = STOPPED;
 
     ESP_LOGD(TAG, "Motor %d stopped", instance_id);
 }

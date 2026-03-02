@@ -26,23 +26,23 @@ private:
      * @brief Static counter used to assign a unique ID to each MotorDriver instance.
      */
     static uint8_t id;
-    
+
     /**
      * @brief Unique ID of this motor instance (assigned from 'id').
      */
     uint8_t instance_id;
-    
+
     /**
      * @brief Stores the motor's current rotation direction (FORWARD or BACKWARD).
      * @see direction (defined in utils.h)
      */
     direction current_direction;
-    
+
     /**
      * @brief GPIO pins used for the direction signals.
      */
     gpio_num_t IN1_pin, IN2_pin;
-    
+
     /**
      * @brief The LEDC channel utilized to generate the PWM signal for speed control.
      */
@@ -58,9 +58,9 @@ public:
      * @param channel The LEDC channel to be used for PWM generation.
      * @param frequency The PWM signal frequency in Hz (e.g., 5000 Hz).
      */
-    MotorDriver(gpio_num_t IN1_pin, gpio_num_t IN2_pin, gpio_num_t PWM_pin, 
+    MotorDriver(gpio_num_t IN1_pin, gpio_num_t IN2_pin, gpio_num_t PWM_pin,
                 ledc_timer_t timer, ledc_channel_t channel, uint16_t frequency);
-    
+
     /**
      * @brief Sets the PWM duty cycle
      * @param percentage The duty cycle percentage, from 0,0 to 100,0.
@@ -79,12 +79,13 @@ public:
      * @see direction (defined in utils.h)
      */
     void setDirection(direction dir);
-    
+
     /**
-     * @brief Toggles the current direction of the motor.
+     * @brief Retrieves the current direction of the motor.
+     * @return The current direction (FORWARD, BACKWARD, or STOPPED).
      */
-    void toggleDirection();
-    
+    direction getDirection() const { return current_direction; }
+
     /**
      * @brief Stops the motor (Does not Change duty Cycle (breaking power)).
      */

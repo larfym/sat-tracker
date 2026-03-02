@@ -71,6 +71,9 @@ void ReedSwitch::countDirection(direction dir)
     {
         this->current_dir = BACKWARD;
         pcnt_set_mode(this->unit, this->channel, PCNT_COUNT_DIS, PCNT_COUNT_DEC, PCNT_MODE_KEEP, PCNT_MODE_KEEP);
+    }else
+    {
+        return;
     }
 }
 

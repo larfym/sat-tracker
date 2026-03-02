@@ -96,7 +96,8 @@ typedef struct __attribute__((packed))
 typedef enum
 {
     FORWARD, /**< Positive direction. */
-    BACKWARD /**< Negative direction. */
+    BACKWARD, /**< Negative direction. */
+    STOPPED /**< No movement. */
 } direction;
 
 // --------------------------------------------------------------------------------------

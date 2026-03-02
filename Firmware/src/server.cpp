@@ -26,8 +26,7 @@ esp_err_t ServerHandler::start()
               std::bind(&ServerHandler::handleData, this, std::placeholders::_1));
 
     // Trackeo (POST /toggle_tracking)
-    server.on("/toggle_tracking", HTTP_POST,
-              std::bind(&ServerHandler::handleToggleTracking, this, std::placeholders::_1));
+    server.on("/toggle_tracking", HTTP_POST, std::bind(&ServerHandler::handleToggleTracking, this, std::placeholders::_1));
 
     // Configuración (POST /saveTle)
     server.on("/saveTle", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveTle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
@@ -40,6 +39,9 @@ esp_err_t ServerHandler::start()
 
     // Control Manual (POST /manual)
     server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleManualTrack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+
+    // Resetear MCU (POST /reset)
+    server.on("/reset", HTTP_POST, std::bind(&ServerHandler::handleReset, this, std::placeholders::_1));
 
     server.onNotFound(handleNotFound);
 
@@ -287,4 +289,17 @@ void ServerHandler::handleGeoTime(AsyncWebServerRequest *request, uint8_t *data,
 void ServerHandler::handleNotFound(AsyncWebServerRequest *request)
 {
     request->send(404, "text/plain", "Not Found");
+}
+
+static TimerHandle_t resetTimer = NULL;
+
+void resetTimerCallback(TimerHandle_t xTimer)
+{
+    ESP.restart();
+}
+
+void ServerHandler::handleReset(AsyncWebServerRequest *request)
+{
+    pending_reset = true;
+    request->send(200, "text/plain", "OK");
 }

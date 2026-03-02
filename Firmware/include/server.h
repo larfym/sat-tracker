@@ -31,12 +31,15 @@ extern esfericalAngles_t target, manual_target, set_angle;
 /** @brief Global structure for the current (measured) antenna position. */
 extern esfericalAngles_t current, offsets_ant;
 
+
 /** @brief Constant string for the default WiFi SSID. */
 const String default_wifi_ssid = DEFAULT_WIFI_SSID;
 /** @brief Constant string for the default WiFi password. */
 const String default_wifi_password = DEFAULT_WIFI_PASSWORD;
 /** @brief Size of the ArduinoJson buffer used for serializing/deserializing data. */
 const size_t JSON_BUFFER_SIZE = 384;
+/** @brief Reset flag */
+extern bool pending_reset;
 
 /**
  * @class ServerHandler
@@ -107,11 +110,19 @@ private:
     void handleToggleTracking(AsyncWebServerRequest *request);
 
     void handleGeoTime(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+
+    /**
+     * @brief Handler for resetting the MCU (POST request).
+     * @param request The asynchronous request object.
+     */
+    void handleReset(AsyncWebServerRequest *request);
+
     /**
      * @brief Static handler for managing "404 Not Found" errors.
      * @param request The asynchronous request object.
      */
     static void handleNotFound(AsyncWebServerRequest *request);
+
 };
 
 #endif // SERVER_HANDLER_H

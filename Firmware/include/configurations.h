@@ -126,9 +126,9 @@
  */
 ///@{
 #define M_V_NOMINAL 36            /**< Nominal voltage for motors (V). */
-#define M_AZ_V_TO_START 7.5       /**< Minimum voltage to overcome static friction (Azimuth). */
-#define M_EL_V_TO_START 3         /**< Minimum voltage to overcome static friction (Elevation). */
-#define M_STOP_DUTY 20            /**< Duty cycle to apply for stopping the motors (0-100%). */
+#define M_AZ_V_TO_START 8.5         /**< Minimum voltage to overcome static friction (Azimuth). */
+#define M_EL_V_TO_START 3.5         /**< Minimum voltage to overcome static friction (Elevation). */
+#define M_STOP_DUTY 30            /**< Duty cycle to apply for stopping the motors (0-100%). */
 #define M_AZ_SETTLING_TIME_MS 65  /**< Settling time for Azimuth motor (ms). */
 #define M_EL_SETTLING_TIME_MS 100 /**< Settling time for Elevation motor (ms). */
 ///@}
@@ -138,7 +138,7 @@
  * @brief Resolution per pulses of reed.
  */
 ///@{
-#define AZIMUTH_RESOLUTION_angle 0.2 /**< Degrees per reed pulse for Azimuth. */
+#define AZIMUTH_RESOLUTION_angle 0.225 /**< Degrees per reed pulse for Azimuth. */
 #define ELEVATION_RESOLUTION_mm 1.6  /**< Millimeters per reed pulse for Elevation. */
 ///@}
 
@@ -170,7 +170,7 @@
  * @brief Filters Reed signal for smooth operation.
  */
 ///@{
-#define FREQUENCY_REED_AZ 0.6 /**< Low pass filter frequency (Reed-AZ). */
+#define FREQUENCY_REED_AZ 0.5 /**< Low pass filter frequency (Reed-AZ). */
 #define FREQUENCY_REED_EL 0.2 /**< Low pass filter frequency (Reed-EL). */
 ///@}
 
@@ -179,8 +179,8 @@
  * @brief Gains for the Azimuth axis PID controller.
  */
 ///@{
-#define KP_AZIMUTH 40.0 /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.8  /**< Integral gain (AZ). */
+#define KP_AZIMUTH 30.0 /**< Proportional gain (AZ). */
+#define KI_AZIMUTH 0.5  /**< Integral gain (AZ). */
 ///@}
 
 /**
@@ -188,8 +188,8 @@
  * @brief Gains for the Elevation axis PID controller.
  */
 ///@{
-#define KP_ELEVATION 10.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.005 /**< Integral gain (EL). */
+#define KP_ELEVATION 8.0  /**< Proportional gain (EL). */
+#define KI_ELEVATION 0.001 /**< Integral gain (EL). */
 ///@}
 
 /**
@@ -197,11 +197,21 @@
  * @brief Encoder/step limits for mechanical range enforcement.
  */
 ///@{
-#define REED_AZ_SOFT_LIMIT_HIGH 1900 /**< Upper soft limit for Azimuth. */
+#define REED_AZ_SOFT_LIMIT_HIGH 1610 /**< Upper soft limit for Azimuth. */
 #define REED_EL_SOFT_LIMIT_HIGH 500  /**< Upper soft limit for Elevation. */
+#define REED_AZ_SOFT_LIMIT_LOW -5 /**< Lower soft limit for Azimuth */
+#define REED_EL_SOFT_LIMIT_LOW -5 /**< Lower soft limit for Elevation */
+///@}
 
-#define REED_AZ_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Azimuth */
-#define REED_EL_SOFT_LIMIT_LOW -1 /**< Lower soft limit for Elevation */
+/**
+ * @name Hardware Limit Positions
+ * @brief 
+ */
+///@{
+#define EL_MIN_DEG 0   /**< Lower limit for Elevation. */
+#define EL_MAX_DEG 90  /**< Upper limit for Elevation. */
+#define AZ_MIN_DEG 0    /**< Lower limit for Azimuth. */
+#define AZ_MAX_DEG 340  /**< Upper limit for Azimuth. */
 ///@}
 
 /**
@@ -220,7 +230,44 @@
 ///@{
 #define SHUNT_AZ_OHM 0.3333333  /**< Shunt resistor value for Azimuth current sensing (Ohms). */
 #define CURRENT_GAIN_AZ 2.11988 /**< Signal Adaptation gain for Azimuth current sensing. */
-
 #define SHUNT_EL_OHM 0.09       /**< Shunt resistor value for Elevation current sensing (Ohms). */
 #define CURRENT_GAIN_EL 7.07773 /**< Signal Adaptation gain for Elevation current sensing. */
+///@}
+
+/* -------------------------------------------------------------------------- */
+/*                      FreeRTOS TASK CONFIGURATION                           */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * @name Task Priorities
+ * @brief Priorities for FreeRTOS tasks (0 = lowest priority).
+ */
+///@{
+#define TASK_STOP_MOTION_PRIORITY 17
+#define TASK_HOME_PRIORITY 16
+#define TASK_GPS_PRIORITY 15
+#define TASK_TRACKING_CALCULATION_PRIORITY 14
+#define TASK_MOTION_CONTROL_PRIORITY 14
+#define TASK_CURRENT_MONITOR_PRIORITY 12
+///@}
+
+/**
+ * @name Task Timing Parameters
+ * @brief Timing parameters for FreeRTOS tasks (in milliseconds).
+ */
+///@{
+#define TASK_LOOP_DELAY 1000 /**< Delay for main loop task (ms). */
+#define TASK_GPS_DELAY 500 /**< Delay for GPS task (ms). */
+#define TASK_CURRENT_MONITOR_DELAY 3000 /**< Delay for Current Monitor task (ms). */
+#define TASK_HOME_CURRENT_DELAY 100 /**< Delay for Home Current task (ms). */
+///@}
+
+/**
+ * @name Task Stack Sizes
+ * @brief Stack sizes for FreeRTOS tasks (in bytes).
+ */
+///@{
+#define MAX_STACK_SIZE 8192    /**< Maximum stack size for FreeRTOS tasks (bytes). */
+#define MEDIUM_STACK_SIZE 2048 /**< Medium stack size for FreeRTOS tasks (bytes). */
+#define MIN_STACK_SIZE 512    /**< Minimum stack size for FreeRTOS tasks (bytes). */
 ///@}
