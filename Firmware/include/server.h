@@ -14,9 +14,6 @@
 #include "esp_log.h"
 #include "esp_err.h"
 
-/** @brief Buffer size for formatting floating-point numbers as strings. */
-#define FLOAT_BUFFER_SIZE 16
-
 // ---------------------------
 // 1. GLOBAL STATE VARIABLES
 // ---------------------------
@@ -26,10 +23,14 @@ extern Sgp4 satellite;
 extern Preferences config;
 /** @brief Global structure holding the current operational status of the tracker. */
 extern trackerStatus_t status;
+/** @brief Global structure holding the current mount flags. */
+extern mountFlags_t flags;
 /** @brief Global structure for the target (commanded) antenna position. */
 extern esfericalAngles_t target, manual_target, set_angle;
 /** @brief Global structure for the current (measured) antenna position. */
 extern esfericalAngles_t current, offsets_ant;
+/** @brief Next pass start time in unix*/
+extern unsigned long next_pass_unix;
 
 
 /** @brief Constant string for the default WiFi SSID. */
@@ -38,8 +39,6 @@ const String default_wifi_ssid = DEFAULT_WIFI_SSID;
 const String default_wifi_password = DEFAULT_WIFI_PASSWORD;
 /** @brief Size of the ArduinoJson buffer used for serializing/deserializing data. */
 const size_t JSON_BUFFER_SIZE = 384;
-/** @brief Reset flag */
-extern bool pending_reset;
 
 /**
  * @class ServerHandler
@@ -64,14 +63,10 @@ public:
      */
     esp_err_t start();
 
+    void sendTelemetry();
 private:
     AsyncWebServer server; /**< The asynchronous web server instance. */
-
-    /**
-     * @brief Handler for retrieving status and configuration data (GET request).
-     * @param request The asynchronous request object.
-     */
-    void handleData(AsyncWebServerRequest *request);
+    AsyncEventSource events; /**< Event source for server-sent events (SSE). */
 
     /**
      * @brief Handler for saving satellite configuration data (tle) (POST request).
@@ -81,7 +76,7 @@ private:
      * @param index Current index of the received chunk (for large uploads).
      * @param total Total length of the expected payload.
      */
-    void handleSaveTle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+    void saveTLE_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     /**
      * @brief Handler for saving antena configuration data (offsets) (POST request).
@@ -91,7 +86,7 @@ private:
      * @param index Current index of the received chunk (for large uploads).
      * @param total Total length of the expected payload.
      */
-    void handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+    void saveOffsets_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     /**
      * @brief Handler for setting manual target angles for the platform (POST request).
@@ -101,27 +96,27 @@ private:
      * @param index Current index of the received chunk.
      * @param total Total length of the expected payload.
      */
-    void handleManualTrack(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+    void manualTrack_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     /**
      * @brief Handler for toggling the automatic tracking state (GET request).
      * @param request The asynchronous request object.
      */
-    void handleToggleTracking(AsyncWebServerRequest *request);
+    void toggleTracking_handle(AsyncWebServerRequest *request);
 
-    void handleGeoTime(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+    void GeoTime_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     /**
      * @brief Handler for resetting the MCU (POST request).
      * @param request The asynchronous request object.
      */
-    void handleReset(AsyncWebServerRequest *request);
+    void reset_handle(AsyncWebServerRequest *request);
 
     /**
      * @brief Static handler for managing "404 Not Found" errors.
      * @param request The asynchronous request object.
      */
-    static void handleNotFound(AsyncWebServerRequest *request);
+    static void NotFount_handle(AsyncWebServerRequest *request);
 
 };
 

@@ -2,7 +2,7 @@
 
 static const char *TAG = "SERVER";
 
-ServerHandler::ServerHandler(int port) : server(port)
+ServerHandler::ServerHandler(int port) : server(port), events("/telemetry")
 {
 }
 
@@ -15,35 +15,42 @@ esp_err_t ServerHandler::start()
         ESP_LOGI(TAG, "Reseting...");
         ESP.restart();
     }
-
+    
     WiFi.mode(WIFI_MODE_AP);
     WiFi.softAP(default_wifi_ssid.c_str(), default_wifi_password.c_str());
 
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
 
-    // Telemetría (GET /data)
-    server.on("/data", HTTP_GET,
-              std::bind(&ServerHandler::handleData, this, std::placeholders::_1));
+    // Telemetry (SSE)
+    server.addHandler(&events);
+    events.onConnect([](AsyncEventSourceClient *client) {
+        ESP_LOGI(TAG, "SSE client connected");
+        client->send("Connected", NULL, millis(), 1000);
+    });
+    events.onDisconnect([](AsyncEventSource *source, AsyncEventSourceClient *client) {
+        ESP_LOGI(TAG, "SSE client disconnected");
+    });
 
-    // Trackeo (POST /toggle_tracking)
-    server.on("/toggle_tracking", HTTP_POST, std::bind(&ServerHandler::handleToggleTracking, this, std::placeholders::_1));
+    // Tracking (POST /toggle_tracking)
+    server.on("/toggle_tracking", HTTP_POST, std::bind(&ServerHandler::toggleTracking_handle, this, std::placeholders::_1));
 
-    // Configuración (POST /saveTle)
-    server.on("/saveTle", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveTle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    // Configuration (POST /saveTle)
+    server.on("/saveTle", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::saveTLE_handle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
     
-    // Configuración (POST /saveOffsets)
-    server.on("/saveOffsets", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleSaveOffsets, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    // Configuration (POST /saveOffsets)
+    server.on("/saveOffsets", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::saveOffsets_handle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
     // GeoTime (POST /geo_time)
-    server.on("/geo_time", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleGeoTime, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    server.on("/geo_time", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::GeoTime_handle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
-    // Control Manual (POST /manual)
-    server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::handleManualTrack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
+    // Manual Control (POST /manual)
+    server.on("/manual", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&ServerHandler::manualTrack_handle, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
 
-    // Resetear MCU (POST /reset)
-    server.on("/reset", HTTP_POST, std::bind(&ServerHandler::handleReset, this, std::placeholders::_1));
+    // Reset MCU (POST /reset)
+    server.on("/reset", HTTP_POST, std::bind(&ServerHandler::reset_handle, this, std::placeholders::_1));
 
-    server.onNotFound(handleNotFound);
+    // Not Found
+    server.onNotFound(NotFount_handle);
 
     if (MDNS.begin(MDNS_SERVICE_NAME))
     {
@@ -62,23 +69,174 @@ esp_err_t ServerHandler::start()
     return ESP_OK;
 }
 
-void ServerHandler::handleData(AsyncWebServerRequest *request)
+void ServerHandler::saveTLE_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, data, total);
+        if (err)
+        {
+            ESP_LOGE(TAG, "Failed to parse JSON: %s", err.c_str());
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
+        String name = doc["name"];
+        String line1 = doc["line1"];
+        String line2 = doc["line2"];
+
+        saveTLE(name, line1, line2);
+        flags.tle_updated = true;
+        request->send(200, "text/plain", "OK");
+    }
+}
+
+void ServerHandler::saveOffsets_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, data, total);
+        if (err)
+        {
+            ESP_LOGE(TAG, "Failed to parse JSON: %s", err.c_str());
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
+        String offset_az = doc["offset_az"];
+        String offset_el = doc["offset_el"];
+
+        saveOffsets(offset_az.toFloat(), offset_el.toFloat());
+        flags.offsets_updated = true;
+        request->send(200, "text/plain", "OK");
+    }
+}
+
+void ServerHandler::toggleTracking_handle(AsyncWebServerRequest *request)
+{
+    JsonDocument res;
+    if (status.tracking == true)
+    {
+        status.tracking = false;
+        res["tracking"] = false;
+        res["reason"] = "none";
+        
+        if (status.manual_tracking == true)
+        {
+            status.manual_tracking = false;
+        }
+        ESP_LOGI(TAG, "Tracking Stopped");
+    }
+    else
+    {
+        if (status.gps == true && status.tle == true)
+        {
+            status.tracking = true;
+            res["tracking"] = status.tracking;
+            res["reason"] = "none";
+            ESP_LOGI(TAG, "Tracking Started");
+        }
+        else if (status.gps == false)
+        {
+            res["tracking"] = false;
+            res["reason"] = "No_GPS";
+            ESP_LOGI(TAG, "Cannot start tracking: No GPS Fix");
+        }
+        else if (status.tle == false)
+        {
+            res["tracking"] = false;
+            res["reason"] = "No_TLE";
+            ESP_LOGI(TAG, "Cannot start tracking: TLE Not Initialized");
+        }
+    }
+
+    ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_tracking, status.gps, status.tle);
+    String _res;
+    serializeJson(res, _res);
+    request->send(200, "application/json", _res);
+}
+
+void ServerHandler::manualTrack_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, (const char *)data);
+        if (err)
+        {
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
+        status.manual_tracking = true;
+        status.tracking = true;
+        float az = doc["manual_az"];
+        float el = doc["manual_el"];
+        manual_target.azimuth = az;
+        manual_target.elevation = el;
+
+        ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
+        ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_tracking, status.gps, status.tle);
+        request->send(200, "text/plain", "OK");
+    }
+    else
+    {
+        request->send(400, "text/plain", "Invalid Request");
+    }
+}
+
+void ServerHandler::GeoTime_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (index == total - len && request->contentType() == "application/json")
+    {
+        JsonDocument doc;
+        DeserializationError err = deserializeJson(doc, (const char *)data);
+        if (err)
+        {
+            request->send(400, "text/plain", "Invalid JSON");
+            return;
+        }
+
+        unsigned long unix_time = doc["unix"];
+        double latitude = doc["lat"];
+        double longitude = doc["lon"];
+        double altitude = doc["alt"];
+
+        setTime(unix_time);
+        satellite.site(latitude, longitude, altitude);
+        status.gps = true;
+
+        ESP_LOGD(TAG, "GeoTime Updated - Time: %lu, Lat: %f, Lon: %f, Alt: %f", unix_time, latitude, longitude, altitude);
+        request->send(200, "text/plain", "OK");
+    }
+}
+
+void ServerHandler::NotFount_handle(AsyncWebServerRequest *request)
+{
+    request->send(404, "text/plain", "Not Found");
+}
+
+void ServerHandler::reset_handle(AsyncWebServerRequest *request)
+{
+    flags.reset_pending = true;
+    request->send(200, "text/plain", "OK");
+}
+
+void ServerHandler::sendTelemetry()
 {
     JsonDocument json;
-    char temp_float_buffer[FLOAT_BUFFER_SIZE];
 
-    JsonObject sat = json["s"].to<JsonObject>(); //Satellite Data
+    //Satellite Data
+    JsonObject sat = json["s"].to<JsonObject>(); 
     sat["n"] = satellite.satName;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLat);
-    sat["la"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.satLon);
-    sat["lo"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", satellite.satAlt);
-    sat["al"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.3f", satellite.satAz);
-    sat["a"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.3f", satellite.satEl);
-    sat["e"] = temp_float_buffer;
+    sat["la"] = serialized(String(satellite.satLat, 6));
+    sat["lo"] = serialized(String(satellite.satLon, 6));
+    sat["al"] = serialized(String(satellite.satAlt, 2));
+    sat["a"] = serialized(String(satellite.satAz, 2));
+    sat["e"] = serialized(String(satellite.satEl, 2));
+    sat["p"] = next_pass_unix;
     
     bool notdark;
     double deltaphi;
@@ -100,206 +258,36 @@ void ServerHandler::handleData(AsyncWebServerRequest *request)
         sat["v"] = "Visible";
     }
     
-    JsonObject stat = json["st"].to<JsonObject>(); //Status Data
-    stat["tle"] = status.tle_inited;
-    stat["gps"] = status.gps_fix;
-    stat["man"] = status.manual_track;
+    //Status Data
+    JsonObject stat = json["st"].to<JsonObject>(); 
+    stat["tle"] = status.tle;
+    stat["gps"] = status.gps;
+    stat["man"] = status.manual_tracking;
     stat["tr"] = status.tracking;
     stat["err"] = status.error;
-    stat["a"] = set_angle.azimuth;
-    stat["e"] = set_angle.elevation;
-    
-    JsonObject ant = json["a"].to<JsonObject>(); //Antenna Data
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", offsets_ant.azimuth);
-    ant["o_a"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", offsets_ant.elevation);
-    ant["o_e"] = temp_float_buffer;
+    stat["a"] = serialized(String(set_angle.azimuth, 2));
+    stat["e"] = serialized(String(set_angle.elevation, 2));
 
+    //Antenna Data
+    JsonObject ant = json["a"].to<JsonObject>(); 
+    ant["o_a"] = serialized(String(offsets_ant.azimuth, 2));
+    ant["o_e"] = serialized(String(offsets_ant.elevation, 2));
+
+    //Platform Data
     unsigned long unixtime = time(NULL);
-    JsonObject platform = json["p"].to<JsonObject>(); //Platform Data
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", current.azimuth);
-    platform["az"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", current.elevation);
-    platform["el"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLat);
-    platform["la"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.6f", satellite.siteLon);
-    platform["lo"] = temp_float_buffer;
-    snprintf(temp_float_buffer, FLOAT_BUFFER_SIZE, "%.2f", satellite.siteAlt);
-    platform["al"] = temp_float_buffer;
-    if(status.gps_fix){
+    JsonObject platform = json["p"].to<JsonObject>(); 
+    platform["la"] = serialized(String(satellite.siteLat, 6));
+    platform["lo"] = serialized(String(satellite.siteLon, 6));
+    platform["al"] = serialized(String(satellite.siteAlt, 2));
+    platform["az"] = serialized(String(current.azimuth, 2));
+    platform["el"] = serialized(String(current.elevation, 2));
+    if(status.gps){
         platform["t"] = unixtime;
     }else{
-        platform["t"] = 0;
+        platform["t"] = 0.0f;
     }
     
-    char buffer[JSON_BUFFER_SIZE];
-    serializeJson(json, buffer);
-    request->send(200, "application/json", buffer);
-}
-
-void ServerHandler::handleSaveTle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-{
-    if (index == total - len && request->contentType() == "application/json")
-    {
-        JsonDocument doc;
-        DeserializationError err = deserializeJson(doc, data, total);
-        if (err)
-        {
-            ESP_LOGE(TAG, "Failed to parse JSON: %s", err.c_str());
-            request->send(400, "text/plain", "Invalid JSON");
-            return;
-        }
-
-        String name = doc["name"];
-        String line1 = doc["line1"];
-        String line2 = doc["line2"];
-
-        saveTLE(name, line1, line2);
-        status.tle_changed = true;
-        request->send(200, "text/plain", "OK");
-    }
-}
-
-void ServerHandler::handleSaveOffsets(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-{
-    if (index == total - len && request->contentType() == "application/json")
-    {
-        JsonDocument doc;
-        DeserializationError err = deserializeJson(doc, data, total);
-        if (err)
-        {
-            ESP_LOGE(TAG, "Failed to parse JSON: %s", err.c_str());
-            request->send(400, "text/plain", "Invalid JSON");
-            return;
-        }
-
-        String offset_az = doc["offset_az"];
-        String offset_el = doc["offset_el"];
-
-        saveOffsets(offset_az.toFloat(), offset_el.toFloat());
-        status.offsets_changed = true;
-        request->send(200, "text/plain", "OK");
-    }
-}
-
-void ServerHandler::handleToggleTracking(AsyncWebServerRequest *request)
-{
-    JsonDocument res;
-    if (status.tracking == true)
-    {
-        status.tracking = false;
-        res["tracking"] = false;
-        res["reason"] = "none";
-        
-        if (status.manual_track == true)
-        {
-            status.manual_track = false;
-        }
-        ESP_LOGI(TAG, "Tracking Stopped");
-    }
-    else
-    {
-        if (status.gps_fix == true && status.tle_inited == true)
-        {
-            status.tracking = true;
-            res["tracking"] = status.tracking;
-            res["reason"] = "none";
-            ESP_LOGI(TAG, "Tracking Started");
-        }
-        else if (status.gps_fix == false)
-        {
-            res["tracking"] = false;
-            res["reason"] = "No_GPS";
-            ESP_LOGI(TAG, "Cannot start tracking: No GPS Fix");
-        }
-        else if (status.tle_inited == false)
-        {
-            res["tracking"] = false;
-            res["reason"] = "No_TLE";
-            ESP_LOGI(TAG, "Cannot start tracking: TLE Not Initialized");
-        }
-    }
-
-    ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_track, status.gps_fix, status.tle_inited);
-    String _res;
-    serializeJson(res, _res);
-    request->send(200, "application/json", _res);
-}
-
-void ServerHandler::handleManualTrack(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-{
-    if (index == total - len && request->contentType() == "application/json")
-    {
-        JsonDocument doc;
-        DeserializationError err = deserializeJson(doc, (const char *)data);
-        if (err)
-        {
-            request->send(400, "text/plain", "Invalid JSON");
-            return;
-        }
-
-        status.manual_track = true;
-        status.tracking = true;
-        float az = doc["manual_az"];
-        float el = doc["manual_el"];
-        manual_target.azimuth = az;
-        manual_target.elevation = el;
-
-        ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
-        ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_track, status.gps_fix, status.tle_inited);
-        request->send(200, "text/plain", "OK");
-    }
-    else
-    {
-        request->send(400, "text/plain", "Invalid Request");
-    }
-}
-
-void ServerHandler::handleGeoTime(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-{
-    if (index == total - len && request->contentType() == "application/json")
-    {
-        JsonDocument doc;
-        DeserializationError err = deserializeJson(doc, (const char *)data);
-        if (err)
-        {
-            request->send(400, "text/plain", "Invalid JSON");
-            return;
-        }
-
-        unsigned long unix_time = doc["unix"];
-        double latitude = doc["lat"];
-        double longitude = doc["lon"];
-        double altitude = doc["alt"];
-
-        struct timeval tv;
-        tv.tv_sec = unix_time;
-        tv.tv_usec = 0;
-        settimeofday(&tv, NULL);
-
-        satellite.site(latitude, longitude, altitude);
-        status.gps_fix = true;
-
-        ESP_LOGI(TAG, "GeoTime Updated - Time: %lu, Lat: %f, Lon: %f, Alt: %f", unix_time, latitude, longitude, altitude);
-        request->send(200, "text/plain", "OK");
-    }
-}
-
-void ServerHandler::handleNotFound(AsyncWebServerRequest *request)
-{
-    request->send(404, "text/plain", "Not Found");
-}
-
-static TimerHandle_t resetTimer = NULL;
-
-void resetTimerCallback(TimerHandle_t xTimer)
-{
-    ESP.restart();
-}
-
-void ServerHandler::handleReset(AsyncWebServerRequest *request)
-{
-    pending_reset = true;
-    request->send(200, "text/plain", "OK");
+    String output;
+    serializeJson(json, output);
+    events.send(output.c_str(), "telemetry", millis());
 }

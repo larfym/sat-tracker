@@ -85,6 +85,7 @@ void MotorDriver::setDirection(direction dir)
 
 void MotorDriver::stop()
 {
+    this->setDuty(M_STOP_DUTY);
     gpio_set_level(IN1_pin, 0);
     gpio_set_level(IN2_pin, 0);
     this->current_direction = STOPPED;

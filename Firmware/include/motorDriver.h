@@ -14,7 +14,8 @@
 #include <driver/ledc.h>
 #include "esp_log.h"
 #include "esp_err.h"
-#include "utils.h" // Assumed to define the 'direction' enumeration
+#include "utils.h"
+#include "configurations.h"
 
 /**
  * @brief Class for controlling DC motors with PWM speed control and direction pins.

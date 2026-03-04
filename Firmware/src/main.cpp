@@ -21,6 +21,9 @@ PI_Controller controllerEl(KP_ELEVATION, KI_ELEVATION, SAMPLE_TIME_S, M_EL_V_TO_
 void IRAM_ATTR reedAz_event_handler(void *arg);
 void IRAM_ATTR reedEl_event_handler(void *arg);
 
+/* ISRs */
+void controlTimer_ISR(void *arg);
+
 /* Components */
 ReedSwitch reedAz(REED_AZ_PIN, PCNT_UNIT_0, PCNT_CHANNEL_0, REED_AZ_SOFT_LIMIT_LOW, REED_AZ_SOFT_LIMIT_HIGH, reedAz_event_handler);
 ReedSwitch reedEl(REED_EL_PIN, PCNT_UNIT_1, PCNT_CHANNEL_0, REED_EL_SOFT_LIMIT_LOW, REED_EL_SOFT_LIMIT_HIGH, reedEl_event_handler);
@@ -30,32 +33,31 @@ CurrentSensor currentAz(I_AZ_CHANNEL);
 CurrentSensor currentEl(I_EL_CHANNEL);
 
 /* Task Handlers */
-TaskHandle_t taskHome_handle = NULL;
-TaskHandle_t taskGPS_handle = NULL;
-TaskHandle_t taskSGP4Calculation_handle = NULL;
-TaskHandle_t taskMotionControl_handle = NULL;
-TaskHandle_t taskStopMotion_handle = NULL;
+TaskHandle_t GPS_TaskHandle = NULL;
+TaskHandle_t TrackingPredictor_TaskHandle = NULL;
+TaskHandle_t MotionControl_TaskHandle = NULL;
+TaskHandle_t StopMotion_TaskHandle = NULL;
+TaskHandle_t Calibration_TaskHandle = NULL;
 
-/* ISRs */
-void controlTimerISR(void *arg);
-
-/* freeRTOS Tasks*/
-void taskGPS(void *pvParameters);
-void taskTrackingCalculation(void *pvParameters);
-void taskMotionControl(void *pvParameters);
-void taskStopMotion(void *pvParameters);
-void taskHome(void *pvParameters);
-void taskCurrentMonitor(void *pvParameters);
+/* freeRTOS Tasks */
+void GPS_Task(void *pvParameters);
+void TrackingPredictor_Task(void *pvParameters);
+void MotionControl_Task(void *pvParameters);
+void StopMotion_Task(void *pvParameters);
+void Calibration_Task(void *pvParameters);
+void CurrentMonitor_Task(void *pvParameters);
+void telemetry_Task(void *pvParameters);
 
 /* Global Variables */
 static const char *TAG = "MAIN";
-trackerStatus_t status;
-esfericalAngles_t target        = {0};
+esfericalAngles_t target = {0};
 esfericalAngles_t manual_target = {0};
-esfericalAngles_t current       = {0};
-esfericalAngles_t offsets_ant   = {0};
-esfericalAngles_t set_angle     = {0};
-bool home_done = false, stopped = false, pred_done = false, pending_reset = false;
+esfericalAngles_t current = {0};
+esfericalAngles_t offsets_ant = {0};
+esfericalAngles_t set_angle = {0};
+mountFlags_t flags;
+trackerStatus_t status;
+unsigned long next_pass_unix = 0;
 
 void setup()
 {
@@ -79,12 +81,13 @@ void setup()
   controllerEl.setDeadZone(M_EL_V_TO_START);
 
   gpsSerial.begin(GPS_BAUDRATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
-  status.tle_inited = configSatellite(&satellite);
-  configControlTimer(controlTimerISR, SAMPLE_TIME_US);
+  status.tle = configSatellite(&satellite);
+  configControlTimer(controlTimer_ISR, SAMPLE_TIME_US);
 
   // Starting Tasks
-  xTaskCreate(taskStopMotion, "Stop Motion Task", MEDIUM_STACK_SIZE, NULL, TASK_STOP_MOTION_PRIORITY, &taskStopMotion_handle);
-  // xTaskCreate(taskCurrentMonitor, "Current Monitor Task", MEDIUM_STACK_SIZE, NULL, 12, NULL);
+  xTaskCreate(StopMotion_Task, "Stop Motion Task", MEDIUM_STACK_SIZE, NULL, TASK_STOP_MOTION_PRIORITY, &StopMotion_TaskHandle);
+  xTaskCreate(telemetry_Task, "Telemetry Task", MAX_STACK_SIZE, NULL, TASK_TELEMETRY_PRIORITY, NULL);
+  // xTaskCreate(CurrentMonitor_Task, "Current Monitor Task", MEDIUM_STACK_SIZE, NULL, 12, NULL);
 
   serverHandler.start();
 }
@@ -92,88 +95,90 @@ void setup()
 void loop()
 {
   // Reset
-  if(pending_reset == true)
+  if (flags.reset_pending == true)
   {
     ESP_LOGI(TAG, "Restarting...");
-    vTaskDelay(pdMS_TO_TICKS(3000));
+    vTaskDelay(pdMS_TO_TICKS(2000));
     ESP.restart();
   }
 
   // Update TLE if changed
-  if (status.tle_changed == true)
+  if (flags.tle_updated == true)
   {
-    status.tle_inited = (configSatellite(&satellite) ? true : false);
-    status.tle_changed = false;
-    pred_done = false;
+    status.tle = (configSatellite(&satellite) ? true : false);
+    flags.tle_updated = false;
+    flags.pred_done = false;
+    next_pass_unix = 0;
   }
 
   // Update Offsets if changed
-  if (status.offsets_changed == true)
+  if (flags.offsets_updated == true)
   {
     offsets_ant = getSavedOffsets();
-    status.offsets_changed = false;
-    pred_done = false;
+    flags.offsets_updated = false;
+    flags.pred_done = false;
+    next_pass_unix = 0;
   }
 
   // GPS Task When no data
-  if (status.gps_fix == false && taskGPS_handle == NULL)
+  if (status.gps == false && GPS_TaskHandle == NULL)
   {
     ESP_LOGI(TAG, "Starting GPS Task");
-    xTaskCreate(taskGPS, "GPS Task", MEDIUM_STACK_SIZE, NULL, TASK_GPS_PRIORITY, &taskGPS_handle);
+    xTaskCreate(GPS_Task, "GPS Task", MEDIUM_STACK_SIZE, NULL, TASK_GPS_PRIORITY, &GPS_TaskHandle);
   }
 
   // SGP4 Calculation Task When possible
-  if (status.tle_inited == true && status.gps_fix == true && taskSGP4Calculation_handle == NULL)
+  if (status.tle == true && status.gps == true && TrackingPredictor_TaskHandle == NULL)
   {
-    ESP_LOGI(TAG, "Starting SGP4 Calculation Task");
-    xTaskCreate(taskTrackingCalculation, "Calculation Task", MAX_STACK_SIZE, NULL, TASK_TRACKING_CALCULATION_PRIORITY, &taskSGP4Calculation_handle);
+    ESP_LOGI(TAG, "Starting Predictor Task");
+    xTaskCreate(TrackingPredictor_Task, "Predictor Task", MAX_STACK_SIZE, NULL, TASK_TRACKING_CALCULATION_PRIORITY, &TrackingPredictor_TaskHandle);
   }
 
   // Tracking Management
   if (status.tracking == true)
   {
-    stopped = false;
-    // Home Task
-    if (!home_done && taskHome_handle == NULL)
+    flags.stop_done = false;
+    // Calibration Task
+    if (!flags.home_done && Calibration_TaskHandle == NULL)
     {
-      ESP_LOGI(TAG, "Starting Home Task");
-      xTaskCreate(taskHome, "Home Task", MEDIUM_STACK_SIZE, NULL, TASK_HOME_PRIORITY, &taskHome_handle);
+      ESP_LOGI(TAG, "Starting Calibration Task");
+      xTaskCreate(Calibration_Task, "Calibration", MEDIUM_STACK_SIZE, NULL, TASK_HOME_PRIORITY, &Calibration_TaskHandle);
     }
-    // Home done
-    else if (home_done && taskMotionControl_handle == NULL)
+    else if (flags.home_done && MotionControl_TaskHandle == NULL)
     {
       ESP_LOGI(TAG, "Starting Motion Control Task");
-      xTaskCreate(taskMotionControl, "Motion Control Task", MAX_STACK_SIZE, NULL, TASK_MOTION_CONTROL_PRIORITY, &taskMotionControl_handle);
+      xTaskCreate(MotionControl_Task, "Motion Control", MAX_STACK_SIZE, NULL, TASK_MOTION_CONTROL_PRIORITY, &MotionControl_TaskHandle);
     }
   }
   // Stopping
   else
   {
-    if (!stopped && taskStopMotion_handle == NULL)
+    if (!flags.stop_done && StopMotion_TaskHandle == NULL)
     {
       ESP_LOGI(TAG, "Starting Stop Motion Task");
-      xTaskCreate(taskStopMotion, "Stop Motion Task", MEDIUM_STACK_SIZE, NULL, TASK_STOP_MOTION_PRIORITY, &taskStopMotion_handle);
+      xTaskCreate(StopMotion_Task, "Stop Motion", MEDIUM_STACK_SIZE, NULL, TASK_STOP_MOTION_PRIORITY, &StopMotion_TaskHandle);
     }
   }
 
   vTaskDelay(pdMS_TO_TICKS(TASK_LOOP_DELAY));
 }
 
-void IRAM_ATTR controlTimerISR(void *arg)
+// SampleTime ISR for Motion Control Task
+void IRAM_ATTR controlTimer_ISR(void *arg)
 {
   timer_group_clr_intr_status_in_isr(TIMER_GROUP_0, TIMER_1);
   timer_group_enable_alarm_in_isr(TIMER_GROUP_0, TIMER_1);
 
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-  if (status.tracking == true && taskMotionControl_handle != NULL)
+  if (status.tracking == true && MotionControl_TaskHandle != NULL)
   {
-    vTaskNotifyGiveFromISR(taskMotionControl_handle, &xHigherPriorityTaskWoken);
+    vTaskNotifyGiveFromISR(MotionControl_TaskHandle, &xHigherPriorityTaskWoken);
   }
   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 // PI & Movement
-void taskMotionControl(void *pvParameters)
+void MotionControl_Task(void *pvParameters)
 {
   constexpr float DUTY_SCALE = 100.0f / M_V_NOMINAL;
   const float ALPHA_AZ = expf(-2.0f * M_PI * FREQUENCY_REED_AZ * SAMPLE_TIME_S);
@@ -188,48 +193,41 @@ void taskMotionControl(void *pvParameters)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    if(motorAz.getDirection() == STOPPED)
-    {
-      motorAz.setDirection(FORWARD);
-      reedAz.countDirection(FORWARD);
-    }
-
-    if(motorEl.getDirection() == STOPPED)
-    {
-      motorEl.setDirection(FORWARD);
-      reedEl.countDirection(FORWARD);
-    }
-
     // SETPOINT Calculation with Offsets
-    if (status.manual_track == true)
+    if (status.manual_tracking == true)
     {
       set_angle.azimuth = manual_target.azimuth;
       set_angle.elevation = manual_target.elevation;
     }
     else
     {
-      //Below Horizon - Next Pass Prediction
-      if(target.elevation < offsets_ant.elevation)
+      // Below Horizon - Next Pass Prediction
+      if (target.elevation < offsets_ant.elevation)
       {
-        if(!pred_done)
+        if (!flags.pred_done)
         {
           passinfo next_pass;
-          if(satellite.nextpass(&next_pass, search_iterations, false, offsets_ant.elevation))
+          satellite.initpredpoint((unsigned long)time(NULL), offsets_ant.elevation);
+          if (satellite.nextpass(&next_pass, search_iterations, false, offsets_ant.elevation))
           {
+            next_pass_unix = jdToUnix(next_pass.jdstart);
             set_angle.azimuth = next_pass.azstart - offsets_ant.azimuth;
             set_angle.elevation = EL_MIN_DEG;
             ESP_LOGI(TAG, "Next Pass - Azimuth: %.2f [°], Elevation: %.2f [°]", set_angle.azimuth, set_angle.elevation);
-          }else
+          }
+          else
           {
+            next_pass_unix = 0;
             ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
             set_angle.azimuth = AZ_MIN_DEG;
             set_angle.elevation = EL_MAX_DEG;
           }
-          pred_done = true;
+          flags.pred_done = true;
         }
-      }else
+      }
+      else
       {
-        pred_done = false;
+        flags.pred_done = false;
         set_angle.azimuth = target.azimuth - offsets_ant.azimuth;
         set_angle.elevation = target.elevation - offsets_ant.elevation;
       }
@@ -238,7 +236,7 @@ void taskMotionControl(void *pvParameters)
     // ANGLE SETPOINT LIMITS
     set_angle.azimuth = fmaxf(fminf(set_angle.azimuth, AZ_MAX_DEG), AZ_MIN_DEG);
     set_angle.elevation = fmaxf(fminf(set_angle.elevation, EL_MAX_DEG), EL_MIN_DEG);
-    
+
     el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
     current.elevation = elevation_deg_from_mm(el_mm);
     current.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
@@ -260,7 +258,6 @@ void taskMotionControl(void *pvParameters)
     if (new_dir_az != current_dir_az)
     {
       controllerAz.reset();
-      motorAz.setDuty(M_STOP_DUTY);
       motorAz.stop();
       vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
       motorAz.setDuty(0);
@@ -269,11 +266,10 @@ void taskMotionControl(void *pvParameters)
       current_dir_az = new_dir_az;
     }
 
-    // Elevación
+    // Elevation
     if (new_dir_el != current_dir_el)
     {
       controllerEl.reset();
-      motorEl.setDuty(M_STOP_DUTY);
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
       motorEl.setDuty(0);
@@ -288,7 +284,7 @@ void taskMotionControl(void *pvParameters)
 }
 
 // Calculate SGP4 & Interpolations
-void taskTrackingCalculation(void *pvParameters)
+void TrackingPredictor_Task(void *pvParameters)
 {
   TickType_t time_ms_ref = 0;
   unsigned long last_unixTime = 0;
@@ -296,15 +292,15 @@ void taskTrackingCalculation(void *pvParameters)
   bool first_run = true;
   for (;;)
   {
-    
-    if (!status.manual_track)
+
+    if (!status.manual_tracking)
     {
       unsigned long current_time_ms = millis();
       unsigned long current_unixTime = time(NULL);
 
       if (current_unixTime == last_unixTime)
       {
-        // Interpolación Lineal de Azimuth y Elevación
+        // Lineal Interpolation
         double delta_s = (current_time_ms - time_ms_ref) / 1000.0;
         if (delta_s >= 1.0)
         {
@@ -351,12 +347,12 @@ void taskTrackingCalculation(void *pvParameters)
   }
 }
 
-void taskGPS(void *pvParameters)
+void GPS_Task(void *pvParameters)
 {
   bool time_set = false;
   for (;;)
   {
-    if (status.gps_fix == true)
+    if (status.gps == true)
     {
       vTaskDelete(NULL);
     }
@@ -375,47 +371,47 @@ void taskGPS(void *pvParameters)
       t.tm_hour = gps.time.hour();
       t.tm_min = gps.time.minute();
       t.tm_sec = gps.time.second();
-
       time_t tim = mktime(&t);
-      struct timeval unix;
-      unix.tv_sec = tim;
-      unix.tv_usec = 0;
-      settimeofday(&unix, NULL);
-      ESP_LOGI(TAG, "GPS Time: %d:%d:%d", gps.time.hour(), gps.time.minute(), gps.time.second());
+
+      setTime(tim);
       time_set = true;
     }
 
     if (gps.location.isUpdated() && gps.location.isValid() && gps.altitude.isUpdated() && gps.altitude.isValid())
     {
       satellite.site(gps.location.lat(), gps.location.lng(), gps.altitude.meters());
-      ESP_LOGI(TAG, "GPS Location: Lat=%.6f, Lng=%.6f, Alt=%.4f", gps.location.lat(), gps.location.lng(), gps.altitude.meters());
-      status.gps_fix = true;
+      status.gps = true;
     }
     vTaskDelay(pdMS_TO_TICKS(TASK_GPS_DELAY));
   }
 }
 
-void taskHome(void *pvParameters)
+void Calibration_Task(void *pvParameters)
 {
   uint16_t current_az = 0, current_el = 0;
+
   reedAz.stopCount();
   reedEl.stopCount();
-  motorAz.setDuty(M_STOP_DUTY);
-  motorEl.setDuty(M_STOP_DUTY);
-  motorAz.stop();
-  motorEl.stop();
-  vTaskDelay(pdMS_TO_TICKS(100));
-  motorAz.setDuty(100);
-  motorEl.setDuty(100);
-  motorAz.setDirection(FORWARD);
-  motorEl.setDirection(FORWARD);
-  vTaskDelay(pdMS_TO_TICKS(1200));
 
   motorAz.stop();
   motorEl.stop();
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  motorAz.setDuty(M_MAX_DUTY);
+  motorEl.setDuty(M_MAX_DUTY);
+  motorAz.setDirection(FORWARD);
+  motorEl.setDirection(FORWARD);
+  vTaskDelay(pdMS_TO_TICKS(500));
+
+  motorAz.stop();
+  motorEl.stop();
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  motorAz.setDuty(M_MAX_DUTY);
+  motorEl.setDuty(M_MAX_DUTY);
   motorAz.setDirection(BACKWARD);
   motorEl.setDirection(BACKWARD);
-  vTaskDelay(pdMS_TO_TICKS(1000));
+  vTaskDelay(pdMS_TO_TICKS(300));
 
   for (;;)
   {
@@ -425,6 +421,8 @@ void taskHome(void *pvParameters)
     {
       motorAz.stop();
       motorEl.stop();
+      vTaskDelay(pdMS_TO_TICKS(100));
+
       motorAz.setDuty(0);
       motorEl.setDuty(0);
       motorAz.setDirection(FORWARD);
@@ -437,45 +435,48 @@ void taskHome(void *pvParameters)
       reedAz.startCount();
       reedEl.startCount();
       ESP_LOGI(TAG, "Home Reached");
-      home_done = true;
-      taskHome_handle = NULL;
+      flags.home_done = true;
+      Calibration_TaskHandle = NULL;
       vTaskDelete(NULL);
     }
     vTaskDelay(pdMS_TO_TICKS(TASK_HOME_CURRENT_DELAY));
   }
 }
 
-void taskStopMotion(void *pvParameters)
+void StopMotion_Task(void *pvParameters)
 {
-  motorAz.setDuty(M_STOP_DUTY);
-  motorEl.setDuty(M_STOP_DUTY);
+
+  if (Calibration_TaskHandle != NULL)
+  {
+    vTaskDelete(Calibration_TaskHandle);
+    Calibration_TaskHandle = NULL;
+    flags.home_done = false;
+  }
+
+  if (MotionControl_TaskHandle != NULL)
+  {
+    vTaskDelete(MotionControl_TaskHandle);
+    MotionControl_TaskHandle = NULL;
+  }
+
   motorAz.stop();
   motorEl.stop();
-
-  if (taskHome_handle != NULL)
-  {
-    vTaskDelete(taskHome_handle);
-    taskHome_handle = NULL;
-    home_done = false;
-  }
-
-  if (taskMotionControl_handle != NULL)
-  {
-    vTaskDelete(taskMotionControl_handle);
-    taskMotionControl_handle = NULL;
-  }
-
-  vTaskDelay(pdMS_TO_TICKS(200));
+  vTaskDelay(pdMS_TO_TICKS(100));
   motorAz.setDuty(0);
   motorEl.setDuty(0);
+  
+  motorAz.setDirection(FORWARD);
+  motorEl.setDirection(FORWARD);
+  reedAz.countDirection(FORWARD);
+  reedEl.countDirection(FORWARD);
 
-  stopped = true;
-  taskStopMotion_handle = NULL;
+  flags.stop_done = true;
+  StopMotion_TaskHandle = NULL;
   vTaskDelete(NULL);
 }
 
-// TODO Ignore motor peak current at start up
-void taskCurrentMonitor(void *pvParameters)
+// TODO: Ignore motor peak current at start up
+void CurrentMonitor_Task(void *pvParameters)
 {
   for (;;)
   {
@@ -486,28 +487,38 @@ void taskCurrentMonitor(void *pvParameters)
     {
       ESP_LOGW(TAG, "Azimuth Motor Overcurrent: %.2f mA", current_az);
       status.tracking = false;
-      status.error = OVERCURRENT_ERROR;
+      status.error = TRACKER_ERROR_OVERCURRENT_AZ;
     }
     if (current_el > CURRENT_ELEVATION_MAX_mA)
     {
       ESP_LOGW(TAG, "Elevation Motor Overcurrent: %.2f mA", current_el);
-      status.error = OVERCURRENT_ERROR;
+      status.tracking = false;
+      status.error = TRACKER_ERROR_OVERCURRENT_EL;
     }
 
     vTaskDelay(pdMS_TO_TICKS(TASK_CURRENT_MONITOR_DELAY));
   }
 }
 
+void telemetry_Task(void *pvParameters)
+{
+  for (;;)
+  {
+    serverHandler.sendTelemetry();
+    vTaskDelay(pdMS_TO_TICKS(TASK_TELEMETRY_DELAY));
+  }
+}
+
 void IRAM_ATTR reedAz_event_handler(void *arg)
 {
   status.tracking = false;
-  status.error = SOFT_ENDSTOP_TRIGGERED;
+  status.error = TRACKER_ERROR_SOFT_ENDSTOP;
   // TODO Software endstops
 }
 
 void IRAM_ATTR reedEl_event_handler(void *arg)
 {
   status.tracking = false;
-  status.error = SOFT_ENDSTOP_TRIGGERED;
+  status.error = TRACKER_ERROR_SOFT_ENDSTOP;
   // TODO Software endstops
 }

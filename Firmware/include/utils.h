@@ -64,21 +64,32 @@ extern Preferences config;
  */
 typedef struct __attribute__((packed))
 {
-    uint8_t tle_inited : 1;   /**< True if TLE data has been successfully loaded. */
-    uint8_t gps_fix : 1;      /**< True if GPS has a valid fix. */
-    uint8_t tle_changed : 1;  /**< True if TLE data has been updated. */
-    uint8_t offsets_changed : 1; /**< True if antenna offsets have been updated. */
-    uint8_t manual_track : 1; /**< True if antenna is in manual control mode. */
-    uint8_t tracking : 1;     /**< True if movement is active. */
-    uint8_t error : 2;        /**< 2-bit internal error code. */
+    uint8_t tle : 1;             /**< True if TLE data has been successfully loaded. */
+    uint8_t gps : 1;             /**< True if GPS has a valid fix. */
+    uint8_t manual_tracking : 1; /**< True if antenna is in manual control mode. */
+    uint8_t tracking : 1;        /**< True if movement is active. */
+    uint8_t error : 3;           /**< internal error code. */
+    uint8_t reserved : 1;        /**< Reserved bits for future use. */
 } trackerStatus_t;
+
+typedef struct __attribute__((packed))
+{
+    uint8_t home_done : 1;       /**< True if the mount has completed its homing procedure. */
+    uint8_t stop_done : 1;       /**< True if the stop task is done */
+    uint8_t pred_done : 1;       /**< True if the next pass prediction has been */
+    uint8_t reset_pending : 1;   /**< True if a system reset is pending. */
+    uint8_t offsets_updated : 1; /**< True if antenna offsets have been updated. */
+    uint8_t tle_updated : 1;     /**< True if TLE data has been updated. */
+    uint8_t reserved : 2;        /**< Reserved bits for future use. */
+} mountFlags_t;
 
 typedef enum
 {
-    NO_ERROR = 0,
-    SOFT_ENDSTOP_TRIGGERED = 1,
-    OVERCURRENT_ERROR = 2,
-    UNKNOWN_ERROR = 3
+    TRACKER_ERROR_NONE = 0,
+    TRACKER_ERROR_SOFT_ENDSTOP = 1,
+    TRACKER_ERROR_OVERCURRENT_AZ = 2,
+    TRACKER_ERROR_OVERCURRENT_EL = 3,
+    TRACKER_ERROR_UNKNOWN = 4
 } errorCode_t;
 
 /**
@@ -95,9 +106,9 @@ typedef struct __attribute__((packed))
  */
 typedef enum
 {
-    FORWARD, /**< Positive direction. */
+    FORWARD,  /**< Positive direction. */
     BACKWARD, /**< Negative direction. */
-    STOPPED /**< No movement. */
+    STOPPED   /**< No movement. */
 } direction;
 
 // --------------------------------------------------------------------------------------
@@ -188,5 +199,9 @@ float elevation_mm_from_deg_lut(float deg);
  * @return Interpolated degree from the LUT.
  */
 float elevation_deg_from_mm_lut(float mm);
+
+void setTime(unsigned long unixTime);
+
+unsigned long jdToUnix(double jd);
 
 #endif // UTILS_H

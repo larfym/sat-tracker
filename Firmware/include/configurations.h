@@ -128,7 +128,8 @@
 #define M_V_NOMINAL 36            /**< Nominal voltage for motors (V). */
 #define M_AZ_V_TO_START 8.5         /**< Minimum voltage to overcome static friction (Azimuth). */
 #define M_EL_V_TO_START 3.5         /**< Minimum voltage to overcome static friction (Elevation). */
-#define M_STOP_DUTY 30            /**< Duty cycle to apply for stopping the motors (0-100%). */
+#define M_STOP_DUTY 50            /**< Duty cycle to apply for stopping the motors (0-100%). */
+#define M_MAX_DUTY 100             /**< Maximum duty cycle for motors (0-100%). */
 #define M_AZ_SETTLING_TIME_MS 65  /**< Settling time for Azimuth motor (ms). */
 #define M_EL_SETTLING_TIME_MS 100 /**< Settling time for Elevation motor (ms). */
 ///@}
@@ -170,8 +171,8 @@
  * @brief Filters Reed signal for smooth operation.
  */
 ///@{
-#define FREQUENCY_REED_AZ 0.5 /**< Low pass filter frequency (Reed-AZ). */
-#define FREQUENCY_REED_EL 0.2 /**< Low pass filter frequency (Reed-EL). */
+#define FREQUENCY_REED_AZ 0.8 /**< Low pass filter frequency (Reed-AZ). */
+#define FREQUENCY_REED_EL 0.8 /**< Low pass filter frequency (Reed-EL). */
 ///@}
 
 /**
@@ -211,7 +212,7 @@
 #define EL_MIN_DEG 0   /**< Lower limit for Elevation. */
 #define EL_MAX_DEG 90  /**< Upper limit for Elevation. */
 #define AZ_MIN_DEG 0    /**< Lower limit for Azimuth. */
-#define AZ_MAX_DEG 340  /**< Upper limit for Azimuth. */
+#define AZ_MAX_DEG 340  /**< Upper limit for Azimuth. */ //TEST
 ///@}
 
 /**
@@ -249,6 +250,7 @@
 #define TASK_TRACKING_CALCULATION_PRIORITY 14
 #define TASK_MOTION_CONTROL_PRIORITY 14
 #define TASK_CURRENT_MONITOR_PRIORITY 12
+#define TASK_TELEMETRY_PRIORITY 11
 ///@}
 
 /**
@@ -260,6 +262,7 @@
 #define TASK_GPS_DELAY 500 /**< Delay for GPS task (ms). */
 #define TASK_CURRENT_MONITOR_DELAY 3000 /**< Delay for Current Monitor task (ms). */
 #define TASK_HOME_CURRENT_DELAY 100 /**< Delay for Home Current task (ms). */
+#define TASK_TELEMETRY_DELAY 1000 /**< Delay for Telemetry task (ms). */
 ///@}
 
 /**
@@ -269,5 +272,5 @@
 ///@{
 #define MAX_STACK_SIZE 8192    /**< Maximum stack size for FreeRTOS tasks (bytes). */
 #define MEDIUM_STACK_SIZE 2048 /**< Medium stack size for FreeRTOS tasks (bytes). */
-#define MIN_STACK_SIZE 512    /**< Minimum stack size for FreeRTOS tasks (bytes). */
+#define MIN_STACK_SIZE 1024    /**< Minimum stack size for FreeRTOS tasks (bytes). */
 ///@}

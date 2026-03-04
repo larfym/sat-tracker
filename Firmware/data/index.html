@@ -341,34 +341,35 @@
                 <div class="card">
                     <h3>Satélite</h3>
                     <ul>
-                        <li><span>ID</span><span id="s_n">---</span></li>
-                        <li><span>Latitud</span><span id="s_la">---</span></li>
-                        <li><span>Longitud</span><span id="s_lo">---</span></li>
-                        <li><span>Altitud</span><span id="s_al">---</span></li>
-                        <li><span>θ</span><span id="s_a">---</span></li>
-                        <li><span>α</span><span id="s_e">---</span></li>
-                        <li><span>Visibilidad</span><span id="s_v">---</span></li>
+                        <li><span>ID</span><span id="s_n">--</span></li>
+                        <li><span>Latitud</span><span id="s_la">--</span></li>
+                        <li><span>Longitud</span><span id="s_lo">--</span></li>
+                        <li><span>Altitud</span><span id="s_al">--</span></li>
+                        <li><span>θ</span><span id="s_a">--</span></li>
+                        <li><span>α</span><span id="s_e">--</span></li>
+                        <li><span>Visibilidad</span><span id="s_v">--</span></li>
+                        <li><span>Siguiente Pase</span><span id="s_p">--</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Estación Terrena</h3>
                     <ul>
-                        <li><span>Estado</span><span id="p_st">---</span></li>
-                        <li><span>Latitud</span><span id="p_la">---</span></li>
-                        <li><span>Longitud</span><span id="p_lo">---</span></li>
-                        <li><span>Altitud</span><span id="p_al">---</span></li>
-                        <li><span>Hora Local</span><span id="p_t">---</span></li>
+                        <li><span>Estado</span><span id="p_st">--</span></li>
+                        <li><span>Latitud</span><span id="p_la">--</span></li>
+                        <li><span>Longitud</span><span id="p_lo">--</span></li>
+                        <li><span>Altitud</span><span id="p_al">--</span></li>
+                        <li><span>Hora Local</span><span id="p_t">--</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Antena</h3>
                     <ul>
-                        <li><span>θ</span><span id="a_a">---</span></li>
-                        <li><span>α</span><span id="a_e">---</span></li>
-                        <li><span>Offset θ</span><span id="a_of_a">---</span></li>
-                        <li><span>Offset α</span><span id="a_of_e">---</span></li>
+                        <li><span>θ</span><span id="a_a">--</span></li>
+                        <li><span>α</span><span id="a_e">--</span></li>
+                        <li><span>Offset θ</span><span id="a_of_a">--</span></li>
+                        <li><span>Offset α</span><span id="a_of_e">--</span></li>
                     </ul>
                 </div>
 
@@ -474,254 +475,46 @@
     </main>
 
     <script>
-        const DEF_STR = "---";
-        const x = ["--", "--", "--", "--", "--", "--"];
+    
+        const x = ["-", "-", "-", "-", "-", "-"];
         const az1 = [0, 0, 0, 0, 0, 0];
         const az2 = [0, 0, 0, 0, 0, 0];
         const el1 = [0, 0, 0, 0, 0, 0];
         const el2 = [0, 0, 0, 0, 0, 0];
         const MAX = 6;
 
-        let updateInterval = null;
+        let eventSource = null;
 
-        function toggleTracking() {
-            fetch("/toggle_tracking", {
-                method: "POST"
-            }).then(res => {
-                if (!res.ok) {
-                    console.error("Tracking toggle failed:", res.status);
-                    alert("❌ Error código: " + res.status);
-                    throw new Error(`API failed: ${res.status}`);
+        function connectSSE() {
+            if (eventSource) eventSource.close();
+            eventSource = new EventSource('/telemetry');
+            eventSource.addEventListener('telemetry', function (event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    updateTelemetry(data);
+                } catch (error) {
+                    console.error('Error parsing telemetry data:', error);
                 }
-                return res.json();
-            })
-                .then(data => {
-                    const reason = data.reason;
-                    const tracking = data.tracking;
-
-                    if (tracking) {
-                        alert("✅ Seguimiento iniciado");
-                    } else {
-                        if (reason == "none") {
-                            alert("✅ Seguimiento detenido");
-                        } else if (reason == "No_TLE") {
-                            alert("❌ No hay TLE configurado.");
-                        } else if (reason == "No_GPS") {
-                            alert("❌ No hay GPS Fix.");
-                        }
-                    }
-
-                    updateBtnState(tracking);
-                })
-                .catch(error => {
-                    console.error("Fetch error:", error);
-                    trackButton.classList.remove('tracking');
-                    alert("❌ Error de conexión.");
-                });
-        }
-
-        function sendManualData() {
-            const az = parseFloat(document.getElementById('m-az').value);
-            const el = parseFloat(document.getElementById('m-el').value);
-
-            if (!checkAngles(el, az)) return;
-
-            const payload = { manual_az: az, manual_el: el };
-
-            fetch('/manual', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(res => {
-                if (res.ok) {
-                    updateBtnState(true);
-                    alert("✅ Modo Manual Activado.");
-                }
-                else {
-                    alert("❌ Modo Manual. Error código: " + res.status);
-                }
-            }).catch(error => console.error('Error de red ', error));
-        }
-
-        function updateBtnState(state) {
-            const trackBtn = document.querySelector('.track-button');
-            if (!trackBtn) return;
-
-            trackBtn.classList.toggle('tracking', state);
-        }
-
-        function saveOffsets() {
-            const az = Number(parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value)).toFixed(2);
-            const el = Number(parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value)).toFixed(2);
-
-            if (!checkAngles(el, az))
-                return;
-
-            const payload = { offset_az: az, offset_el: el };
-
-            fetch("/saveOffsets", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).then(res => {
-                alert(res.ok ? "✅ Configuración guardada " : "❌ Error código: " + res.status);
-            }).catch(error => console.error('Error Saving:', error));
-        }
-
-        function saveTle() {
-            const tleText = document.getElementById("tle").value;
-            const tleLines = tleText.trim().split('\n').filter(line => line.trim() !== '');
-
-            if (!isValidTLE(tleLines)) {
-                alert("❌ TLE inválido");
-                return;
-            }
-
-            const payload = {
-                name: tleLines[0].trim(),
-                line1: tleLines[1].trim(),
-                line2: tleLines[2].trim(),
-            };
-
-            fetch("/saveTle", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).then(res => {
-                alert(res.ok ? "✅ Configuración guardada " : "❌ Error código: " + res.status);
-            }).catch(error => console.error('Error Saving:', error));
-        }
-
-        function updateData() {
-            fetch("/data")
-                .then(response => {
-                    if (!response.ok) throw new Error('API no disponible');
-                    return response.json();
-                })
-                .then(data => {
-                    const setText = (id, value, suffix = "") => {
-                        document.getElementById(id).textContent = (value !== undefined && value !== null) ? value + suffix : DEF_STR;
-                    };
-
-                    // Datos del satélite
-                    const s = data.s || {};
-                    setText("s_n", s.n);
-                    setText("s_la", s.la);
-                    setText("s_lo", s.lo);
-                    setText("s_al", s.al, "[km]");
-                    setText("s_a", s.a, "[°]");
-                    setText("s_e", s.e, "[°]");
-                    setText("s_v", s.v);
-
-                    // Estado
-                    const st = data.st || {};
-                    if (!st.err) {
-                        if (st.man) {
-                            setText("p_st", "Control Manual");
-                        } else {
-                            if (st.tr) {
-                                setText("p_st", "Rastreando");
-                            } else {
-                                if (!st.gps) {
-                                    setText("p_st", "No GPS Fix");
-                                }
-                                else if (!st.tle) {
-                                    setText("p_st", "No TLE");
-                                }
-                                else {
-                                    setText("p_st", "Detenido");
-                                }
-                            }
-                        }
-                    } else {
-                        setText("p_st", "Error: " + st.err);
-                    }
-
-                    // Estación Terrena
-                    const p = data.p || {};
-                    setText("p_la", p.la);
-                    setText("p_lo", p.lo);
-                    setText("p_al", p.al, "[km]");
-                    const t_tim_val = p.t;
-                    if (t_tim_val) {
-                        document.getElementById("p_t").textContent = formatUnixTime(t_tim_val);
-                    } else {
-                        document.getElementById("p_t").textContent = DEF_STR;
-                    }
-
-                    const a = data.a || {};
-                    const az_ant = Number(p.az ?? 0) + Number(a.o_a ?? 0);
-                    const el_ant = Number(p.el ?? 0) + Number(a.o_e ?? 0);
-
-                    setText("a_a", az_ant, "[°]");
-                    setText("a_e", el_ant, "[°]");
-                    setText("a_of_a", a.o_a, "[°]");
-                    setText("a_of_e", a.o_e, "[°]");
-
-                    // Gráficos
-                    pushBuffer(x, formatUnixTimeMMSS(t_tim_val));
-                    pushBuffer(az1, st.a);
-                    pushBuffer(az2, p.az);
-                    pushBuffer(el1, st.e);
-                    pushBuffer(el2, p.el);
-
-                    drawLineChart("chart_az", x, az1, az2);
-                    drawLineChart("chart_el", x, el1, el2);
-                })
-                .catch(error => {
-                    console.error('Error en datos:', error);
-                });
-        }
-
-        function resetMCU() {
-            fetch("/reset", {
-                method: "POST"
-            }).then(res => {
-                if (res.ok) {
-                    alert("✅ Reinicio enviado.");
-                    window.location.reload();
-                } else {
-                    alert("❌ Error código: " + res.status);
-                }
-            }).catch(error => console.error('Error de red ', error));
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.page-section');
-            const pageTitle = document.getElementById('page-title');
-
-            function showPage(pageId) {
-                if (updateInterval) {
-                    clearInterval(updateInterval);
-                    updateInterval = null;
-                }
-
-                sections.forEach(section => section.classList.remove('active'));
-                navLinks.forEach(link => link.classList.remove('active'));
-
-                const activeSection = document.getElementById(pageId);
-                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
-
-                if (activeSection && activeLink) {
-                    activeSection.classList.add('active');
-                    activeLink.classList.add('active');
-                    pageTitle.textContent = activeLink.textContent.trim();
-
-                    if (pageId === 'Telemetría') {
-                        updateData();
-                        updateInterval = setInterval(updateData, 2000);
-                    }
-                }
-            }
-            showPage('Telemetría');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const pageId = e.currentTarget.getAttribute('data-page');
-                    showPage(pageId);
-                });
             });
-        });
+
+            eventSource.onopen = function () {
+                console.log('SSE Connected');
+            }
+
+            eventSource.onerror = function () {
+                console.warn('SSE Disconnected. Attempting to reconnect...');
+                setTimeout(connectSSE, 1000);
+            };
+        }
+
+        function setText(id, value, suffix = "") {
+            document.getElementById(id).textContent = (value !== undefined && value !== null) ? value + suffix : "--";
+        }
+
+        function pushBuffer(arr, value) {
+            arr.push(value);
+            if (arr.length > MAX) arr.shift();
+        }
 
         function formatUnixTime(unixTimestamp) {
             const date = new Date(unixTimestamp * 1000);
@@ -739,99 +532,13 @@
             return formattedDate;
         }
 
-        function __checkSumTLE(str) {
-            let sum = 0;
-            const checkSumIndex = str.length - 1;
-            for (let i = 0; i < checkSumIndex; i++) {
-                const char = str.charAt(i);
-
-                if (char >= '0' && char <= '9') {
-                    sum += parseInt(char);
-                } else if (char === '-') {
-                    sum += 1;
-                }
-            }
-            const calculatedCheckSum = sum % 10;
-            const expectedCheckSum = parseInt(str.charAt(checkSumIndex));
-            return calculatedCheckSum === expectedCheckSum;
-        }
-
-        function isValidTLE(tleLines) {
-            if (tleLines.length !== 3) {
-                return false;
-            }
-
-            const name = tleLines[0].trim();
-            const line1 = tleLines[1].trim();
-            const line2 = tleLines[2].trim();
-
-            if (line1.length !== 69 || line2.length !== 69) {
-                return false;
-            }
-
-            if (line1.charAt(0) !== '1' || line2.charAt(0) !== '2') {
-                return false;
-            }
-
-            if (!__checkSumTLE(line1) || !__checkSumTLE(line2)) {
-                return false;
-            }
-            return true;
-        }
-
-        function checkAngles(el, az) {
-            if (isNaN(az) || isNaN(el) || az < 0.0 || az > 360.0 || el < 0.0 || el > 90.0) {
-                alert("❌ Ingrese rangos válidos.");
-                return false;
-            }
-            return true;
-        }
-
-        function sendGeoTime() {
-            const geoOptions = {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            };
-
-            if (!navigator.geolocation) {
-                alert("❌ Geolocalización no soportada.");
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition((pos) => {
-
-                const unixSeg = Math.floor(Date.now() / 1000);
-                const payload = {
-                    unix: unixSeg,
-                    lat: pos.coords.latitude,
-                    lon: pos.coords.longitude,
-                    alt: pos.coords.altitude || 0
-                };
-
-                fetch("/geo_time", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                })
-                    .then(res => {
-                        if (!res.ok) throw new Error(`Código: ${res.status}`);
-                        alert("✅ Datos enviados con éxito");
-                    })
-                    .catch(err => {
-                        console.error('Error en fetch:', err);
-                        alert("❌ Error al enviar datos.");
-                    });
-
-            }, (error) => {
-                console.error('Error de ubicación:', error);
-                const mensajes = {
-                    1: "Permiso no concedido",
-                    2: "Ubicación no disponible",
-                    3: "Tiempo de espera agotado"
-                };
-                alert("❌ Error: " + (mensajes[error.code] || "Desconocido"));
-            }, geoOptions);
+        function formatUnixTimeMMSS(unix) {
+            if (typeof unix !== "number" || isNaN(unix)) return "--";
+            const d = new Date(unix * 1000);
+            if (isNaN(d.getTime())) return "--";
+            const mm = String(d.getMinutes()).padStart(2, "0");
+            const ss = String(d.getSeconds()).padStart(2, "0");
+            return `${mm}:${ss}`;
         }
 
         function drawLineChart(svgId, x, y1, y2) {
@@ -936,23 +643,333 @@
             `;
         }
 
-        function pushBuffer(arr, value) {
-            arr.push(value);
-            if (arr.length > MAX) arr.shift();
+        function updateTelemetry(data) {
+            //Satellite
+            const s = data.s || {};
+            setText("s_n", s.n);
+            setText("s_la", s.la, " [°]");
+            setText("s_lo", s.lo, " [°]");
+            setText("s_al", s.al, " [km]");
+            setText("s_a", s.a, " [°]");
+            setText("s_e", s.e, " [°]");
+            setText("s_v", s.v);
+
+            const pass_t = s.p;
+            if(pass_t)
+            {
+                setText("s_p", formatUnixTime(pass_t));
+            } else 
+            {
+                setText("s_p", "--");
+            }
+        
+            //Status
+            const st = data.st || {};
+            updateBtnState(st.tr);
+            if (!st.err) {
+                if (st.man) {
+                    setText("p_st", "Control Manual");
+                } else {
+                    if (st.tr) {
+                        setText("p_st", "Rastreando");
+                    } else {
+                        if (!st.gps) {
+                            setText("p_st", "No GPS Fix");
+                        }
+                        else if (!st.tle) {
+                            setText("p_st", "No TLE");
+                        }
+                        else {
+                            setText("p_st", "Detenido");
+                        }
+                    }
+                }
+            } else {
+                setText("p_st", "Error: " + st.err);
+            }
+
+            //Platform
+            const p = data.p || {};
+            setText("p_la", p.la, " [°]");
+            setText("p_lo", p.lo, " [°]");
+            setText("p_al", p.al, " [km]");
+            const t_tim = p.t;
+            if (t_tim) {
+                document.getElementById("p_t").textContent = formatUnixTime(t_tim);
+            } else {
+                document.getElementById("p_t").textContent = DEF_STR;
+            }
+
+            const a = data.a || {};
+            const az_ant = Number(p.az ?? 0) + Number(a.o_a ?? 0);
+            const el_ant = Number(p.el ?? 0) + Number(a.o_e ?? 0);
+
+            setText("a_a", az_ant, " [°]");
+            setText("a_e", el_ant, " [°]");
+            setText("a_of_a", a.o_a, " [°]");
+            setText("a_of_e", a.o_e, " [°]");
+
+            //Graphs
+            pushBuffer(x, formatUnixTimeMMSS(t_tim));
+            pushBuffer(az1, st.a);
+            pushBuffer(az2, p.az);
+            pushBuffer(el1, st.e);
+            pushBuffer(el2, p.el);
+
+            drawLineChart("chart_az", x, az1, az2);
+            drawLineChart("chart_el", x, el1, el2);
         }
 
-        function formatUnixTimeMMSS(unix) {
-            if (typeof unix !== "number" || isNaN(unix)) return "--";
-            const d = new Date(unix * 1000);
-            if (isNaN(d.getTime())) return "--";
-            const mm = String(d.getMinutes()).padStart(2, "0");
-            const ss = String(d.getSeconds()).padStart(2, "0");
-            return `${mm}:${ss}`;
+        // Toggle Tracking
+        function updateBtnState(state) {
+            const trackBtn = document.querySelector('.track-button');
+            if (!trackBtn) return;
+
+            trackBtn.classList.toggle('tracking', state);
         }
+
+        function toggleTracking() {
+            fetch("/toggle_tracking", {
+                method: "POST"
+            }).then(res => {
+                if (!res.ok) {
+                    console.error("Tracking toggle failed:", res.status);
+                    alert("❌ Error código: " + res.status);
+                    throw new Error(`API failed: ${res.status}`);
+                }
+                return res.json();
+            })
+                .then(data => {
+                    const reason = data.reason;
+
+                    if (data.tracking) {
+                        alert("✅ Seguimiento iniciado");
+                    } else {
+                        if (reason == "none") {
+                            alert("✅ Seguimiento detenido");
+                        } else if (reason == "No_TLE") {
+                            alert("❌ No hay TLE configurado.");
+                        } else if (reason == "No_GPS") {
+                            alert("❌ No hay GPS Fix.");
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    alert("❌ Error de conexión.");
+                });
+        }
+
+        //Send Manual Data
+        function checkAngles(el, az) {
+            if (isNaN(az) || isNaN(el) || az < 0.0 || az > 360.0 || el < 0.0 || el > 90.0) {
+                alert("❌ Ingrese rangos válidos.");
+                return false;
+            }
+            return true;
+        }
+
+        function sendManualData() {
+            const az = parseFloat(document.getElementById('m-az').value);
+            const el = parseFloat(document.getElementById('m-el').value);
+
+            if (!checkAngles(el, az)) return;
+
+            const payload = { manual_az: az, manual_el: el };
+
+            fetch('/manual', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(res => {
+                if (res.ok) {
+                    alert("✅ Modo Manual Activado.");
+                }
+                else {
+                    alert("❌ Modo Manual. Error código: " + res.status);
+                }
+            }).catch(error => console.error('Error de red ', error));
+        }
+
+        //Save Offsets
+        function saveOffsets() {
+            const az = Number(parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value)).toFixed(2);
+            const el = Number(parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value)).toFixed(2);
+
+            if (!checkAngles(el, az))
+                return;
+
+            const payload = { offset_az: az, offset_el: el };
+
+            fetch("/saveOffsets", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(res => {
+                alert(res.ok ? "✅ Configuración guardada " : "❌ Error código: " + res.status);
+            }).catch(error => console.error('Error Saving:', error));
+        }
+
+        //Save TLE
+        function isValidTLE(tleLines) {
+            if (tleLines.length !== 3) {
+                return false;
+            }
+
+            const name = tleLines[0].trim();
+            const line1 = tleLines[1].trim();
+            const line2 = tleLines[2].trim();
+
+            if (line1.length !== 69 || line2.length !== 69) {
+                return false;
+            }
+
+            if (line1.charAt(0) !== '1' || line2.charAt(0) !== '2') {
+                return false;
+            }
+
+            if (!__checkSumTLE(line1) || !__checkSumTLE(line2)) {
+                return false;
+            }
+            return true;
+        }
+
+        function __checkSumTLE(str) {
+            let sum = 0;
+            const checkSumIndex = str.length - 1;
+            for (let i = 0; i < checkSumIndex; i++) {
+                const char = str.charAt(i);
+
+                if (char >= '0' && char <= '9') {
+                    sum += parseInt(char);
+                } else if (char === '-') {
+                    sum += 1;
+                }
+            }
+            const calculatedCheckSum = sum % 10;
+            const expectedCheckSum = parseInt(str.charAt(checkSumIndex));
+            return calculatedCheckSum === expectedCheckSum;
+        }
+
+        function saveTle() {
+            const tleText = document.getElementById("tle").value;
+            const tleLines = tleText.trim().split('\n').filter(line => line.trim() !== '');
+
+            if (!isValidTLE(tleLines)) {
+                alert("❌ TLE inválido");
+                return;
+            }
+
+            const payload = {
+                name: tleLines[0].trim(),
+                line1: tleLines[1].trim(),
+                line2: tleLines[2].trim(),
+            };
+
+            fetch("/saveTle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(res => {
+                alert(res.ok ? "✅ Configuración guardada " : "❌ Error código: " + res.status);
+            }).catch(error => console.error('Error Saving:', error));
+        }
+
+        //Send Geo-Time
+        function sendGeoTime() {
+            const geoOptions = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+
+            if (!navigator.geolocation) {
+                alert("❌ Geolocalización no soportada.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition((pos) => {
+
+                const unixSeg = Math.floor(Date.now() / 1000);
+                const payload = {
+                    unix: unixSeg,
+                    lat: pos.coords.latitude,
+                    lon: pos.coords.longitude,
+                    alt: pos.coords.altitude || 0
+                };
+
+                fetch("/geo_time", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error(`Código: ${res.status}`);
+                        alert("✅ Datos enviados con éxito");
+                    })
+                    .catch(err => {
+                        console.error('Error en fetch:', err);
+                        alert("❌ Error al enviar datos.");
+                    });
+
+            }, (error) => {
+                console.error('Error de ubicación:', error);
+                const mensajes = {
+                    1: "Permiso no concedido",
+                    2: "Ubicación no disponible",
+                    3: "Tiempo de espera agotado"
+                };
+                alert("❌ Error: " + (mensajes[error.code] || "Desconocido"));
+            }, geoOptions);
+        }
+
+        // Reset
+        function resetMCU() {
+            fetch("/reset", {
+                method: "POST"
+            }).then(res => {
+                if (res.ok) {
+                    alert("✅ Reinicio enviado.");
+                    window.location.reload();
+                } else {
+                    alert("❌ Error código: " + res.status);
+                }
+            }).catch(error => console.error('Error de red ', error));
+        }
+
+        //START
+        document.addEventListener('DOMContentLoaded', function () {
+            connectSSE();
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+            const pageTitle = document.getElementById('page-title');
+
+            function showPage(pageId) {
+                sections.forEach(section => section.classList.remove('active'));
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                const activeSection = document.getElementById(pageId);
+                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+
+                if (activeSection && activeLink) {
+                    activeSection.classList.add('active');
+                    activeLink.classList.add('active');
+                    pageTitle.textContent = activeLink.textContent.trim();
+                }
+            }
+            
+            showPage('Telemetría');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const pageId = e.currentTarget.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+        });
 
         drawLineChart("chart_az", x, az1, az2);
         drawLineChart("chart_el", x, el1, el2);
-
     </script>
 </body>
 

@@ -154,3 +154,16 @@ float elevation_deg_from_mm(float mm)
 {
     return RAD_TO_DEG * (A_CONST - acosf( (C_CONST - (BP_ANT + mm) * (BP_ANT + mm)) / B_CONST));
 }
+
+void setTime(unsigned long unixTime)
+{
+    struct timeval unix;
+    unix.tv_sec = unixTime;
+    unix.tv_usec = 0;
+    settimeofday(&unix, NULL);
+}
+
+unsigned long jdToUnix(double jd)
+{
+    return ((jd - 2440587.5) * 86400.0 + 0.5);
+}
