@@ -227,6 +227,7 @@ void MotionControl_Task(void *pvParameters)
       }
       else
       {
+        next_pass_unix = 0;
         flags.pred_done = false;
         set_angle.azimuth = target.azimuth - offsets_ant.azimuth;
         set_angle.elevation = target.elevation - offsets_ant.elevation;
@@ -464,7 +465,7 @@ void StopMotion_Task(void *pvParameters)
   vTaskDelay(pdMS_TO_TICKS(100));
   motorAz.setDuty(0);
   motorEl.setDuty(0);
-  
+
   motorAz.setDirection(FORWARD);
   motorEl.setDirection(FORWARD);
   reedAz.countDirection(FORWARD);
