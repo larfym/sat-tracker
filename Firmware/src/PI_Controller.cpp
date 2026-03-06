@@ -42,10 +42,12 @@ float PI_Controller::output(float input, float setPoint)
 
     // -------- Dead-zone compensation --------
     float u_dz = u[0];
-    if(u[0] > 0)
+    if(u[0] > 0.1f)
         u_dz += deadZone;
-    else if(u[0] < 0)
+    else if(u[0] < 0.1f)
         u_dz -= deadZone;
+    else
+        u_dz = 0;
 
     // -------- Saturation --------
     float u_sat = fminf(fmaxf(u_dz, -u_max), u_max);

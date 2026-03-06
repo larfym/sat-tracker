@@ -181,11 +181,9 @@ void IRAM_ATTR controlTimer_ISR(void *arg)
 void MotionControl_Task(void *pvParameters)
 {
   constexpr float DUTY_SCALE = 100.0f / M_V_NOMINAL;
-  const float ALPHA_AZ = expf(-2.0f * M_PI * FREQUENCY_REED_AZ * SAMPLE_TIME_S);
-  const float ALPHA_EL = expf(-2.0f * M_PI * FREQUENCY_REED_EL * SAMPLE_TIME_S);
   const uint8_t search_iterations = 30;
 
-  float az_f = 0.0f, el_mm_f = 0.0f, el_mm = 0.0f;
+  float el_mm = 0.0f;
   float output_az = 0.0, output_el = 0.0;
   int new_dir_az = 0, new_dir_el = 0, current_dir_az = 0, current_dir_el = 0;
 
@@ -241,13 +239,10 @@ void MotionControl_Task(void *pvParameters)
     el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
     current.elevation = elevation_deg_from_mm(el_mm);
     current.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
-    // Filtering
-    az_f = ALPHA_AZ * az_f + (1 - ALPHA_AZ) * current.azimuth;
-    el_mm_f = ALPHA_EL * el_mm_f + (1 - ALPHA_EL) * el_mm;
 
     // PID Controller
-    output_az = controllerAz.output(az_f, set_angle.azimuth);
-    output_el = controllerEl.output(el_mm_f, elevation_mm_from_deg(set_angle.elevation));
+    output_az = controllerAz.output(current.azimuth, set_angle.azimuth);
+    output_el = controllerEl.output(el_mm, elevation_mm_from_deg(set_angle.elevation));
 
     // CONTROL ACTION
     new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD

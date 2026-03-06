@@ -5,8 +5,8 @@
 /**
  * @file config.h
  * @brief Centralized configuration file defining pins, communication
- * parameters, timing constants, and control values for the satellite
- * tracking system (Tracker).
+ * parameters, timing constants,control values for the satellite
+ * tracking system (Tracker), etc.
  *
  * This file is included across multiple modules and provides:
  * - Pin assignments for motors, sensors, and communication ports.
@@ -126,12 +126,12 @@
  */
 ///@{
 #define M_V_NOMINAL 36            /**< Nominal voltage for motors (V). */
-#define M_AZ_V_TO_START 8.5         /**< Minimum voltage to overcome static friction (Azimuth). */
-#define M_EL_V_TO_START 3.5         /**< Minimum voltage to overcome static friction (Elevation). */
-#define M_STOP_DUTY 50            /**< Duty cycle to apply for stopping the motors (0-100%). */
-#define M_MAX_DUTY 100             /**< Maximum duty cycle for motors (0-100%). */
-#define M_AZ_SETTLING_TIME_MS 65  /**< Settling time for Azimuth motor (ms). */
-#define M_EL_SETTLING_TIME_MS 100 /**< Settling time for Elevation motor (ms). */
+#define M_AZ_V_TO_START 15.5      /**< Minimum voltage to overcome static friction (Azimuth). Note: Values from PWM modulation*/
+#define M_EL_V_TO_START 8         /**< Minimum voltage to overcome static friction (Elevation). Note: Values from PWM modulation*/
+#define M_STOP_DUTY 25            /**< Duty cycle to apply for stopping the motors (0-100%). */
+#define M_MAX_DUTY 100            /**< Maximum duty cycle for motors (0-100%). */
+#define M_AZ_SETTLING_TIME_MS 80  /**< Settling time for Azimuth motor (ms). */
+#define M_EL_SETTLING_TIME_MS 150 /**< Settling time for Elevation motor (ms). */
 ///@}
 
 /**
@@ -140,7 +140,7 @@
  */
 ///@{
 #define AZIMUTH_RESOLUTION_angle 0.225 /**< Degrees per reed pulse for Azimuth. */
-#define ELEVATION_RESOLUTION_mm 1.6  /**< Millimeters per reed pulse for Elevation. */
+#define ELEVATION_RESOLUTION_mm 0.8    /**< Millimeters per reed pulse for Elevation. */
 ///@}
 
 /**
@@ -163,34 +163,25 @@
 #define DEFAULT_SAMPLE_TIME_US 500                 /**< Default control loop sample time (µs). */
 #define SAMPLE_TIME_US 500                         /**< Control loop sample time (µs). */
 #define SAMPLE_TIME_S (SAMPLE_TIME_US / 1000000.0) /**< Control loop sample time (s). */
-#define SAMPLE_TIME_SGP4_MS 200                    /**< SGP4 Trayectory estimation time (ms). */
-///@}
-
-/**
- * @name Reed Low Pass Filter Frequency
- * @brief Filters Reed signal for smooth operation.
- */
-///@{
-#define FREQUENCY_REED_AZ 0.8 /**< Low pass filter frequency (Reed-AZ). */
-#define FREQUENCY_REED_EL 0.8 /**< Low pass filter frequency (Reed-EL). */
+#define SAMPLE_TIME_SGP4_MS 50                     /**< SGP4 Trayectory estimation time (ms). */
 ///@}
 
 /**
  * @name PID Gains — Azimuth
- * @brief Gains for the Azimuth axis PID controller.
+ * @brief Gains for the Azimuth axis PI controller.
  */
 ///@{
-#define KP_AZIMUTH 30.0 /**< Proportional gain (AZ). */
-#define KI_AZIMUTH 0.5  /**< Integral gain (AZ). */
+#define KP_AZIMUTH 10.0 /**< Proportional gain (AZ). 10*/
+#define KI_AZIMUTH 1    /**< Integral gain (AZ). 0.1*/
 ///@}
 
 /**
  * @name PID Gains — Elevation
- * @brief Gains for the Elevation axis PID controller.
+ * @brief Gains for the Elevation axis PI controller.
  */
 ///@{
-#define KP_ELEVATION 8.0  /**< Proportional gain (EL). */
-#define KI_ELEVATION 0.001 /**< Integral gain (EL). */
+#define KP_ELEVATION 10.0 /**< Proportional gain (EL). 5*/
+#define KI_ELEVATION 0.5  /**< Integral gain (EL). 0.001*/
 ///@}
 
 /**
@@ -198,27 +189,27 @@
  * @brief Encoder/step limits for mechanical range enforcement.
  */
 ///@{
-#define REED_AZ_SOFT_LIMIT_HIGH 1610 /**< Upper soft limit for Azimuth. */
-#define REED_EL_SOFT_LIMIT_HIGH 500  /**< Upper soft limit for Elevation. */
-#define REED_AZ_SOFT_LIMIT_LOW -5 /**< Lower soft limit for Azimuth */
-#define REED_EL_SOFT_LIMIT_LOW -5 /**< Lower soft limit for Elevation */
+#define REED_AZ_SOFT_LIMIT_HIGH 1610 /**< Upper soft limit for Azimuth. (362.25° máx)*/
+#define REED_EL_SOFT_LIMIT_HIGH 435  /**< Upper soft limit for Elevation. (348mm máx)*/
+#define REED_AZ_SOFT_LIMIT_LOW -5    /**< Lower soft limit for Azimuth */
+#define REED_EL_SOFT_LIMIT_LOW -5    /**< Lower soft limit for Elevation */
 ///@}
 
 /**
  * @name Hardware Limit Positions
- * @brief 
+ * @brief
  */
 ///@{
-#define EL_MIN_DEG 0   /**< Lower limit for Elevation. */
-#define EL_MAX_DEG 90  /**< Upper limit for Elevation. */
-#define AZ_MIN_DEG 0    /**< Lower limit for Azimuth. */
-#define AZ_MAX_DEG 340  /**< Upper limit for Azimuth. */ //TEST
+#define EL_MIN_DEG 0   /**< Lower SetPoint limit for Elevation. */
+#define EL_MAX_DEG 90  /**< Upper SetPoint limit for Elevation. */
+#define AZ_MIN_DEG 0   /**< Lower SetPoint limit for Azimuth. */
+#define AZ_MAX_DEG 340 /**< Upper SetPoint limit for Azimuth. */
 ///@}
 
 /**
  * @brief PWM frequency for PWM motor speed control (Hz).
  */
-#define PWM_FREQ_HZ 2000
+#define PWM_FREQ_HZ 2500 // Note: It increases power dissipation in MOSFETS
 
 /* -------------------------------------------------------------------------- */
 /*                           SIGNAL ADAPTATION                                */
@@ -258,11 +249,11 @@
  * @brief Timing parameters for FreeRTOS tasks (in milliseconds).
  */
 ///@{
-#define TASK_LOOP_DELAY 1000 /**< Delay for main loop task (ms). */
-#define TASK_GPS_DELAY 500 /**< Delay for GPS task (ms). */
+#define TASK_LOOP_DELAY 1000            /**< Delay for main loop task (ms). */
+#define TASK_GPS_DELAY 1000             /**< Delay for GPS task (ms). */
 #define TASK_CURRENT_MONITOR_DELAY 3000 /**< Delay for Current Monitor task (ms). */
-#define TASK_HOME_CURRENT_DELAY 100 /**< Delay for Home Current task (ms). */
-#define TASK_TELEMETRY_DELAY 1000 /**< Delay for Telemetry task (ms). */
+#define TASK_HOME_CURRENT_DELAY 200     /**< Delay for Home Current task (ms). */
+#define TASK_TELEMETRY_DELAY 1000       /**< Delay for Telemetry task (ms). */
 ///@}
 
 /**
@@ -273,4 +264,4 @@
 #define MAX_STACK_SIZE 8192    /**< Maximum stack size for FreeRTOS tasks (bytes). */
 #define MEDIUM_STACK_SIZE 2048 /**< Medium stack size for FreeRTOS tasks (bytes). */
 #define MIN_STACK_SIZE 1024    /**< Minimum stack size for FreeRTOS tasks (bytes). */
-///@}
+                               ///@}
