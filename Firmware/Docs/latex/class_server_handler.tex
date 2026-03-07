@@ -1,0 +1,239 @@
+\doxysection{Server\+Handler Class Reference}
+\hypertarget{class_server_handler}{}\label{class_server_handler}\index{ServerHandler@{ServerHandler}}
+
+
+Manages the ESP32\textquotesingle{}s asynchronous web server, handles API requests, and serves configuration/\+status data.  
+
+
+
+
+{\ttfamily \+\#include $<$server.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_server_handler_a5cf587cdb9447374cd2c942d04582fcb}{Server\+Handler}} (int port=\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}})
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_server_handler}{Server\+Handler} class. \end{DoxyCompactList}\item 
+esp\+\_\+err\+\_\+t \doxymbox{\hyperlink{class_server_handler_a27ee242fdee793aa97f918f9ca1f62e2}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the web server and configures the m\+DNS service. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_server_handler_a3c04b7cee6ab3e4d5d5271cc1327eb98}{send\+Telemetry}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{class_server_handler_a810dbe15d1c1951dd92b50c57fd0c7ba}{save\+TLE\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len, size\+\_\+t index, size\+\_\+t total)
+\begin{DoxyCompactList}\small\item\em Handler for saving satellite configuration data (tle) (POST request). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_server_handler_ad78a32d068c5ecbf9c0481d1bb4a3836}{save\+Offsets\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len, size\+\_\+t index, size\+\_\+t total)
+\begin{DoxyCompactList}\small\item\em Handler for saving antena configuration data (offsets) (POST request). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_server_handler_a5d949f5c8cacb7e50f93cc9b5d54c196}{manual\+Track\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len, size\+\_\+t index, size\+\_\+t total)
+\begin{DoxyCompactList}\small\item\em Handler for setting manual target angles for the platform (POST request). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_server_handler_a5bea35635c69b5090c8ba8724482084e}{toggle\+Tracking\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request)
+\begin{DoxyCompactList}\small\item\em Handler for toggling the automatic tracking state (GET request). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_server_handler_ac7feeebede1592a2bd95156a0229f9b6}{Geo\+Time\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data, size\+\_\+t len, size\+\_\+t index, size\+\_\+t total)
+\item 
+void \doxymbox{\hyperlink{class_server_handler_a02c8a40cd5765cbee3ae7da3051f70b5}{reset\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request)
+\begin{DoxyCompactList}\small\item\em Handler for resetting the MCU (POST request). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \doxymbox{\hyperlink{class_server_handler_a26002f17e5af09ad55b04ff9e64a0c6c}{Not\+Fount\+\_\+handle}} (Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}request)
+\begin{DoxyCompactList}\small\item\em Static handler for managing "{}404 Not Found"{} errors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Async\+Web\+Server \doxymbox{\hyperlink{class_server_handler_ace8a80fd9f1be4723f98929acdc07598}{server}}
+\item 
+Async\+Event\+Source \doxymbox{\hyperlink{class_server_handler_a610f92f089c9773f99e0b7901af69de2}{events}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages the ESP32\textquotesingle{}s asynchronous web server, handles API requests, and serves configuration/\+status data. 
+
+This class sets up the HTTP server, defines endpoints for data retrieval, configuration saving, manual control, and tracking status toggling. 
+
+\label{doc-constructors}
+\Hypertarget{class_server_handler_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_server_handler_a5cf587cdb9447374cd2c942d04582fcb}\index{ServerHandler@{ServerHandler}!ServerHandler@{ServerHandler}}
+\index{ServerHandler@{ServerHandler}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{ServerHandler()}{ServerHandler()}}
+{\footnotesize\ttfamily \label{class_server_handler_a5cf587cdb9447374cd2c942d04582fcb} 
+Server\+Handler::\+\+Server\+Handler (\begin{DoxyParamCaption}\item[{int}]{port}{ = {\ttfamily \doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}}}\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{class_server_handler}{Server\+Handler} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & The HTTP port to run the server on (defaults to 80). \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_server_handler_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_server_handler_ac7feeebede1592a2bd95156a0229f9b6}\index{ServerHandler@{ServerHandler}!GeoTime\_handle@{GeoTime\_handle}}
+\index{GeoTime\_handle@{GeoTime\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{GeoTime\_handle()}{GeoTime\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_ac7feeebede1592a2bd95156a0229f9b6} 
+void Server\+Handler::\+\+Geo\+Time\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{, }\item[{size\+\_\+t}]{index}{, }\item[{size\+\_\+t}]{total}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_server_handler_a5d949f5c8cacb7e50f93cc9b5d54c196}\index{ServerHandler@{ServerHandler}!manualTrack\_handle@{manualTrack\_handle}}
+\index{manualTrack\_handle@{manualTrack\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{manualTrack\_handle()}{manualTrack\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_a5d949f5c8cacb7e50f93cc9b5d54c196} 
+void Server\+Handler::\+manual\+Track\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{, }\item[{size\+\_\+t}]{index}{, }\item[{size\+\_\+t}]{total}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handler for setting manual target angles for the platform (POST request). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+{\em data} & The received POST data payload. \\
+\hline
+{\em len} & Length of the data payload. \\
+\hline
+{\em index} & Current index of the received chunk. \\
+\hline
+{\em total} & Total length of the expected payload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_server_handler_a26002f17e5af09ad55b04ff9e64a0c6c}\index{ServerHandler@{ServerHandler}!NotFount\_handle@{NotFount\_handle}}
+\index{NotFount\_handle@{NotFount\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{NotFount\_handle()}{NotFount\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_a26002f17e5af09ad55b04ff9e64a0c6c} 
+void Server\+Handler::\+\+Not\+Fount\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Static handler for managing "{}404 Not Found"{} errors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_server_handler_a02c8a40cd5765cbee3ae7da3051f70b5}\index{ServerHandler@{ServerHandler}!reset\_handle@{reset\_handle}}
+\index{reset\_handle@{reset\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{reset\_handle()}{reset\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_a02c8a40cd5765cbee3ae7da3051f70b5} 
+void Server\+Handler::\+reset\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handler for resetting the MCU (POST request). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_server_handler_ad78a32d068c5ecbf9c0481d1bb4a3836}\index{ServerHandler@{ServerHandler}!saveOffsets\_handle@{saveOffsets\_handle}}
+\index{saveOffsets\_handle@{saveOffsets\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{saveOffsets\_handle()}{saveOffsets\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_ad78a32d068c5ecbf9c0481d1bb4a3836} 
+void Server\+Handler::\+save\+Offsets\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{, }\item[{size\+\_\+t}]{index}{, }\item[{size\+\_\+t}]{total}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handler for saving antena configuration data (offsets) (POST request). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+{\em data} & The received POST data payload. \\
+\hline
+{\em len} & Length of the data payload. \\
+\hline
+{\em index} & Current index of the received chunk (for large uploads). \\
+\hline
+{\em total} & Total length of the expected payload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_server_handler_a810dbe15d1c1951dd92b50c57fd0c7ba}\index{ServerHandler@{ServerHandler}!saveTLE\_handle@{saveTLE\_handle}}
+\index{saveTLE\_handle@{saveTLE\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{saveTLE\_handle()}{saveTLE\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_a810dbe15d1c1951dd92b50c57fd0c7ba} 
+void Server\+Handler::\+save\+TLE\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{size\+\_\+t}]{len}{, }\item[{size\+\_\+t}]{index}{, }\item[{size\+\_\+t}]{total}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handler for saving satellite configuration data (tle) (POST request). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+{\em data} & The received POST data payload. \\
+\hline
+{\em len} & Length of the data payload. \\
+\hline
+{\em index} & Current index of the received chunk (for large uploads). \\
+\hline
+{\em total} & Total length of the expected payload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_server_handler_a3c04b7cee6ab3e4d5d5271cc1327eb98}\index{ServerHandler@{ServerHandler}!sendTelemetry@{sendTelemetry}}
+\index{sendTelemetry@{sendTelemetry}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{sendTelemetry()}{sendTelemetry()}}
+{\footnotesize\ttfamily \label{class_server_handler_a3c04b7cee6ab3e4d5d5271cc1327eb98} 
+void Server\+Handler::\+send\+Telemetry (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_server_handler_a27ee242fdee793aa97f918f9ca1f62e2}\index{ServerHandler@{ServerHandler}!start@{start}}
+\index{start@{start}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{class_server_handler_a27ee242fdee793aa97f918f9ca1f62e2} 
+esp\+\_\+err\+\_\+t Server\+Handler::\+start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts the web server and configures the m\+DNS service. 
+
+\begin{DoxyReturn}{Returns}
+ESP\+\_\+\+OK on success, or an error code on failure. 
+\end{DoxyReturn}
+\Hypertarget{class_server_handler_a5bea35635c69b5090c8ba8724482084e}\index{ServerHandler@{ServerHandler}!toggleTracking\_handle@{toggleTracking\_handle}}
+\index{toggleTracking\_handle@{toggleTracking\_handle}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{toggleTracking\_handle()}{toggleTracking\_handle()}}
+{\footnotesize\ttfamily \label{class_server_handler_a5bea35635c69b5090c8ba8724482084e} 
+void Server\+Handler::\+toggle\+Tracking\+\_\+handle (\begin{DoxyParamCaption}\item[{Async\+Web\+Server\+Request \texorpdfstring{$\ast$}{*}}]{request}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handler for toggling the automatic tracking state (GET request). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & The asynchronous request object. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-variable-members}
+\Hypertarget{class_server_handler_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_server_handler_a610f92f089c9773f99e0b7901af69de2}\index{ServerHandler@{ServerHandler}!events@{events}}
+\index{events@{events}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{events}{events}}
+{\footnotesize\ttfamily \label{class_server_handler_a610f92f089c9773f99e0b7901af69de2} 
+Async\+Event\+Source Server\+Handler::\+events\hspace{0.3cm}{\ttfamily [private]}}
+
+Event source for server-\/sent events (SSE). \Hypertarget{class_server_handler_ace8a80fd9f1be4723f98929acdc07598}\index{ServerHandler@{ServerHandler}!server@{server}}
+\index{server@{server}!ServerHandler@{ServerHandler}}
+\doxysubsubsection{\texorpdfstring{server}{server}}
+{\footnotesize\ttfamily \label{class_server_handler_ace8a80fd9f1be4723f98929acdc07598} 
+Async\+Web\+Server Server\+Handler::\+server\hspace{0.3cm}{\ttfamily [private]}}
+
+The asynchronous web server instance. 
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+include/\+\doxymbox{\hyperlink{server_8h}{server.\+h}}\item 
+src/\+\doxymbox{\hyperlink{server_8cpp}{server.\+cpp}}\end{DoxyCompactItemize}

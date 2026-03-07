@@ -1,0 +1,224 @@
+\doxysection{Current\+Sensor Class Reference}
+\hypertarget{class_current_sensor}{}\label{class_current_sensor}\index{CurrentSensor@{CurrentSensor}}
+
+
+Class for current reading using an ESP32 ADC channel.  
+
+
+
+
+{\ttfamily \+\#include $<$current\+Sensor.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}{Current\+Sensor}} (adc1\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}})
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_current_sensor}{Current\+Sensor} class. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8}{get\+Current\+\_\+mA}} ()
+\begin{DoxyCompactList}\small\item\em Gets the measured current in milliamperes (mA). \end{DoxyCompactList}\item 
+uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_ab6064868042388af7b1b384943487d06}{get\+Shunt\+Voltage\+\_\+mV}} ()
+\begin{DoxyCompactList}\small\item\em Gets the shunt resistor voltage in millivolts. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec}{calibrate\+Offset}} (uint8\+\_\+t samples)
+\begin{DoxyCompactList}\small\item\em Calibrates the sensor\textquotesingle{}s voltage offset. \end{DoxyCompactList}\item 
+uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}{get\+Offset\+\_\+mV}} ()
+\begin{DoxyCompactList}\small\item\em Gets the calibrated voltage offset value. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1}{set\+Shunt\+Value}} (float \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\+\_\+ohm}})
+\begin{DoxyCompactList}\small\item\em Sets a new shunt resistor value. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}{set\+Op\+Amp\+Gain}} (float gain)
+\begin{DoxyCompactList}\small\item\em Sets a new operational amplifier gain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+adc1\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}}
+\begin{DoxyCompactList}\small\item\em Configured ADC channel for measurement. \end{DoxyCompactList}\item 
+esp\+\_\+adc\+\_\+cal\+\_\+characteristics\+\_\+t \doxymbox{\hyperlink{class_current_sensor_acad693f0e83b428794877a86cace4e8b}{adc\+\_\+chars}}
+\begin{DoxyCompactList}\small\item\em ADC calibration characteristics structure. \end{DoxyCompactList}\item 
+uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\+\_\+mV}} = 0
+\begin{DoxyCompactList}\small\item\em Voltage offset (in mV) measured under zero current condition. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\+\_\+ohm}} = \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\+\_\+\+SHUNT\+\_\+\+VALUE\+\_\+\+OHM}}
+\begin{DoxyCompactList}\small\item\em Shunt resistor value in Ohms. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{class_current_sensor_acc6cb6dce83074c330c43ef33d8a28ff}{opamp\+\_\+gain}} = \doxymbox{\hyperlink{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}{DEFAULT\+\_\+\+OPAMP\+\_\+\+GAIN}}
+\begin{DoxyCompactList}\small\item\em Operational amplifier gain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for current reading using an ESP32 ADC channel. 
+
+This class configures an ADC channel, calibrates the conversion to millivolts (mV), and calculates the current in milliamperes (mA), considering the shunt resistor and the amplifier gain. 
+
+\label{doc-constructors}
+\Hypertarget{class_current_sensor_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}\index{CurrentSensor@{CurrentSensor}!CurrentSensor@{CurrentSensor}}
+\index{CurrentSensor@{CurrentSensor}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{CurrentSensor()}{CurrentSensor()}}
+{\footnotesize\ttfamily \label{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8} 
+Current\+Sensor::\+\+Current\+Sensor (\begin{DoxyParamCaption}\item[{adc1\+\_\+channel\+\_\+t}]{channel}{}\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{class_current_sensor}{Current\+Sensor} class. 
+
+Configures the ADC width and attenuation, and performs characterization to obtain the voltage conversion curve.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}} & The ADC1 channel to be used for the measurement. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_current_sensor_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec}\index{CurrentSensor@{CurrentSensor}!calibrateOffset@{calibrateOffset}}
+\index{calibrateOffset@{calibrateOffset}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{calibrateOffset()}{calibrateOffset()}}
+{\footnotesize\ttfamily \label{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec} 
+void Current\+Sensor::\+calibrate\+Offset (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{samples}{}\end{DoxyParamCaption})}
+
+
+
+Calibrates the sensor\textquotesingle{}s voltage offset. 
+
+Measures the voltage of the ADC pin when the input current is zero (0) to establish the {\ttfamily \doxylink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\+\_\+mV}} value. {\bfseries{Must be called with no current applied.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em samples} & Number of samples to average for a more stable calibration. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8}\index{CurrentSensor@{CurrentSensor}!getCurrent\_mA@{getCurrent\_mA}}
+\index{getCurrent\_mA@{getCurrent\_mA}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{getCurrent\_mA()}{getCurrent\_mA()}}
+{\footnotesize\ttfamily \label{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8} 
+float Current\+Sensor::\+get\+Current\+\_\+mA (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the measured current in milliamperes (mA). 
+
+Reads the analog value, applies calibration and offset, and calculates the current using Ohm\textquotesingle{}s Law and the amplifier gain:\+ \$\+I\+\_\+\{mA\} = V\+\_\+\{Shunt, mV\} /\+ (G \textbackslash{}cdot R\+\_\+\{Shunt, \textbackslash{}\+Omega\})\$
+
+\begin{DoxyReturn}{Returns}
+Measured current in milliamperes (mA). Returns float for precision. 
+\end{DoxyReturn}
+\Hypertarget{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}\index{CurrentSensor@{CurrentSensor}!getOffset\_mV@{getOffset\_mV}}
+\index{getOffset\_mV@{getOffset\_mV}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{getOffset\_mV()}{getOffset\_mV()}}
+{\footnotesize\ttfamily \label{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178} 
+uint32\+\_\+t Current\+Sensor::\+get\+Offset\+\_\+mV (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the calibrated voltage offset value. 
+
+\begin{DoxyReturn}{Returns}
+The offset value in millivolts (mV). 
+\end{DoxyReturn}
+\Hypertarget{class_current_sensor_ab6064868042388af7b1b384943487d06}\index{CurrentSensor@{CurrentSensor}!getShuntVoltage\_mV@{getShuntVoltage\_mV}}
+\index{getShuntVoltage\_mV@{getShuntVoltage\_mV}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{getShuntVoltage\_mV()}{getShuntVoltage\_mV()}}
+{\footnotesize\ttfamily \label{class_current_sensor_ab6064868042388af7b1b384943487d06} 
+uint32\+\_\+t Current\+Sensor::\+get\+Shunt\+Voltage\+\_\+mV (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the shunt resistor voltage in millivolts. 
+
+Takes an average of \doxylink{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}{ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES} raw ADC readings, converts it to voltage using calibration, and subtracts the calibrated offset.
+
+\begin{DoxyReturn}{Returns}
+Shunt voltage in millivolts (mV). 
+\end{DoxyReturn}
+\Hypertarget{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}\index{CurrentSensor@{CurrentSensor}!setOpAmpGain@{setOpAmpGain}}
+\index{setOpAmpGain@{setOpAmpGain}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{setOpAmpGain()}{setOpAmpGain()}}
+{\footnotesize\ttfamily \label{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89} 
+void Current\+Sensor::\+set\+Op\+Amp\+Gain (\begin{DoxyParamCaption}\item[{float}]{gain}{}\end{DoxyParamCaption})}
+
+
+
+Sets a new operational amplifier gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gain} & New operational amplifier gain. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1}\index{CurrentSensor@{CurrentSensor}!setShuntValue@{setShuntValue}}
+\index{setShuntValue@{setShuntValue}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{setShuntValue()}{setShuntValue()}}
+{\footnotesize\ttfamily \label{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1} 
+void Current\+Sensor::\+set\+Shunt\+Value (\begin{DoxyParamCaption}\item[{float}]{shunt\+\_\+ohm}{}\end{DoxyParamCaption})}
+
+
+
+Sets a new shunt resistor value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\+\_\+ohm}} & New shunt resistor value in Ohms. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-variable-members}
+\Hypertarget{class_current_sensor_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_current_sensor_acad693f0e83b428794877a86cace4e8b}\index{CurrentSensor@{CurrentSensor}!adc\_chars@{adc\_chars}}
+\index{adc\_chars@{adc\_chars}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{adc\_chars}{adc\_chars}}
+{\footnotesize\ttfamily \label{class_current_sensor_acad693f0e83b428794877a86cace4e8b} 
+esp\+\_\+adc\+\_\+cal\+\_\+characteristics\+\_\+t Current\+Sensor::\+adc\+\_\+chars\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+ADC calibration characteristics structure. 
+
+\Hypertarget{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}\index{CurrentSensor@{CurrentSensor}!channel@{channel}}
+\index{channel@{channel}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{channel}{channel}}
+{\footnotesize\ttfamily \label{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb} 
+adc1\+\_\+channel\+\_\+t Current\+Sensor::\+channel\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Configured ADC channel for measurement. 
+
+\Hypertarget{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}\index{CurrentSensor@{CurrentSensor}!offset\_mV@{offset\_mV}}
+\index{offset\_mV@{offset\_mV}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{offset\_mV}{offset\_mV}}
+{\footnotesize\ttfamily \label{class_current_sensor_a9df470ef7d32b668732aad55bce142a2} 
+uint32\+\_\+t Current\+Sensor::\+offset\+\_\+mV = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Voltage offset (in mV) measured under zero current condition. 
+
+\Hypertarget{class_current_sensor_acc6cb6dce83074c330c43ef33d8a28ff}\index{CurrentSensor@{CurrentSensor}!opamp\_gain@{opamp\_gain}}
+\index{opamp\_gain@{opamp\_gain}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{opamp\_gain}{opamp\_gain}}
+{\footnotesize\ttfamily \label{class_current_sensor_acc6cb6dce83074c330c43ef33d8a28ff} 
+float Current\+Sensor::\+opamp\+\_\+gain = \doxymbox{\hyperlink{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}{DEFAULT\+\_\+\+OPAMP\+\_\+\+GAIN}}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Operational amplifier gain. 
+
+\Hypertarget{class_current_sensor_a696410e1f762478481cd91931841dc08}\index{CurrentSensor@{CurrentSensor}!shunt\_ohm@{shunt\_ohm}}
+\index{shunt\_ohm@{shunt\_ohm}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{shunt\_ohm}{shunt\_ohm}}
+{\footnotesize\ttfamily \label{class_current_sensor_a696410e1f762478481cd91931841dc08} 
+float Current\+Sensor::\+shunt\+\_\+ohm = \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\+\_\+\+SHUNT\+\_\+\+VALUE\+\_\+\+OHM}}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Shunt resistor value in Ohms. 
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+include/\+\doxymbox{\hyperlink{current_sensor_8h}{current\+Sensor.\+h}}\item 
+src/\+\doxymbox{\hyperlink{current_sensor_8cpp}{current\+Sensor.\+cpp}}\end{DoxyCompactItemize}

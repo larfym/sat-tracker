@@ -1,0 +1,223 @@
+\doxysection{Motor\+Driver Class Reference}
+\hypertarget{class_motor_driver}{}\label{class_motor_driver}\index{MotorDriver@{MotorDriver}}
+
+
+Class for controlling DC motors with PWM speed control and direction pins.  
+
+
+
+
+{\ttfamily \+\#include $<$motor\+Driver.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_motor_driver_a0817fdbb78b2e42cc643a88fc1e7ef6d}{Motor\+Driver}} (gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}{IN1\+\_\+pin}}, gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}{IN2\+\_\+pin}}, gpio\+\_\+num\+\_\+t PWM\+\_\+pin, ledc\+\_\+timer\+\_\+t timer, ledc\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}{channel}}, uint16\+\_\+t frequency)
+\begin{DoxyCompactList}\small\item\em Constructor, Initializes GPIO pins and configures the LEDC channel (PWM) for speed. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_motor_driver_ab872c179920f8a606985a3c940919eb2}{set\+Duty}} (double percentage)
+\begin{DoxyCompactList}\small\item\em Sets the PWM duty cycle. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_motor_driver_a2fdca424033a431d7a2ee20f22427a83}{set\+Motor\+Duty}} (double percentage)
+\begin{DoxyCompactList}\small\item\em Set the Motor Duty(starting from the lower bound). \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_motor_driver_acd4e0cd165d5b08de8dcc27240f56267}{set\+Direction}} (\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} dir)
+\begin{DoxyCompactList}\small\item\em Sets the motor\textquotesingle{}s direction of rotation (FORWARD or BACKWARD). \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} \doxymbox{\hyperlink{class_motor_driver_abd6167f1bfb974aab47cc0ca52a0d635}{get\+Direction}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the current direction of the motor. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_motor_driver_a7a5f50f6b7238f0a55ef4fa6cebc16d9}{stop}} ()
+\begin{DoxyCompactList}\small\item\em Stops the motor (Does not Change duty Cycle (breaking power)). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a19c7bb349c79021b40c56f79f1261b30}{instance\+\_\+id}}
+\begin{DoxyCompactList}\small\item\em Unique ID of this motor instance (assigned from \textquotesingle{}id\textquotesingle{}). \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} \doxymbox{\hyperlink{class_motor_driver_a4faaaf49a22790b9deb25190b8e87efe}{current\+\_\+direction}}
+\begin{DoxyCompactList}\small\item\em Stores the motor\textquotesingle{}s current rotation direction (FORWARD or BACKWARD). \end{DoxyCompactList}\item 
+gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}{IN1\+\_\+pin}}
+\begin{DoxyCompactList}\small\item\em GPIO pins used for the direction signals. \end{DoxyCompactList}\item 
+gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}{IN2\+\_\+pin}}
+\item 
+ledc\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}{channel}}
+\begin{DoxyCompactList}\small\item\em The LEDC channel utilized to generate the PWM signal for speed control. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static uint8\+\_\+t \doxymbox{\hyperlink{class_motor_driver_a74fcb8c07e08c7709777c17c8cd09692}{id}} = 0
+\begin{DoxyCompactList}\small\item\em Static counter used to assign a unique ID to each \doxylink{class_motor_driver}{Motor\+Driver} instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for controlling DC motors with PWM speed control and direction pins. 
+
+\label{doc-constructors}
+\Hypertarget{class_motor_driver_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_motor_driver_a0817fdbb78b2e42cc643a88fc1e7ef6d}\index{MotorDriver@{MotorDriver}!MotorDriver@{MotorDriver}}
+\index{MotorDriver@{MotorDriver}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{MotorDriver()}{MotorDriver()}}
+{\footnotesize\ttfamily \label{class_motor_driver_a0817fdbb78b2e42cc643a88fc1e7ef6d} 
+Motor\+Driver::\+\+Motor\+Driver (\begin{DoxyParamCaption}\item[{gpio\+\_\+num\+\_\+t}]{IN1\+\_\+pin}{, }\item[{gpio\+\_\+num\+\_\+t}]{IN2\+\_\+pin}{, }\item[{gpio\+\_\+num\+\_\+t}]{PWM\+\_\+pin}{, }\item[{ledc\+\_\+timer\+\_\+t}]{timer}{, }\item[{ledc\+\_\+channel\+\_\+t}]{channel}{, }\item[{uint16\+\_\+t}]{frequency}{}\end{DoxyParamCaption})}
+
+
+
+Constructor, Initializes GPIO pins and configures the LEDC channel (PWM) for speed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}{IN1\+\_\+pin}} & GPIO pin for the IN1 direction signal. \\
+\hline
+{\em \doxylink{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}{IN2\+\_\+pin}} & GPIO pin for the IN2 direction signal. \\
+\hline
+{\em PWM\+\_\+pin} & GPIO pin to which the PWM speed signal will be assigned. \\
+\hline
+{\em timer} & The LEDC timer to be used for PWM generation. \\
+\hline
+{\em \doxylink{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}{channel}} & The LEDC channel to be used for PWM generation. \\
+\hline
+{\em frequency} & The PWM signal frequency in Hz (e.\+g., 5000 Hz). \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_motor_driver_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_motor_driver_abd6167f1bfb974aab47cc0ca52a0d635}\index{MotorDriver@{MotorDriver}!getDirection@{getDirection}}
+\index{getDirection@{getDirection}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{getDirection()}{getDirection()}}
+{\footnotesize\ttfamily \label{class_motor_driver_abd6167f1bfb974aab47cc0ca52a0d635} 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} Motor\+Driver::\+get\+Direction (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the current direction of the motor. 
+
+\begin{DoxyReturn}{Returns}
+The current direction (FORWARD, BACKWARD, or STOPPED). 
+\end{DoxyReturn}
+\Hypertarget{class_motor_driver_acd4e0cd165d5b08de8dcc27240f56267}\index{MotorDriver@{MotorDriver}!setDirection@{setDirection}}
+\index{setDirection@{setDirection}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{setDirection()}{setDirection()}}
+{\footnotesize\ttfamily \label{class_motor_driver_acd4e0cd165d5b08de8dcc27240f56267} 
+void Motor\+Driver::\+set\+Direction (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}}]{dir}{}\end{DoxyParamCaption})}
+
+
+
+Sets the motor\textquotesingle{}s direction of rotation (FORWARD or BACKWARD). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir} & The new direction to set. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction} (defined in \doxylink{utils_8h}{utils.\+h}) 
+\end{DoxySeeAlso}
+\Hypertarget{class_motor_driver_ab872c179920f8a606985a3c940919eb2}\index{MotorDriver@{MotorDriver}!setDuty@{setDuty}}
+\index{setDuty@{setDuty}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{setDuty()}{setDuty()}}
+{\footnotesize\ttfamily \label{class_motor_driver_ab872c179920f8a606985a3c940919eb2} 
+void Motor\+Driver::\+set\+Duty (\begin{DoxyParamCaption}\item[{double}]{percentage}{}\end{DoxyParamCaption})}
+
+
+
+Sets the PWM duty cycle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em percentage} & The duty cycle percentage, from 0,0 to 100,0. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_motor_driver_a2fdca424033a431d7a2ee20f22427a83}\index{MotorDriver@{MotorDriver}!setMotorDuty@{setMotorDuty}}
+\index{setMotorDuty@{setMotorDuty}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{setMotorDuty()}{setMotorDuty()}}
+{\footnotesize\ttfamily \label{class_motor_driver_a2fdca424033a431d7a2ee20f22427a83} 
+void Motor\+Driver::\+set\+Motor\+Duty (\begin{DoxyParamCaption}\item[{double}]{percentage}{}\end{DoxyParamCaption})}
+
+
+
+Set the Motor Duty(starting from the lower bound). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em percentage} & The motor duty cycle percentage, from 0.\+0 to 100.\+0. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_motor_driver_a7a5f50f6b7238f0a55ef4fa6cebc16d9}\index{MotorDriver@{MotorDriver}!stop@{stop}}
+\index{stop@{stop}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily \label{class_motor_driver_a7a5f50f6b7238f0a55ef4fa6cebc16d9} 
+void Motor\+Driver::\+stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the motor (Does not Change duty Cycle (breaking power)). 
+
+
+
+\label{doc-variable-members}
+\Hypertarget{class_motor_driver_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}\index{MotorDriver@{MotorDriver}!channel@{channel}}
+\index{channel@{channel}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{channel}{channel}}
+{\footnotesize\ttfamily \label{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087} 
+ledc\+\_\+channel\+\_\+t Motor\+Driver::\+channel\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The LEDC channel utilized to generate the PWM signal for speed control. 
+
+\Hypertarget{class_motor_driver_a4faaaf49a22790b9deb25190b8e87efe}\index{MotorDriver@{MotorDriver}!current\_direction@{current\_direction}}
+\index{current\_direction@{current\_direction}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{current\_direction}{current\_direction}}
+{\footnotesize\ttfamily \label{class_motor_driver_a4faaaf49a22790b9deb25190b8e87efe} 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} Motor\+Driver::\+current\+\_\+direction\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Stores the motor\textquotesingle{}s current rotation direction (FORWARD or BACKWARD). 
+
+\begin{DoxySeeAlso}{See also}
+\doxylink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction} (defined in \doxylink{utils_8h}{utils.\+h}) 
+\end{DoxySeeAlso}
+\Hypertarget{class_motor_driver_a74fcb8c07e08c7709777c17c8cd09692}\index{MotorDriver@{MotorDriver}!id@{id}}
+\index{id@{id}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \label{class_motor_driver_a74fcb8c07e08c7709777c17c8cd09692} 
+uint8\+\_\+t Motor\+Driver::\+id = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Static counter used to assign a unique ID to each \doxylink{class_motor_driver}{Motor\+Driver} instance. 
+
+\Hypertarget{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}\index{MotorDriver@{MotorDriver}!IN1\_pin@{IN1\_pin}}
+\index{IN1\_pin@{IN1\_pin}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{IN1\_pin}{IN1\_pin}}
+{\footnotesize\ttfamily \label{class_motor_driver_ae7da7526cec153099d71b9868b26ea85} 
+gpio\+\_\+num\+\_\+t Motor\+Driver::\+\+IN1\+\_\+pin\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+GPIO pins used for the direction signals. 
+
+\Hypertarget{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}\index{MotorDriver@{MotorDriver}!IN2\_pin@{IN2\_pin}}
+\index{IN2\_pin@{IN2\_pin}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{IN2\_pin}{IN2\_pin}}
+{\footnotesize\ttfamily \label{class_motor_driver_a0c52a37f487b8be40315bd90e204effe} 
+gpio\+\_\+num\+\_\+t Motor\+Driver::\+\+IN2\+\_\+pin\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_motor_driver_a19c7bb349c79021b40c56f79f1261b30}\index{MotorDriver@{MotorDriver}!instance\_id@{instance\_id}}
+\index{instance\_id@{instance\_id}!MotorDriver@{MotorDriver}}
+\doxysubsubsection{\texorpdfstring{instance\_id}{instance\_id}}
+{\footnotesize\ttfamily \label{class_motor_driver_a19c7bb349c79021b40c56f79f1261b30} 
+uint8\+\_\+t Motor\+Driver::\+instance\+\_\+id\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Unique ID of this motor instance (assigned from \textquotesingle{}id\textquotesingle{}). 
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+include/\+\doxymbox{\hyperlink{motor_driver_8h}{motor\+Driver.\+h}}\item 
+src/\+\doxymbox{\hyperlink{motor_driver_8cpp}{motor\+Driver.\+cpp}}\end{DoxyCompactItemize}

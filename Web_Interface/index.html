@@ -341,33 +341,35 @@
                 <div class="card">
                     <h3>Satélite</h3>
                     <ul>
-                        <li><span>ID</span><span id="name">---</span></li>
-                        <li><span>Latitud</span><span id="s_lat">---</span></li>
-                        <li><span>Longitud</span><span id="s_lon">---</span></li>
-                        <li><span>Altitud</span><span id="s_alt">---</span></li>
-                        <li><span>θ</span><span id="s_az">---</span></li>
-                        <li><span>α</span><span id="s_el">---</span></li>
+                        <li><span>ID</span><span id="s_n">--</span></li>
+                        <li><span>Latitud</span><span id="s_la">--</span></li>
+                        <li><span>Longitud</span><span id="s_lo">--</span></li>
+                        <li><span>Altitud</span><span id="s_al">--</span></li>
+                        <li><span>θ</span><span id="s_a">--</span></li>
+                        <li><span>α</span><span id="s_e">--</span></li>
+                        <li><span>Visibilidad</span><span id="s_v">--</span></li>
+                        <li><span>Siguiente Pase</span><span id="s_p">--</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Estación Terrena</h3>
                     <ul>
-                        <li><span>Estado</span><span id="stat">---</span></li>
-                        <li><span>Latitud</span><span id="t_lat">---</span></li>
-                        <li><span>Longitud</span><span id="t_lon">---</span></li>
-                        <li><span>Altitud</span><span id="t_alt">---</span></li>
-                        <li><span>Hora Local</span><span id="t_tim">---</span></li>
+                        <li><span>Estado</span><span id="p_st">--</span></li>
+                        <li><span>Latitud</span><span id="p_la">--</span></li>
+                        <li><span>Longitud</span><span id="p_lo">--</span></li>
+                        <li><span>Altitud</span><span id="p_al">--</span></li>
+                        <li><span>Hora Local</span><span id="p_t">--</span></li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <h3>Antena</h3>
                     <ul>
-                        <li><span>θ</span><span id="a_az">---</span></li>
-                        <li><span>α</span><span id="a_el">---</span></li>
-                        <li><span>Offset θ</span><span id="az_off">---</span></li>
-                        <li><span>Offset α</span><span id="el_off">---</span></li>
+                        <li><span>θ</span><span id="a_a">--</span></li>
+                        <li><span>α</span><span id="a_e">--</span></li>
+                        <li><span>Offset θ</span><span id="a_of_a">--</span></li>
+                        <li><span>Offset α</span><span id="a_of_e">--</span></li>
                     </ul>
                 </div>
 
@@ -406,13 +408,13 @@
                 <h3>Offsets de Antena</h3>
                 <ul>
                     <li><span>Declinación Magnética</span><span class="input-value"><input type="number" id="mag-of"
-                                value="0.0"></span></li>
-                    <li><span>Offset Antena</span><span class="input-value"><input type="number" id="ant-of"
-                                value="0.0"></span></li>
-                    <li><span>Offset Azimut</span><span class="input-value"><input type="number" id="az-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
+                    <li><span>Offset Antena</span><span class="input-value"><input type="number" id="ant-of" value="0.0"
+                                inputmode="decimal"></span></li>
+                    <li><span>Offset Azimut</span><span class="input-value"><input type="number" id="az-of" value="0.0"
+                                inputmode="decimal"></span></li>
                     <li><span>Offset Elevación</span><span class="input-value"><input type="number" id="el-of"
-                                value="0.0"></span></li>
+                                value="0.0" inputmode="decimal"></span></li>
                 </ul>
                 <button class="send-button" onclick="saveOffsets()">
                     <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
@@ -437,6 +439,20 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="card">
+                <h3>Microcontrolador</h3>
+                <li>
+                    <span>Reiniciar</span>
+                    <button class="send-button" onclick="resetMCU()">
+
+                        <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                            <path
+                                d="m653-208-88 88-85-85 88-88q-4-11-6-23t-2-24q0-58 41-99t99-41q18 0 35 4.5t32 12.5l-95 95 56 56 95-94q8 15 12.5 31.5T840-340q0 58-41 99t-99 41q-13 0-24.5-2t-22.5-6Zm178-352h-83q-26-88-99-144t-169-56q-117 0-198.5 81.5T200-480q0 72 32.5 132t87.5 98v-110h80v240H160v-80h94q-62-50-98-122.5T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q129 0 226.5 79.5T831-560Z" />
+                        </svg>
+                    </button>
+                </li>
+            </div>
         </section>
 
         <section id="manual" class="page-section">
@@ -445,8 +461,8 @@
                 <ul>
                     <li><span>Azimut (θ°):</span><span class="input-value"><input type="number" id="m-az" value="0.0"
                                 min="0" max="360"></span></li>
-                    <li><span>Elevación (α°):</span><span class="input-value"><input type="number" id="m-el" value="0.0"
-                                min="0" max="90"></span></li>
+                    <li><span>Elevación (α°):</span><span class="input-value"><input type="number" id="m-el"
+                                value="90.0" min="0" max="90"></span></li>
                 </ul>
             </div>
             <button class="send-button" onclick="sendManualData()">
@@ -459,15 +475,258 @@
     </main>
 
     <script>
-        const DEF_STR = "---";
-        const x = ["--", "--", "--", "--", "--", "--"];
+    
+        const x = ["-", "-", "-", "-", "-", "-"];
         const az1 = [0, 0, 0, 0, 0, 0];
         const az2 = [0, 0, 0, 0, 0, 0];
         const el1 = [0, 0, 0, 0, 0, 0];
         const el2 = [0, 0, 0, 0, 0, 0];
         const MAX = 6;
 
-        let updateInterval = null;
+        let eventSource = null;
+
+        function connectSSE() {
+            if (eventSource) eventSource.close();
+            eventSource = new EventSource('/telemetry');
+            eventSource.addEventListener('telemetry', function (event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    updateTelemetry(data);
+                } catch (error) {
+                    console.error('Error parsing telemetry data:', error);
+                }
+            });
+
+            eventSource.onopen = function () {
+                console.log('SSE Connected');
+            }
+
+            eventSource.onerror = function () {
+                console.warn('SSE Disconnected. Attempting to reconnect...');
+                setTimeout(connectSSE, 1000);
+            };
+        }
+
+        function setText(id, value, suffix = "") {
+            document.getElementById(id).textContent = (value !== undefined && value !== null) ? value + suffix : "--";
+        }
+
+        function pushBuffer(arr, value) {
+            arr.push(value);
+            if (arr.length > MAX) arr.shift();
+        }
+
+        function formatUnixTime(unixTimestamp) {
+            const date = new Date(unixTimestamp * 1000);
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23'
+            };
+            const formattedDate = new Intl.DateTimeFormat('es-AR', options).format(date);
+
+            return formattedDate;
+        }
+
+        function formatUnixTimeMMSS(unix) {
+            if (typeof unix !== "number" || isNaN(unix)) return "--";
+            const d = new Date(unix * 1000);
+            if (isNaN(d.getTime())) return "--";
+            const mm = String(d.getMinutes()).padStart(2, "0");
+            const ss = String(d.getSeconds()).padStart(2, "0");
+            return `${mm}:${ss}`;
+        }
+
+        function drawLineChart(svgId, x, y1, y2) {
+            const margin = { top: 5, right: 15, bottom: 20, left: 35 };
+            const svg = document.getElementById(svgId);
+            const W = svg.clientWidth;
+            const H = svg.clientHeight;
+            const iw = W - margin.left - margin.right;
+            const ih = H - margin.top - margin.bottom;
+
+            let minY = Math.min(...y1, ...y2);
+            let maxY = Math.max(...y1, ...y2);
+
+            let rangeY = maxY - minY;
+
+            if (rangeY === 0) {
+                rangeY = Math.abs(maxY) * 0.1 || 1;
+            }
+
+            const padding = rangeY * 0.2;
+            minY = Math.max(0, minY - padding);
+            maxY += padding;
+
+            if (maxY <= minY) {
+                maxY = minY + 1;
+            }
+
+            const targetPixelPerTick = 30;
+            const ticks = Math.max(6, Math.floor(ih / targetPixelPerTick));
+
+            const scaleX = i =>
+                margin.left + (i / (x.length - 1)) * iw;
+
+            const scaleY = v =>
+                margin.top + ih - ((v - minY) / (maxY - minY)) * ih;
+
+            const line = y =>
+                y.map((v, i) => `${scaleX(i)},${scaleY(v)}`).join(" ");
+
+            let grid = "";
+            let labels = "";
+
+            for (let i = 0; i <= ticks; i++) {
+                const yVal = minY + (i / ticks) * (maxY - minY);
+                const yPos = scaleY(yVal);
+
+                grid += `
+                    <line x1="${margin.left}" y1="${yPos}"
+                        x2="${W - margin.right}" y2="${yPos}"
+                        stroke="#333" stroke-dasharray="2 4"/>
+                `;
+
+                labels += `
+                    <text x="${margin.left - 5}" y="${yPos + 4}"
+                        font-size="10" fill="#f0f0f0"
+                        text-anchor="end">
+                        ${yVal.toFixed(2)}
+                    </text>
+                `;
+            }
+
+            x.forEach((label, i) => {
+                const xPos = scaleX(i);
+
+                grid += `
+                    <line x1="${xPos}" y1="${margin.top}"
+                        x2="${xPos}" y2="${H - margin.bottom}"
+                        stroke="#333" stroke-dasharray="2 4"/>
+                `;
+
+                labels += `
+                    <text x="${xPos}" y="${H - 5}"
+                        font-size="10" fill="#f0f0f0"
+                        text-anchor="middle">
+                        ${label}
+                    </text>
+                `;
+            });
+
+            svg.innerHTML = `
+                ${grid}
+
+                <!-- Ejes -->
+                <line x1="${margin.left}" y1="${H - margin.bottom}"
+                    x2="${W - margin.right}" y2="${H - margin.bottom}"
+                    stroke="#aaa"/>
+
+                <line x1="${margin.left}" y1="${margin.top}"
+                    x2="${margin.left}" y2="${H - margin.bottom}"
+                    stroke="#aaa"/>
+
+                ${labels}
+
+                <!-- Líneas -->
+                <polyline fill="none" stroke="#007bff"
+                        stroke-width="2"
+                        points="${line(y1)}"/>
+
+                <polyline fill="none" stroke="#dc3545"
+                        stroke-width="2"
+                        points="${line(y2)}"/>
+            `;
+        }
+
+        function updateTelemetry(data) {
+            //Satellite
+            const s = data.s || {};
+            setText("s_n", s.n);
+            setText("s_la", s.la, " [°]");
+            setText("s_lo", s.lo, " [°]");
+            setText("s_al", s.al, " [km]");
+            setText("s_a", s.a, " [°]");
+            setText("s_e", s.e, " [°]");
+            setText("s_v", s.v);
+
+            const pass_t = s.p;
+            if(pass_t)
+            {
+                setText("s_p", formatUnixTime(pass_t));
+            } else 
+            {
+                setText("s_p", "--");
+            }
+        
+            //Status
+            const st = data.st || {};
+            updateBtnState(st.tr);
+            if (!st.err) {
+                if (st.man) {
+                    setText("p_st", "Control Manual");
+                } else {
+                    if (st.tr) {
+                        setText("p_st", "Rastreando");
+                    } else {
+                        if (!st.gps) {
+                            setText("p_st", "No GPS Fix");
+                        }
+                        else if (!st.tle) {
+                            setText("p_st", "No TLE");
+                        }
+                        else {
+                            setText("p_st", "Detenido");
+                        }
+                    }
+                }
+            } else {
+                setText("p_st", "Error: " + st.err);
+            }
+
+            //Platform
+            const p = data.p || {};
+            setText("p_la", p.la, " [°]");
+            setText("p_lo", p.lo, " [°]");
+            setText("p_al", p.al, " [km]");
+            const t_tim = p.t;
+            if (t_tim) {
+                document.getElementById("p_t").textContent = formatUnixTime(t_tim);
+            } else {
+                document.getElementById("p_t").textContent = DEF_STR;
+            }
+
+            const a = data.a || {};
+            const az_ant = Number(p.az ?? 0) + Number(a.o_a ?? 0);
+            const el_ant = Number(p.el ?? 0) + Number(a.o_e ?? 0);
+
+            setText("a_a", az_ant, " [°]");
+            setText("a_e", el_ant, " [°]");
+            setText("a_of_a", a.o_a, " [°]");
+            setText("a_of_e", a.o_e, " [°]");
+
+            //Graphs
+            pushBuffer(x, formatUnixTimeMMSS(t_tim));
+            pushBuffer(az1, st.a);
+            pushBuffer(az2, p.az);
+            pushBuffer(el1, st.e);
+            pushBuffer(el2, p.el);
+
+            drawLineChart("chart_az", x, az1, az2);
+            drawLineChart("chart_el", x, el1, el2);
+        }
+
+        // Toggle Tracking
+        function updateBtnState(state) {
+            const trackBtn = document.querySelector('.track-button');
+            if (!trackBtn) return;
+
+            trackBtn.classList.toggle('tracking', state);
+        }
 
         function toggleTracking() {
             fetch("/toggle_tracking", {
@@ -482,9 +741,8 @@
             })
                 .then(data => {
                     const reason = data.reason;
-                    const tracking = data.tracking;
 
-                    if (tracking) {
+                    if (data.tracking) {
                         alert("✅ Seguimiento iniciado");
                     } else {
                         if (reason == "none") {
@@ -495,14 +753,21 @@
                             alert("❌ No hay GPS Fix.");
                         }
                     }
-                    
-                    updateBtnState(tracking);
+
                 })
                 .catch(error => {
                     console.error("Fetch error:", error);
-                    trackButton.classList.remove('tracking');
                     alert("❌ Error de conexión.");
                 });
+        }
+
+        //Send Manual Data
+        function checkAngles(el, az) {
+            if (isNaN(az) || isNaN(el) || az < 0.0 || az > 360.0 || el < 0.0 || el > 90.0) {
+                alert("❌ Ingrese rangos válidos.");
+                return false;
+            }
+            return true;
         }
 
         function sendManualData() {
@@ -519,7 +784,6 @@
                 body: JSON.stringify(payload)
             }).then(res => {
                 if (res.ok) {
-                    updateBtnState(true);
                     alert("✅ Modo Manual Activado.");
                 }
                 else {
@@ -528,16 +792,10 @@
             }).catch(error => console.error('Error de red ', error));
         }
 
-        function updateBtnState(state) {
-            const trackBtn = document.querySelector('.track-button');
-            if (!trackBtn) return;
-
-            trackBtn.classList.toggle('tracking', state);
-        }
-
+        //Save Offsets
         function saveOffsets() {
-            const az = parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value);
-            const el = parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value);
+            const az = Number(parseFloat(document.getElementById("az-of").value) + parseFloat(document.getElementById("mag-of").value)).toFixed(2);
+            const el = Number(parseFloat(document.getElementById("el-of").value) + parseFloat(document.getElementById("ant-of").value)).toFixed(2);
 
             if (!checkAngles(el, az))
                 return;
@@ -551,6 +809,47 @@
             }).then(res => {
                 alert(res.ok ? "✅ Configuración guardada " : "❌ Error código: " + res.status);
             }).catch(error => console.error('Error Saving:', error));
+        }
+
+        //Save TLE
+        function isValidTLE(tleLines) {
+            if (tleLines.length !== 3) {
+                return false;
+            }
+
+            const name = tleLines[0].trim();
+            const line1 = tleLines[1].trim();
+            const line2 = tleLines[2].trim();
+
+            if (line1.length !== 69 || line2.length !== 69) {
+                return false;
+            }
+
+            if (line1.charAt(0) !== '1' || line2.charAt(0) !== '2') {
+                return false;
+            }
+
+            if (!__checkSumTLE(line1) || !__checkSumTLE(line2)) {
+                return false;
+            }
+            return true;
+        }
+
+        function __checkSumTLE(str) {
+            let sum = 0;
+            const checkSumIndex = str.length - 1;
+            for (let i = 0; i < checkSumIndex; i++) {
+                const char = str.charAt(i);
+
+                if (char >= '0' && char <= '9') {
+                    sum += parseInt(char);
+                } else if (char === '-') {
+                    sum += 1;
+                }
+            }
+            const calculatedCheckSum = sum % 10;
+            const expectedCheckSum = parseInt(str.charAt(checkSumIndex));
+            return calculatedCheckSum === expectedCheckSum;
         }
 
         function saveTle() {
@@ -577,154 +876,7 @@
             }).catch(error => console.error('Error Saving:', error));
         }
 
-        function updateData() {
-            fetch("/data")
-                .then(response => {
-                    if (!response.ok) throw new Error('API no disponible');
-                    return response.json();
-                })
-                .then(data => {
-                    const setText = (id, value, suffix = "") => {
-                        document.getElementById(id).textContent = (value !== undefined && value !== null) ? value + suffix : DEF_STR;
-                    };
-
-                    setText("name", data.name);
-                    setText("s_lon", data.s_lon);
-                    setText("s_lat", data.s_lat);
-                    setText("s_alt", data.s_alt, "[km]");
-                    setText("s_az", data.s_az, "[°]");
-                    setText("s_el", data.s_el, "[°]");
-                    setText("stat", data.stat);
-                    setText("t_lon", data.t_lon);
-                    setText("t_lat", data.t_lat);
-                    setText("t_alt", data.t_alt, "[km]");
-                    setText("a_az", data.a_az, "[°]");
-                    setText("a_el", data.a_el, "[°]");
-                    setText("az_off", data.az_off, "[°]");
-                    setText("el_off", data.el_off, "[°]");
-
-                    const t_tim_val = data.t_tim;
-                    if (t_tim_val) {
-                        document.getElementById("t_tim").textContent = formatUnixTime(t_tim_val);
-                    } else {
-                        document.getElementById("t_tim").textContent = DEF_STR;
-                    }
-
-                    pushBuffer(x, formatUnixTimeMMSS(data.t_tim));
-                    pushBuffer(az1, data.s_az + data.az_off);
-                    pushBuffer(az2, data.a_az);
-                    pushBuffer(el1, data.s_el + data.el_off);
-                    pushBuffer(el2, data.a_el);
-
-                    drawLineChart("chart_az", x, az1, az2);
-                    drawLineChart("chart_el", x, el1, el2);
-                })
-                .catch(error => {
-                    console.error('Error en datos:', error);
-                });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.page-section');
-            const pageTitle = document.getElementById('page-title');
-
-            function showPage(pageId) {
-                if (updateInterval) {
-                    clearInterval(updateInterval);
-                    updateInterval = null;
-                }
-
-                sections.forEach(section => section.classList.remove('active'));
-                navLinks.forEach(link => link.classList.remove('active'));
-
-                const activeSection = document.getElementById(pageId);
-                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
-
-                if (activeSection && activeLink) {
-                    activeSection.classList.add('active');
-                    activeLink.classList.add('active');
-                    pageTitle.textContent = activeLink.textContent.trim();
-
-                    if (pageId === 'Telemetría') {
-                        updateData();
-                        updateInterval = setInterval(updateData, 2000);
-                    }
-                }
-            }
-            showPage('Telemetría');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const pageId = e.currentTarget.getAttribute('data-page');
-                    showPage(pageId);
-                });
-            });
-        });
-
-        function formatUnixTime(unixTimestamp) {
-            const date = new Date(unixTimestamp * 1000);
-            const options = {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hourCycle: 'h23'
-            };
-            const formattedDate = new Intl.DateTimeFormat('es-AR', options).format(date);
-
-            return formattedDate;
-        }
-
-        function __checkSumTLE(str) {
-            let sum = 0;
-            const checkSumIndex = str.length - 1;
-            for (let i = 0; i < checkSumIndex; i++) {
-                const char = str.charAt(i);
-
-                if (char >= '0' && char <= '9') {
-                    sum += parseInt(char);
-                } else if (char === '-') {
-                    sum += 1;
-                }
-            }
-            const calculatedCheckSum = sum % 10;
-            const expectedCheckSum = parseInt(str.charAt(checkSumIndex));
-            return calculatedCheckSum === expectedCheckSum;
-        }
-
-        function isValidTLE(tleLines) {
-            if (tleLines.length !== 3) {
-                return false;
-            }
-
-            const name = tleLines[0].trim();
-            const line1 = tleLines[1].trim();
-            const line2 = tleLines[2].trim();
-
-            if (line1.length !== 69 || line2.length !== 69) {
-                return false;
-            }
-
-            if (line1.charAt(0) !== '1' || line2.charAt(0) !== '2') {
-                return false;
-            }
-
-            if (!__checkSumTLE(line1) || !__checkSumTLE(line2)) {
-                return false;
-            }
-            return true;
-        }
-
-        function checkAngles(el, az) {
-            if (isNaN(az) || isNaN(el) || az < 0.0 || az > 360.0 || el < 0.0 || el > 90.0) {
-                alert("❌ Ingrese rangos válidos.");
-                return false;
-            }
-            return true;
-        }
-
+        //Send Geo-Time
         function sendGeoTime() {
             const geoOptions = {
                 enableHighAccuracy: true,
@@ -772,100 +924,52 @@
             }, geoOptions);
         }
 
-        function drawLineChart(svgId, x, y1, y2) {
-            const margin = { top: 5, right: 15, bottom: 20, left: 25 };
-            const svg = document.getElementById(svgId);
-            const W = svg.clientWidth;
-            const H = svg.clientHeight;
-            const iw = W - margin.left - margin.right;
-            const ih = H - margin.top - margin.bottom;
-            const ticks = 5;
-            const minY = Math.min(...y1, ...y2);
-            const maxY = Math.max(...y1, ...y2);
+        // Reset
+        function resetMCU() {
+            fetch("/reset", {
+                method: "POST"
+            }).then(res => {
+                if (res.ok) {
+                    alert("✅ Reinicio enviado.");
+                    window.location.reload();
+                } else {
+                    alert("❌ Error código: " + res.status);
+                }
+            }).catch(error => console.error('Error de red ', error));
+        }
 
-            const scaleX = i =>
-                margin.left + (i / (x.length - 1)) * iw;
-            const scaleY = v =>
-                margin.top + ih - ((v - minY) / (maxY - minY)) * ih;
-            const line = y =>
-                y.map((v, i) => `${scaleX(i)},${scaleY(v)}`).join(" ");
+        //START
+        document.addEventListener('DOMContentLoaded', function () {
+            connectSSE();
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.page-section');
+            const pageTitle = document.getElementById('page-title');
 
-            let grid = "";
-            let labels = "";
+            function showPage(pageId) {
+                sections.forEach(section => section.classList.remove('active'));
+                navLinks.forEach(link => link.classList.remove('active'));
 
-            for (let i = 0; i <= ticks; i++) {
-                const yVal = minY + (i / ticks) * (maxY - minY);
-                const yPos = scaleY(yVal);
+                const activeSection = document.getElementById(pageId);
+                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
 
-                grid += `
-                <line x1="${margin.left}" y1="${yPos}"
-                        x2="${W - margin.right}" y2="${yPos}"
-                        stroke="#333" stroke-dasharray="2 4"/>
-                `;
-
-                labels += `
-                <text x="25" y="${yPos + 4}"
-                        font-size="10" fill="#f0f0f0"
-                        text-anchor="end">${yVal.toFixed(1)}</text>
-                `;
+                if (activeSection && activeLink) {
+                    activeSection.classList.add('active');
+                    activeLink.classList.add('active');
+                    pageTitle.textContent = activeLink.textContent.trim();
+                }
             }
-
-            x.forEach((label, i) => {
-                const xPos = scaleX(i);
-
-                grid += `
-                <line x1="${xPos}" y1="${margin.top}"
-                        x2="${xPos}" y2="${H - margin.bottom}"
-                        stroke="#333" stroke-dasharray="2 4"/>
-                `;
-
-                labels += `
-                <text x="${xPos}" y="${H - 5}"
-                        font-size="10" fill="#f0f0f0"
-                        text-anchor="middle">${label}</text>
-                `;
+            
+            showPage('Telemetría');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const pageId = e.currentTarget.getAttribute('data-page');
+                    showPage(pageId);
+                });
             });
-
-            svg.innerHTML = `
-                ${grid}
-
-                <!-- Ejes -->
-                <line x1="${margin.left}" y1="${H - margin.bottom}"
-                    x2="${W - margin.right}" y2="${H - margin.bottom}"
-                    stroke="#aaa"/>
-
-                <line x1="${margin.left}" y1="${margin.top}"
-                    x2="${margin.left}" y2="${H - margin.bottom}"
-                    stroke="#aaa"/>
-
-                ${labels}
-
-                <!-- Líneas -->
-                <polyline fill="none" stroke="#007bff"
-                        stroke-width="2" points="${line(y1)}"/>
-
-                <polyline fill="none" stroke="#dc3545"
-                        stroke-width="2" points="${line(y2)}"/>
-            `;
-        }
-
-        function pushBuffer(arr, value) {
-            arr.push(value);
-            if (arr.length > MAX) arr.shift();
-        }
-
-        function formatUnixTimeMMSS(unix) {
-            if (typeof unix !== "number" || isNaN(unix)) return "--";
-            const d = new Date(unix * 1000);
-            if (isNaN(d.getTime())) return "--";
-            const mm = String(d.getMinutes()).padStart(2, "0");
-            const ss = String(d.getSeconds()).padStart(2, "0");
-            return `${mm}:${ss}`;
-        }
+        });
 
         drawLineChart("chart_az", x, az1, az2);
         drawLineChart("chart_el", x, el1, el2);
-
     </script>
 </body>
 

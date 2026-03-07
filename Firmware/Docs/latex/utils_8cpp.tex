@@ -1,0 +1,289 @@
+\doxysection{src/\+utils.cpp File Reference}
+\hypertarget{utils_8cpp}{}\label{utils_8cpp}\index{src/utils.cpp@{src/utils.cpp}}
+{\ttfamily \+\#include "{}utils.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{utils_8cpp_a3f98e11f168e7ebded2d2875dcc53d15}{config\+Satellite}} (Sgp4 \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}})
+\begin{DoxyCompactList}\small\item\em Loads TLE data from NVS and configures the given Sgp4 object. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{utils_8cpp_a62dde60c7ccbfdf2485f766d6b6d5922}{get\+Saved\+Offsets}} (void)
+\begin{DoxyCompactList}\small\item\em Reads saved azimuth and elevation offsets from NVS. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8cpp_a9337eb14ab020193580abd312d1fbb50}{save\+TLE}} (String name, String line1, String line2)
+\begin{DoxyCompactList}\small\item\em Saves TLE data to NVS. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8cpp_a89b23cbd2db895bd4069a8a9bd33506a}{save\+Offsets}} (float offset\+\_\+az, float offset\+\_\+el)
+\begin{DoxyCompactList}\small\item\em Saves Offsets data to NVS.\end{DoxyCompactList}\item 
+unsigned long \doxymbox{\hyperlink{utils_8cpp_a7db34d0acfcfc9f7997160c378606503}{get\+Unix\+Time\+From\+GPS}} (Tiny\+GPSPlus \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}})
+\begin{DoxyCompactList}\small\item\em Extracts the current Unix timestamp from a Tiny\+GPSPlus instance. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8cpp_a740ca551badb5dd0d8f5e32aee48b493}{config\+Control\+Timer}} (void(\texorpdfstring{$\ast$}{*}timer\+ISR)(void \texorpdfstring{$\ast$}{*}), uint64\+\_\+t sample\+\_\+time\+\_\+us)
+\begin{DoxyCompactList}\small\item\em Configures an ESP32 hardware timer to generate periodic interrupts. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8cpp_af214a00ea6b069c59001e2d6a1370063}{init\+\_\+elevation\+\_\+lut}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the elevation lookup table (LUT). \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8cpp_ac9b39096fcead1abd4f373deb01d3b42}{elevation\+\_\+mm\+\_\+from\+\_\+deg\+\_\+lut}} (float deg)
+\begin{DoxyCompactList}\small\item\em Retrieves a distance value from the LUT based on the input angle. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8cpp_afc00f5f63690bee3e235a9f7be532376}{elevation\+\_\+deg\+\_\+from\+\_\+mm\+\_\+lut}} (float mm)
+\begin{DoxyCompactList}\small\item\em Retrieves a degree value from the LUT based on the input mm. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8cpp_a81de41623d708a4bbbe5f33630d13cf8}{elevation\+\_\+mm\+\_\+from\+\_\+deg}} (float deg)
+\begin{DoxyCompactList}\small\item\em Computes the non linearity of elevation. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8cpp_a717eb2cedac354fdc44bef69e6ede98a}{elevation\+\_\+deg\+\_\+from\+\_\+mm}} (float mm)
+\begin{DoxyCompactList}\small\item\em Computes the non linearity of elevation. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8cpp_acc2313d78818323e2d30ed5226c4d7c0}{set\+Time}} (unsigned long unix\+Time)
+\item 
+unsigned long \doxymbox{\hyperlink{utils_8cpp_a920af668a5907f81c684537724aab31d}{jd\+To\+Unix}} (double jd)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{utils_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}UTILS"{}
+\item 
+static const float \doxymbox{\hyperlink{utils_8cpp_ae1af24e1877f25bf2de80ba74c0f68d6}{A\+\_\+\+CONST}} = 3.\+0f \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{utils_8h_a193913ea25238426ec5f9cbe3f2fb40b}{PI\+\_\+\+FLOAT}} /\+ 2.\+0f -\/ atan2f(\doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}, \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}}) -\/ atan2f(\doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}}, \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}})
+\item 
+static const float \doxymbox{\hyperlink{utils_8cpp_a19c2b9ec618c21d783beb1ccf5f119f7}{B\+\_\+\+CONST}} = 2.\+0f \texorpdfstring{$\ast$}{*} sqrtf((\doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}}) \texorpdfstring{$\ast$}{*} (\doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}))
+\item 
+static const float \doxymbox{\hyperlink{utils_8cpp_ae9a14ee2d114df6cfdb14b0711e3c204}{C\+\_\+\+CONST}} = \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} -\/ \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}}
+\item 
+static float \doxymbox{\hyperlink{utils_8cpp_ab7196fde6d5da0c354ebd3d33765dc57}{elevation\+\_\+lut\+\_\+mm}} \+[\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}}+1]\+
+\item 
+static float \doxymbox{\hyperlink{utils_8cpp_ab67acce58bc8c575bcb890e7902aee1a}{elevation\+\_\+lut\+\_\+deg}} \+[\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}}+1]\+
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{utils_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{utils_8cpp_a740ca551badb5dd0d8f5e32aee48b493}\index{utils.cpp@{utils.cpp}!configControlTimer@{configControlTimer}}
+\index{configControlTimer@{configControlTimer}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{configControlTimer()}{configControlTimer()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a740ca551badb5dd0d8f5e32aee48b493} 
+void config\+Control\+Timer (\begin{DoxyParamCaption}\item[{void(\texorpdfstring{$\ast$}{*}}]{timer\+ISR~}{)(void \texorpdfstring{$\ast$}{*}), }\item[{uint64\+\_\+t}]{sample\+\_\+time\+\_\+us}{ = {\ttfamily \doxymbox{\hyperlink{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}{DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US}}}}\end{DoxyParamCaption})}
+
+
+
+Configures an ESP32 hardware timer to generate periodic interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer\+ISR} & Pointer to the function executed on each timer interrupt. \\
+\hline
+{\em sample\+\_\+time\+\_\+us} & Timer period in microseconds (default:\+ DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8cpp_a3f98e11f168e7ebded2d2875dcc53d15}\index{utils.cpp@{utils.cpp}!configSatellite@{configSatellite}}
+\index{configSatellite@{configSatellite}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{configSatellite()}{configSatellite()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a3f98e11f168e7ebded2d2875dcc53d15} 
+bool config\+Satellite (\begin{DoxyParamCaption}\item[{Sgp4 \texorpdfstring{$\ast$}{*}}]{satellite}{}\end{DoxyParamCaption})}
+
+
+
+Loads TLE data from NVS and configures the given Sgp4 object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}} & Pointer to the Sgp4 object to configure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if TLE data was successfully loaded and applied, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_a717eb2cedac354fdc44bef69e6ede98a}\index{utils.cpp@{utils.cpp}!elevation\_deg\_from\_mm@{elevation\_deg\_from\_mm}}
+\index{elevation\_deg\_from\_mm@{elevation\_deg\_from\_mm}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_deg\_from\_mm()}{elevation\_deg\_from\_mm()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a717eb2cedac354fdc44bef69e6ede98a} 
+float elevation\+\_\+deg\+\_\+from\+\_\+mm (\begin{DoxyParamCaption}\item[{float}]{mm}{}\end{DoxyParamCaption})}
+
+
+
+Computes the non linearity of elevation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mm} & distance in mm. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+degrees. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_afc00f5f63690bee3e235a9f7be532376}\index{utils.cpp@{utils.cpp}!elevation\_deg\_from\_mm\_lut@{elevation\_deg\_from\_mm\_lut}}
+\index{elevation\_deg\_from\_mm\_lut@{elevation\_deg\_from\_mm\_lut}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_deg\_from\_mm\_lut()}{elevation\_deg\_from\_mm\_lut()}}
+{\footnotesize\ttfamily \label{utils_8cpp_afc00f5f63690bee3e235a9f7be532376} 
+float elevation\+\_\+deg\+\_\+from\+\_\+mm\+\_\+lut (\begin{DoxyParamCaption}\item[{float}]{mm}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves a degree value from the LUT based on the input mm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mm} & distance in mm. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Interpolated degree from the LUT. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_a81de41623d708a4bbbe5f33630d13cf8}\index{utils.cpp@{utils.cpp}!elevation\_mm\_from\_deg@{elevation\_mm\_from\_deg}}
+\index{elevation\_mm\_from\_deg@{elevation\_mm\_from\_deg}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_mm\_from\_deg()}{elevation\_mm\_from\_deg()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a81de41623d708a4bbbe5f33630d13cf8} 
+float elevation\+\_\+mm\+\_\+from\+\_\+deg (\begin{DoxyParamCaption}\item[{float}]{deg}{}\end{DoxyParamCaption})}
+
+
+
+Computes the non linearity of elevation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deg} & angle in degrees. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+distance in mm. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_ac9b39096fcead1abd4f373deb01d3b42}\index{utils.cpp@{utils.cpp}!elevation\_mm\_from\_deg\_lut@{elevation\_mm\_from\_deg\_lut}}
+\index{elevation\_mm\_from\_deg\_lut@{elevation\_mm\_from\_deg\_lut}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_mm\_from\_deg\_lut()}{elevation\_mm\_from\_deg\_lut()}}
+{\footnotesize\ttfamily \label{utils_8cpp_ac9b39096fcead1abd4f373deb01d3b42} 
+float elevation\+\_\+mm\+\_\+from\+\_\+deg\+\_\+lut (\begin{DoxyParamCaption}\item[{float}]{deg}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves a distance value from the LUT based on the input angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deg} & Angle in degrees. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Interpolated distance from the LUT. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_a62dde60c7ccbfdf2485f766d6b6d5922}\index{utils.cpp@{utils.cpp}!getSavedOffsets@{getSavedOffsets}}
+\index{getSavedOffsets@{getSavedOffsets}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{getSavedOffsets()}{getSavedOffsets()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a62dde60c7ccbfdf2485f766d6b6d5922} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} get\+Saved\+Offsets (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Reads saved azimuth and elevation offsets from NVS. 
+
+\begin{DoxyReturn}{Returns}
+A structure containing the stored azimuth and elevation offsets. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_a7db34d0acfcfc9f7997160c378606503}\index{utils.cpp@{utils.cpp}!getUnixTimeFromGPS@{getUnixTimeFromGPS}}
+\index{getUnixTimeFromGPS@{getUnixTimeFromGPS}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{getUnixTimeFromGPS()}{getUnixTimeFromGPS()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a7db34d0acfcfc9f7997160c378606503} 
+unsigned long get\+Unix\+Time\+From\+GPS (\begin{DoxyParamCaption}\item[{Tiny\+GPSPlus \texorpdfstring{$\ast$}{*}}]{gps}{}\end{DoxyParamCaption})}
+
+
+
+Extracts the current Unix timestamp from a Tiny\+GPSPlus instance. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}} & Pointer to a valid Tiny\+GPSPlus object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Unix time in seconds since January 1, 1970. 
+\end{DoxyReturn}
+\Hypertarget{utils_8cpp_af214a00ea6b069c59001e2d6a1370063}\index{utils.cpp@{utils.cpp}!init\_elevation\_lut@{init\_elevation\_lut}}
+\index{init\_elevation\_lut@{init\_elevation\_lut}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{init\_elevation\_lut()}{init\_elevation\_lut()}}
+{\footnotesize\ttfamily \label{utils_8cpp_af214a00ea6b069c59001e2d6a1370063} 
+void init\+\_\+elevation\+\_\+lut (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the elevation lookup table (LUT). 
+
+\Hypertarget{utils_8cpp_a920af668a5907f81c684537724aab31d}\index{utils.cpp@{utils.cpp}!jdToUnix@{jdToUnix}}
+\index{jdToUnix@{jdToUnix}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{jdToUnix()}{jdToUnix()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a920af668a5907f81c684537724aab31d} 
+unsigned long jd\+To\+Unix (\begin{DoxyParamCaption}\item[{double}]{jd}{}\end{DoxyParamCaption})}
+
+\Hypertarget{utils_8cpp_a89b23cbd2db895bd4069a8a9bd33506a}\index{utils.cpp@{utils.cpp}!saveOffsets@{saveOffsets}}
+\index{saveOffsets@{saveOffsets}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{saveOffsets()}{saveOffsets()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a89b23cbd2db895bd4069a8a9bd33506a} 
+void save\+Offsets (\begin{DoxyParamCaption}\item[{float}]{offset\+\_\+az}{, }\item[{float}]{offset\+\_\+el}{}\end{DoxyParamCaption})}
+
+
+
+Saves Offsets data to NVS.
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset\+\_\+az} & Azimuth offset to be saved. \\
+\hline
+{\em offset\+\_\+el} & Elevation offset to be saved. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8cpp_a9337eb14ab020193580abd312d1fbb50}\index{utils.cpp@{utils.cpp}!saveTLE@{saveTLE}}
+\index{saveTLE@{saveTLE}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{saveTLE()}{saveTLE()}}
+{\footnotesize\ttfamily \label{utils_8cpp_a9337eb14ab020193580abd312d1fbb50} 
+void save\+TLE (\begin{DoxyParamCaption}\item[{String}]{name}{, }\item[{String}]{line1}{, }\item[{String}]{line2}{}\end{DoxyParamCaption})}
+
+
+
+Saves TLE data to NVS. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Satellite name. \\
+\hline
+{\em line1} & First TLE line. \\
+\hline
+{\em line2} & Second TLE line. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8cpp_acc2313d78818323e2d30ed5226c4d7c0}\index{utils.cpp@{utils.cpp}!setTime@{setTime}}
+\index{setTime@{setTime}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily \label{utils_8cpp_acc2313d78818323e2d30ed5226c4d7c0} 
+void set\+Time (\begin{DoxyParamCaption}\item[{unsigned long}]{unix\+Time}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{utils_8cpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{utils_8cpp_ae1af24e1877f25bf2de80ba74c0f68d6}\index{utils.cpp@{utils.cpp}!A\_CONST@{A\_CONST}}
+\index{A\_CONST@{A\_CONST}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{A\_CONST}{A\_CONST}}
+{\footnotesize\ttfamily \label{utils_8cpp_ae1af24e1877f25bf2de80ba74c0f68d6} 
+const float A\+\_\+\+CONST = 3.\+0f \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{utils_8h_a193913ea25238426ec5f9cbe3f2fb40b}{PI\+\_\+\+FLOAT}} /\+ 2.\+0f -\/ atan2f(\doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}, \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}}) -\/ atan2f(\doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}}, \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{utils_8cpp_a19c2b9ec618c21d783beb1ccf5f119f7}\index{utils.cpp@{utils.cpp}!B\_CONST@{B\_CONST}}
+\index{B\_CONST@{B\_CONST}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{B\_CONST}{B\_CONST}}
+{\footnotesize\ttfamily \label{utils_8cpp_a19c2b9ec618c21d783beb1ccf5f119f7} 
+const float B\+\_\+\+CONST = 2.\+0f \texorpdfstring{$\ast$}{*} sqrtf((\doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}}) \texorpdfstring{$\ast$}{*} (\doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}))\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{utils_8cpp_ae9a14ee2d114df6cfdb14b0711e3c204}\index{utils.cpp@{utils.cpp}!C\_CONST@{C\_CONST}}
+\index{C\_CONST@{C\_CONST}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{C\_CONST}{C\_CONST}}
+{\footnotesize\ttfamily \label{utils_8cpp_ae9a14ee2d114df6cfdb14b0711e3c204} 
+const float C\+\_\+\+CONST = \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}} + \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}} -\/ \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}}\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{utils_8cpp_ab67acce58bc8c575bcb890e7902aee1a}\index{utils.cpp@{utils.cpp}!elevation\_lut\_deg@{elevation\_lut\_deg}}
+\index{elevation\_lut\_deg@{elevation\_lut\_deg}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_lut\_deg}{elevation\_lut\_deg}}
+{\footnotesize\ttfamily \label{utils_8cpp_ab67acce58bc8c575bcb890e7902aee1a} 
+float elevation\+\_\+lut\+\_\+deg\+[\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}}+1]\+\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{utils_8cpp_ab7196fde6d5da0c354ebd3d33765dc57}\index{utils.cpp@{utils.cpp}!elevation\_lut\_mm@{elevation\_lut\_mm}}
+\index{elevation\_lut\_mm@{elevation\_lut\_mm}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{elevation\_lut\_mm}{elevation\_lut\_mm}}
+{\footnotesize\ttfamily \label{utils_8cpp_ab7196fde6d5da0c354ebd3d33765dc57} 
+float elevation\+\_\+lut\+\_\+mm\+[\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}}+1]\+\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{utils_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{utils.cpp@{utils.cpp}!TAG@{TAG}}
+\index{TAG@{TAG}!utils.cpp@{utils.cpp}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{utils_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}UTILS"{}\hspace{0.3cm}{\ttfamily [static]}}
+

@@ -1,0 +1,523 @@
+\doxysection{include/\+utils.h File Reference}
+\hypertarget{utils_8h}{}\label{utils_8h}\index{include/utils.h@{include/utils.h}}
+{\ttfamily \+\#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdint.\+h$>$}\newline
+{\ttfamily \+\#include $<$Preferences.\+h$>$}\newline
+{\ttfamily \+\#include $<$Sgp4.\+h$>$}\newline
+{\ttfamily \+\#include $<$Tiny\+GPSPlus.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+time.\+h$>$}\newline
+{\ttfamily \+\#include $<$math.\+h$>$}\newline
+{\ttfamily \+\#include "{}driver/\+timer.\+h"{}}\newline
+{\ttfamily \+\#include "{}configurations.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}}~45
+\begin{DoxyCompactList}\small\item\em Lookup Table (LUT) size for elevation calculation. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_a193913ea25238426ec5f9cbe3f2fb40b}{PI\+\_\+\+FLOAT}}~3.\+1415926535f
+\begin{DoxyCompactList}\small\item\em PI constant in float precision. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}{MAX\+\_\+\+EXTENSION\+\_\+mm}}~450 -\/ \doxymbox{\hyperlink{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}{BP\+\_\+\+ANT}}
+\begin{DoxyCompactList}\small\item\em Max extension in mm of the linear actuator. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}{MAX\+\_\+\+ELEVATION\+\_\+deg}}~90.\+0f
+\begin{DoxyCompactList}\small\item\em Max elevation in degrees. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_ad555d21ae860f085552c7eb68b600cd9}{ANGLE\+\_\+\+STEP}}~(\doxymbox{\hyperlink{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}{MAX\+\_\+\+ELEVATION\+\_\+deg}} /\+ (float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em Angular step in radians for the LUT (90° /\+ LUT\+\_\+\+SIZE). \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_a06159d1209d605909ba500071327eef7}{MM\+\_\+\+STEP}}~(\doxymbox{\hyperlink{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}{MAX\+\_\+\+EXTENSION\+\_\+mm}} /\+ (float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}})
+\begin{DoxyCompactList}\small\item\em step in mm for the LUT. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_ae1fa054cf7fcfea80234830bef0f37cf}{INV\+\_\+\+DEG\+\_\+\+TO\+\_\+\+LUT\+\_\+\+POS}}~((float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}} /\+ \doxymbox{\hyperlink{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}{MAX\+\_\+\+ELEVATION\+\_\+deg}})
+\begin{DoxyCompactList}\small\item\em Precomputed factor to convert degrees to LUT index. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{utils_8h_a2dab95540fea3967471fecd7d9802949}{INV\+\_\+\+MM\+\_\+\+TO\+\_\+\+LUT\+\_\+\+POS}}~((float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}} /\+ \doxymbox{\hyperlink{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}{MAX\+\_\+\+EXTENSION\+\_\+mm}})
+\begin{DoxyCompactList}\small\item\em Precomputed factor to convert mm to LUT index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eac}{error\+Code\+\_\+t}} \{ \newline
+\doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eacaff67568fe805bd7db360df2083f619e8}{TRACKER\+\_\+\+ERROR\+\_\+\+NONE}} = 0
+, \doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eacab1ce6667b386c13bdcd9dcff0941c786}{TRACKER\+\_\+\+ERROR\+\_\+\+SOFT\+\_\+\+ENDSTOP}} = 1
+, \doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eaca7f48686adfcafd2c0a6cdf632ff57239}{TRACKER\+\_\+\+ERROR\+\_\+\+OVERCURRENT\+\_\+\+AZ}} = 2
+, \doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eacab9313257aacbd3040dd97aa2b4fc0b79}{TRACKER\+\_\+\+ERROR\+\_\+\+OVERCURRENT\+\_\+\+EL}} = 3
+, \newline
+\doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eaca74116c88aa3f88c77efe8c4d5aa8d133}{TRACKER\+\_\+\+ERROR\+\_\+\+UNKNOWN}} = 4
+ \}
+\item 
+enum \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} \{ \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098aa26736999186daf8146f809e863712a1}{FORWARD}}
+, \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098afed2fca77e454294d6b8bda1bf2c9fd6}{BACKWARD}}
+, \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098a948b2aee15f52b421fa4770c47bcfe8c}{STOPPED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Direction type for counting or motor rotation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{utils_8h_ab898071398b359603a35c202e9c65f3b}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((packed))
+\begin{DoxyCompactList}\small\item\em Status flags for the satellite tracking system. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{utils_8h_a3f98e11f168e7ebded2d2875dcc53d15}{config\+Satellite}} (Sgp4 \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}})
+\begin{DoxyCompactList}\small\item\em Loads TLE data from NVS and configures the given Sgp4 object. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922}{get\+Saved\+Offsets}} (void)
+\begin{DoxyCompactList}\small\item\em Reads saved azimuth and elevation offsets from NVS. \end{DoxyCompactList}\item 
+unsigned long \doxymbox{\hyperlink{utils_8h_a7db34d0acfcfc9f7997160c378606503}{get\+Unix\+Time\+From\+GPS}} (Tiny\+GPSPlus \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}})
+\begin{DoxyCompactList}\small\item\em Extracts the current Unix timestamp from a Tiny\+GPSPlus instance. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8h_a189ac2192418b0a3dd09a2550cc6759a}{config\+Control\+Timer}} (void(\texorpdfstring{$\ast$}{*}timer\+ISR)(void \texorpdfstring{$\ast$}{*}), uint64\+\_\+t sample\+\_\+time\+\_\+us=\doxymbox{\hyperlink{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}{DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US}})
+\begin{DoxyCompactList}\small\item\em Configures an ESP32 hardware timer to generate periodic interrupts. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8h_a9337eb14ab020193580abd312d1fbb50}{save\+TLE}} (String name, String line1, String line2)
+\begin{DoxyCompactList}\small\item\em Saves TLE data to NVS. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8h_a89b23cbd2db895bd4069a8a9bd33506a}{save\+Offsets}} (float offset\+\_\+az, float offset\+\_\+el)
+\begin{DoxyCompactList}\small\item\em Saves Offsets data to NVS.\end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8h_af214a00ea6b069c59001e2d6a1370063}{init\+\_\+elevation\+\_\+lut}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the elevation lookup table (LUT). \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8h_a717eb2cedac354fdc44bef69e6ede98a}{elevation\+\_\+deg\+\_\+from\+\_\+mm}} (float mm)
+\begin{DoxyCompactList}\small\item\em Computes the non linearity of elevation. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8h_a81de41623d708a4bbbe5f33630d13cf8}{elevation\+\_\+mm\+\_\+from\+\_\+deg}} (float deg)
+\begin{DoxyCompactList}\small\item\em Computes the non linearity of elevation. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8h_ac9b39096fcead1abd4f373deb01d3b42}{elevation\+\_\+mm\+\_\+from\+\_\+deg\+\_\+lut}} (float deg)
+\begin{DoxyCompactList}\small\item\em Retrieves a distance value from the LUT based on the input angle. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{utils_8h_afc00f5f63690bee3e235a9f7be532376}{elevation\+\_\+deg\+\_\+from\+\_\+mm\+\_\+lut}} (float mm)
+\begin{DoxyCompactList}\small\item\em Retrieves a degree value from the LUT based on the input mm. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{utils_8h_acc2313d78818323e2d30ed5226c4d7c0}{set\+Time}} (unsigned long unix\+Time)
+\item 
+unsigned long \doxymbox{\hyperlink{utils_8h_a920af668a5907f81c684537724aab31d}{jd\+To\+Unix}} (double jd)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Preferences \doxymbox{\hyperlink{utils_8h_a95d592edb81dd40b1f9085628e7698a8}{config}}
+\begin{DoxyCompactList}\small\item\em External reference to the global Preferences storage handler. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}}
+\item 
+\doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{utils_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{utils_8h_ad555d21ae860f085552c7eb68b600cd9}\index{utils.h@{utils.h}!ANGLE\_STEP@{ANGLE\_STEP}}
+\index{ANGLE\_STEP@{ANGLE\_STEP}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{ANGLE\_STEP}{ANGLE\_STEP}}
+{\footnotesize\ttfamily \label{utils_8h_ad555d21ae860f085552c7eb68b600cd9} 
+\+\#define ANGLE\+\_\+\+STEP~(\doxymbox{\hyperlink{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}{MAX\+\_\+\+ELEVATION\+\_\+deg}} /\+ (float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}})}
+
+
+
+Angular step in radians for the LUT (90° /\+ LUT\+\_\+\+SIZE). 
+
+\Hypertarget{utils_8h_ae1fa054cf7fcfea80234830bef0f37cf}\index{utils.h@{utils.h}!INV\_DEG\_TO\_LUT\_POS@{INV\_DEG\_TO\_LUT\_POS}}
+\index{INV\_DEG\_TO\_LUT\_POS@{INV\_DEG\_TO\_LUT\_POS}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{INV\_DEG\_TO\_LUT\_POS}{INV\_DEG\_TO\_LUT\_POS}}
+{\footnotesize\ttfamily \label{utils_8h_ae1fa054cf7fcfea80234830bef0f37cf} 
+\+\#define INV\+\_\+\+DEG\+\_\+\+TO\+\_\+\+LUT\+\_\+\+POS~((float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}} /\+ \doxymbox{\hyperlink{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}{MAX\+\_\+\+ELEVATION\+\_\+deg}})}
+
+
+
+Precomputed factor to convert degrees to LUT index. 
+
+\Hypertarget{utils_8h_a2dab95540fea3967471fecd7d9802949}\index{utils.h@{utils.h}!INV\_MM\_TO\_LUT\_POS@{INV\_MM\_TO\_LUT\_POS}}
+\index{INV\_MM\_TO\_LUT\_POS@{INV\_MM\_TO\_LUT\_POS}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{INV\_MM\_TO\_LUT\_POS}{INV\_MM\_TO\_LUT\_POS}}
+{\footnotesize\ttfamily \label{utils_8h_a2dab95540fea3967471fecd7d9802949} 
+\+\#define INV\+\_\+\+MM\+\_\+\+TO\+\_\+\+LUT\+\_\+\+POS~((float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}} /\+ \doxymbox{\hyperlink{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}{MAX\+\_\+\+EXTENSION\+\_\+mm}})}
+
+
+
+Precomputed factor to convert mm to LUT index. 
+
+\Hypertarget{utils_8h_aebfcb45923a56e8581fda080243ec5bb}\index{utils.h@{utils.h}!LUT\_SIZE@{LUT\_SIZE}}
+\index{LUT\_SIZE@{LUT\_SIZE}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{LUT\_SIZE}{LUT\_SIZE}}
+{\footnotesize\ttfamily \label{utils_8h_aebfcb45923a56e8581fda080243ec5bb} 
+\+\#define LUT\+\_\+\+SIZE~45}
+
+
+
+Lookup Table (LUT) size for elevation calculation. 
+
+\Hypertarget{utils_8h_aa917384de7e7ec76e8b267d7e71b3606}\index{utils.h@{utils.h}!MAX\_ELEVATION\_deg@{MAX\_ELEVATION\_deg}}
+\index{MAX\_ELEVATION\_deg@{MAX\_ELEVATION\_deg}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_ELEVATION\_deg}{MAX\_ELEVATION\_deg}}
+{\footnotesize\ttfamily \label{utils_8h_aa917384de7e7ec76e8b267d7e71b3606} 
+\+\#define MAX\+\_\+\+ELEVATION\+\_\+deg~90.\+0f}
+
+
+
+Max elevation in degrees. 
+
+\Hypertarget{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}\index{utils.h@{utils.h}!MAX\_EXTENSION\_mm@{MAX\_EXTENSION\_mm}}
+\index{MAX\_EXTENSION\_mm@{MAX\_EXTENSION\_mm}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_EXTENSION\_mm}{MAX\_EXTENSION\_mm}}
+{\footnotesize\ttfamily \label{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da} 
+\+\#define MAX\+\_\+\+EXTENSION\+\_\+mm~450 -\/ \doxymbox{\hyperlink{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}{BP\+\_\+\+ANT}}}
+
+
+
+Max extension in mm of the linear actuator. 
+
+\Hypertarget{utils_8h_a06159d1209d605909ba500071327eef7}\index{utils.h@{utils.h}!MM\_STEP@{MM\_STEP}}
+\index{MM\_STEP@{MM\_STEP}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{MM\_STEP}{MM\_STEP}}
+{\footnotesize\ttfamily \label{utils_8h_a06159d1209d605909ba500071327eef7} 
+\+\#define MM\+\_\+\+STEP~(\doxymbox{\hyperlink{utils_8h_a3bd4e5b8bb9c9a45f8a6db48db1800da}{MAX\+\_\+\+EXTENSION\+\_\+mm}} /\+ (float)\doxymbox{\hyperlink{utils_8h_aebfcb45923a56e8581fda080243ec5bb}{LUT\+\_\+\+SIZE}})}
+
+
+
+step in mm for the LUT. 
+
+\Hypertarget{utils_8h_a193913ea25238426ec5f9cbe3f2fb40b}\index{utils.h@{utils.h}!PI\_FLOAT@{PI\_FLOAT}}
+\index{PI\_FLOAT@{PI\_FLOAT}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{PI\_FLOAT}{PI\_FLOAT}}
+{\footnotesize\ttfamily \label{utils_8h_a193913ea25238426ec5f9cbe3f2fb40b} 
+\+\#define PI\+\_\+\+FLOAT~3.\+1415926535f}
+
+
+
+PI constant in float precision. 
+
+
+
+\label{doc-enum-members}
+\Hypertarget{utils_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}\index{utils.h@{utils.h}!direction@{direction}}
+\index{direction@{direction}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{direction}{direction}}
+{\footnotesize\ttfamily \label{utils_8h_a99f26e6ee9fcd62f75203b5402df8098} 
+enum \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}}
+
+
+
+Direction type for counting or motor rotation. 
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FORWARD@{FORWARD}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!FORWARD@{FORWARD}}
+}\Hypertarget{utils_8h_a99f26e6ee9fcd62f75203b5402df8098aa26736999186daf8146f809e863712a1}\label{utils_8h_a99f26e6ee9fcd62f75203b5402df8098aa26736999186daf8146f809e863712a1} 
+FORWARD&Positive direction. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BACKWARD@{BACKWARD}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!BACKWARD@{BACKWARD}}
+}\Hypertarget{utils_8h_a99f26e6ee9fcd62f75203b5402df8098afed2fca77e454294d6b8bda1bf2c9fd6}\label{utils_8h_a99f26e6ee9fcd62f75203b5402df8098afed2fca77e454294d6b8bda1bf2c9fd6} 
+BACKWARD&Negative direction. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STOPPED@{STOPPED}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!STOPPED@{STOPPED}}
+}\Hypertarget{utils_8h_a99f26e6ee9fcd62f75203b5402df8098a948b2aee15f52b421fa4770c47bcfe8c}\label{utils_8h_a99f26e6ee9fcd62f75203b5402df8098a948b2aee15f52b421fa4770c47bcfe8c} 
+STOPPED&No movement. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eac}\index{utils.h@{utils.h}!errorCode\_t@{errorCode\_t}}
+\index{errorCode\_t@{errorCode\_t}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{errorCode\_t}{errorCode\_t}}
+{\footnotesize\ttfamily \label{utils_8h_a124755c819bc8940253539ec67404eac} 
+enum \doxymbox{\hyperlink{utils_8h_a124755c819bc8940253539ec67404eac}{error\+Code\+\_\+t}}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRACKER\_ERROR\_NONE@{TRACKER\_ERROR\_NONE}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!TRACKER\_ERROR\_NONE@{TRACKER\_ERROR\_NONE}}
+}\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eacaff67568fe805bd7db360df2083f619e8}\label{utils_8h_a124755c819bc8940253539ec67404eacaff67568fe805bd7db360df2083f619e8} 
+TRACKER\+\_\+\+ERROR\+\_\+\+NONE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRACKER\_ERROR\_SOFT\_ENDSTOP@{TRACKER\_ERROR\_SOFT\_ENDSTOP}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!TRACKER\_ERROR\_SOFT\_ENDSTOP@{TRACKER\_ERROR\_SOFT\_ENDSTOP}}
+}\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eacab1ce6667b386c13bdcd9dcff0941c786}\label{utils_8h_a124755c819bc8940253539ec67404eacab1ce6667b386c13bdcd9dcff0941c786} 
+TRACKER\+\_\+\+ERROR\+\_\+\+SOFT\+\_\+\+ENDSTOP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRACKER\_ERROR\_OVERCURRENT\_AZ@{TRACKER\_ERROR\_OVERCURRENT\_AZ}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!TRACKER\_ERROR\_OVERCURRENT\_AZ@{TRACKER\_ERROR\_OVERCURRENT\_AZ}}
+}\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eaca7f48686adfcafd2c0a6cdf632ff57239}\label{utils_8h_a124755c819bc8940253539ec67404eaca7f48686adfcafd2c0a6cdf632ff57239} 
+TRACKER\+\_\+\+ERROR\+\_\+\+OVERCURRENT\+\_\+\+AZ&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRACKER\_ERROR\_OVERCURRENT\_EL@{TRACKER\_ERROR\_OVERCURRENT\_EL}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!TRACKER\_ERROR\_OVERCURRENT\_EL@{TRACKER\_ERROR\_OVERCURRENT\_EL}}
+}\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eacab9313257aacbd3040dd97aa2b4fc0b79}\label{utils_8h_a124755c819bc8940253539ec67404eacab9313257aacbd3040dd97aa2b4fc0b79} 
+TRACKER\+\_\+\+ERROR\+\_\+\+OVERCURRENT\+\_\+\+EL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRACKER\_ERROR\_UNKNOWN@{TRACKER\_ERROR\_UNKNOWN}!utils.h@{utils.h}}
+\index{utils.h@{utils.h}!TRACKER\_ERROR\_UNKNOWN@{TRACKER\_ERROR\_UNKNOWN}}
+}\Hypertarget{utils_8h_a124755c819bc8940253539ec67404eaca74116c88aa3f88c77efe8c4d5aa8d133}\label{utils_8h_a124755c819bc8940253539ec67404eaca74116c88aa3f88c77efe8c4d5aa8d133} 
+TRACKER\+\_\+\+ERROR\+\_\+\+UNKNOWN&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{utils_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{utils_8h_ab898071398b359603a35c202e9c65f3b}\index{utils.h@{utils.h}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily \label{utils_8h_ab898071398b359603a35c202e9c65f3b} 
+struct \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(packed)}]{}{}\end{DoxyParamCaption})}
+
+
+
+Status flags for the satellite tracking system. 
+
+Represents the angular position of the antenna.
+
+Uses bit-\/fields to pack multiple status indicators and a 3-\/bit error code into a single byte. \texorpdfstring{$<$}{<} True if TLE data has been successfully loaded.
+
+\texorpdfstring{$<$}{<} True if GPS has a valid fix.
+
+\texorpdfstring{$<$}{<} True if antenna is in manual control mode.
+
+\texorpdfstring{$<$}{<} True if movement is active.
+
+\texorpdfstring{$<$}{<} internal error code.
+
+\texorpdfstring{$<$}{<} Reserved bits for future use.
+
+\texorpdfstring{$<$}{<} True if the mount has completed its homing procedure.
+
+\texorpdfstring{$<$}{<} True if the stop task is done
+
+\texorpdfstring{$<$}{<} True if the next pass prediction has been
+
+\texorpdfstring{$<$}{<} True if a system reset is pending.
+
+\texorpdfstring{$<$}{<} True if antenna offsets have been updated.
+
+\texorpdfstring{$<$}{<} True if TLE data has been updated.
+
+\texorpdfstring{$<$}{<} Reserved bits for future use.
+
+\texorpdfstring{$<$}{<} Azimuth angle in degrees (0–360).
+
+\texorpdfstring{$<$}{<} Elevation angle in degrees (0–90).\Hypertarget{utils_8h_a189ac2192418b0a3dd09a2550cc6759a}\index{utils.h@{utils.h}!configControlTimer@{configControlTimer}}
+\index{configControlTimer@{configControlTimer}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{configControlTimer()}{configControlTimer()}}
+{\footnotesize\ttfamily \label{utils_8h_a189ac2192418b0a3dd09a2550cc6759a} 
+void config\+Control\+Timer (\begin{DoxyParamCaption}\item[{void(\texorpdfstring{$\ast$}{*}}]{timer\+ISR~}{)(void \texorpdfstring{$\ast$}{*}), }\item[{uint64\+\_\+t}]{sample\+\_\+time\+\_\+us}{ = {\ttfamily \doxymbox{\hyperlink{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}{DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US}}}}\end{DoxyParamCaption})}
+
+
+
+Configures an ESP32 hardware timer to generate periodic interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer\+ISR} & Pointer to the function executed on each timer interrupt. \\
+\hline
+{\em sample\+\_\+time\+\_\+us} & Timer period in microseconds (default:\+ DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a3f98e11f168e7ebded2d2875dcc53d15}\index{utils.h@{utils.h}!configSatellite@{configSatellite}}
+\index{configSatellite@{configSatellite}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{configSatellite()}{configSatellite()}}
+{\footnotesize\ttfamily \label{utils_8h_a3f98e11f168e7ebded2d2875dcc53d15} 
+bool config\+Satellite (\begin{DoxyParamCaption}\item[{Sgp4 \texorpdfstring{$\ast$}{*}}]{satellite}{}\end{DoxyParamCaption})}
+
+
+
+Loads TLE data from NVS and configures the given Sgp4 object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}} & Pointer to the Sgp4 object to configure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if TLE data was successfully loaded and applied, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a717eb2cedac354fdc44bef69e6ede98a}\index{utils.h@{utils.h}!elevation\_deg\_from\_mm@{elevation\_deg\_from\_mm}}
+\index{elevation\_deg\_from\_mm@{elevation\_deg\_from\_mm}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{elevation\_deg\_from\_mm()}{elevation\_deg\_from\_mm()}}
+{\footnotesize\ttfamily \label{utils_8h_a717eb2cedac354fdc44bef69e6ede98a} 
+float elevation\+\_\+deg\+\_\+from\+\_\+mm (\begin{DoxyParamCaption}\item[{float}]{mm}{}\end{DoxyParamCaption})}
+
+
+
+Computes the non linearity of elevation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mm} & distance in mm. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+degrees. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_afc00f5f63690bee3e235a9f7be532376}\index{utils.h@{utils.h}!elevation\_deg\_from\_mm\_lut@{elevation\_deg\_from\_mm\_lut}}
+\index{elevation\_deg\_from\_mm\_lut@{elevation\_deg\_from\_mm\_lut}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{elevation\_deg\_from\_mm\_lut()}{elevation\_deg\_from\_mm\_lut()}}
+{\footnotesize\ttfamily \label{utils_8h_afc00f5f63690bee3e235a9f7be532376} 
+float elevation\+\_\+deg\+\_\+from\+\_\+mm\+\_\+lut (\begin{DoxyParamCaption}\item[{float}]{mm}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves a degree value from the LUT based on the input mm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mm} & distance in mm. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Interpolated degree from the LUT. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a81de41623d708a4bbbe5f33630d13cf8}\index{utils.h@{utils.h}!elevation\_mm\_from\_deg@{elevation\_mm\_from\_deg}}
+\index{elevation\_mm\_from\_deg@{elevation\_mm\_from\_deg}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{elevation\_mm\_from\_deg()}{elevation\_mm\_from\_deg()}}
+{\footnotesize\ttfamily \label{utils_8h_a81de41623d708a4bbbe5f33630d13cf8} 
+float elevation\+\_\+mm\+\_\+from\+\_\+deg (\begin{DoxyParamCaption}\item[{float}]{deg}{}\end{DoxyParamCaption})}
+
+
+
+Computes the non linearity of elevation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deg} & angle in degrees. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+distance in mm. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_ac9b39096fcead1abd4f373deb01d3b42}\index{utils.h@{utils.h}!elevation\_mm\_from\_deg\_lut@{elevation\_mm\_from\_deg\_lut}}
+\index{elevation\_mm\_from\_deg\_lut@{elevation\_mm\_from\_deg\_lut}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{elevation\_mm\_from\_deg\_lut()}{elevation\_mm\_from\_deg\_lut()}}
+{\footnotesize\ttfamily \label{utils_8h_ac9b39096fcead1abd4f373deb01d3b42} 
+float elevation\+\_\+mm\+\_\+from\+\_\+deg\+\_\+lut (\begin{DoxyParamCaption}\item[{float}]{deg}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves a distance value from the LUT based on the input angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deg} & Angle in degrees. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Interpolated distance from the LUT. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922}\index{utils.h@{utils.h}!getSavedOffsets@{getSavedOffsets}}
+\index{getSavedOffsets@{getSavedOffsets}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{getSavedOffsets()}{getSavedOffsets()}}
+{\footnotesize\ttfamily \label{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} get\+Saved\+Offsets (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Reads saved azimuth and elevation offsets from NVS. 
+
+\begin{DoxyReturn}{Returns}
+A structure containing the stored azimuth and elevation offsets. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_a7db34d0acfcfc9f7997160c378606503}\index{utils.h@{utils.h}!getUnixTimeFromGPS@{getUnixTimeFromGPS}}
+\index{getUnixTimeFromGPS@{getUnixTimeFromGPS}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{getUnixTimeFromGPS()}{getUnixTimeFromGPS()}}
+{\footnotesize\ttfamily \label{utils_8h_a7db34d0acfcfc9f7997160c378606503} 
+unsigned long get\+Unix\+Time\+From\+GPS (\begin{DoxyParamCaption}\item[{Tiny\+GPSPlus \texorpdfstring{$\ast$}{*}}]{gps}{}\end{DoxyParamCaption})}
+
+
+
+Extracts the current Unix timestamp from a Tiny\+GPSPlus instance. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}} & Pointer to a valid Tiny\+GPSPlus object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Unix time in seconds since January 1, 1970. 
+\end{DoxyReturn}
+\Hypertarget{utils_8h_af214a00ea6b069c59001e2d6a1370063}\index{utils.h@{utils.h}!init\_elevation\_lut@{init\_elevation\_lut}}
+\index{init\_elevation\_lut@{init\_elevation\_lut}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{init\_elevation\_lut()}{init\_elevation\_lut()}}
+{\footnotesize\ttfamily \label{utils_8h_af214a00ea6b069c59001e2d6a1370063} 
+void init\+\_\+elevation\+\_\+lut (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the elevation lookup table (LUT). 
+
+\Hypertarget{utils_8h_a920af668a5907f81c684537724aab31d}\index{utils.h@{utils.h}!jdToUnix@{jdToUnix}}
+\index{jdToUnix@{jdToUnix}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{jdToUnix()}{jdToUnix()}}
+{\footnotesize\ttfamily \label{utils_8h_a920af668a5907f81c684537724aab31d} 
+unsigned long jd\+To\+Unix (\begin{DoxyParamCaption}\item[{double}]{jd}{}\end{DoxyParamCaption})}
+
+\Hypertarget{utils_8h_a89b23cbd2db895bd4069a8a9bd33506a}\index{utils.h@{utils.h}!saveOffsets@{saveOffsets}}
+\index{saveOffsets@{saveOffsets}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{saveOffsets()}{saveOffsets()}}
+{\footnotesize\ttfamily \label{utils_8h_a89b23cbd2db895bd4069a8a9bd33506a} 
+void save\+Offsets (\begin{DoxyParamCaption}\item[{float}]{offset\+\_\+az}{, }\item[{float}]{offset\+\_\+el}{}\end{DoxyParamCaption})}
+
+
+
+Saves Offsets data to NVS.
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset\+\_\+az} & Azimuth offset to be saved. \\
+\hline
+{\em offset\+\_\+el} & Elevation offset to be saved. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_a9337eb14ab020193580abd312d1fbb50}\index{utils.h@{utils.h}!saveTLE@{saveTLE}}
+\index{saveTLE@{saveTLE}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{saveTLE()}{saveTLE()}}
+{\footnotesize\ttfamily \label{utils_8h_a9337eb14ab020193580abd312d1fbb50} 
+void save\+TLE (\begin{DoxyParamCaption}\item[{String}]{name}{, }\item[{String}]{line1}{, }\item[{String}]{line2}{}\end{DoxyParamCaption})}
+
+
+
+Saves TLE data to NVS. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Satellite name. \\
+\hline
+{\em line1} & First TLE line. \\
+\hline
+{\em line2} & Second TLE line. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{utils_8h_acc2313d78818323e2d30ed5226c4d7c0}\index{utils.h@{utils.h}!setTime@{setTime}}
+\index{setTime@{setTime}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily \label{utils_8h_acc2313d78818323e2d30ed5226c4d7c0} 
+void set\+Time (\begin{DoxyParamCaption}\item[{unsigned long}]{unix\+Time}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{utils_8h_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{utils_8h_a95d592edb81dd40b1f9085628e7698a8}\index{utils.h@{utils.h}!config@{config}}
+\index{config@{config}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{config}{config}}
+{\footnotesize\ttfamily \label{utils_8h_a95d592edb81dd40b1f9085628e7698a8} 
+Preferences config\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+External reference to the global Preferences storage handler. 
+
+External reference to the global Preferences storage handler. \Hypertarget{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}\index{utils.h@{utils.h}!esfericalAngles\_t@{esfericalAngles\_t}}
+\index{esfericalAngles\_t@{esfericalAngles\_t}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{esfericalAngles\_t}{esfericalAngles\_t}}
+{\footnotesize\ttfamily \label{utils_8h_a157fd63fdcfa478d39372dec5744a3d2} 
+esferical\+Angles\+\_\+t}
+
+\Hypertarget{utils_8h_a4e531e11ab017aad416f0432e33e1a31}\index{utils.h@{utils.h}!mountFlags\_t@{mountFlags\_t}}
+\index{mountFlags\_t@{mountFlags\_t}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{mountFlags\_t}{mountFlags\_t}}
+{\footnotesize\ttfamily \label{utils_8h_a4e531e11ab017aad416f0432e33e1a31} 
+mount\+Flags\+\_\+t}
+
+\Hypertarget{utils_8h_af8a35661022926a438bb0e33cf4e84d2}\index{utils.h@{utils.h}!trackerStatus\_t@{trackerStatus\_t}}
+\index{trackerStatus\_t@{trackerStatus\_t}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{trackerStatus\_t}{trackerStatus\_t}}
+{\footnotesize\ttfamily \label{utils_8h_af8a35661022926a438bb0e33cf4e84d2} 
+tracker\+Status\+\_\+t}
+

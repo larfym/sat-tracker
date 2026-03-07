@@ -1,0 +1,142 @@
+\doxysection{configurations.\+h}
+\hypertarget{configurations_8h_source}{}\label{configurations_8h_source}\index{include/configurations.h@{include/configurations.h}}
+\doxymbox{\hyperlink{configurations_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00020\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PIN\ DEFINES\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00021\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ IN1\_AZ\_PIN\ GPIO\_NUM\_25\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ EN\_AZ\_PIN\ GPIO\_NUM\_12\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ IN2\_AZ\_PIN\ GPIO\_NUM\_26\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ I\_AZ\_PIN\ GPIO\_NUM\_36\ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ I\_AZ\_CHANNEL\ ADC1\_CHANNEL\_0\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ IN1\_EL\_PIN\ GPIO\_NUM\_27\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ EN\_EL\_PIN\ GPIO\_NUM\_13\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ IN2\_EL\_PIN\ GPIO\_NUM\_14\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ I\_EL\_PIN\ GPIO\_NUM\_39\ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ I\_EL\_CHANNEL\ ADC1\_CHANNEL\_3\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ GPS\_RX\_PIN\ 16\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ GPS\_TX\_PIN\ 17\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ REED\_AZ\_PIN\ GPIO\_NUM\_22\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ REED\_EL\_PIN\ GPIO\_NUM\_23\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00062\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MOUNT\ DIMENSIONS\ CONFIGURATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00063\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ A\_ANT\ 50.0f}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ BP\_ANT\ 230.66f}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ C\_ANT\ 260.00f}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#define\ D\_ANT\ 156.0f}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#define\ E\_ANT\ 80.0f}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#define\ F\_ANT\ 255.00f}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00081\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ WIFI\ \&\ SERVER\ CONFIGURATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00082\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#define\ DEFAULT\_WIFI\_SSID\ "{}TrackerLARFyM"{}\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#define\ DEFAULT\_WIFI\_PASSWORD\ "{}"{}\ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ DEFAULT\_SERVER\_PORT\ 80\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ MDNS\_SERVICE\_NAME\ "{}Tracker"{}\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00096\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SERIAL\ CONFIGURATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00097\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ SERIAL\_BAUDRATE\ 115200\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00108\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GPS\ CONFIGURATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00109\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#define\ GPS\_UART\ 1\ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#define\ GPS\_BAUDRATE\ 9600\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00121\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CONTROL\ \&\ PI\ CONSTANTS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00122\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#define\ M\_V\_NOMINAL\ 36\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#define\ M\_AZ\_V\_TO\_START\ 15.5\ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#define\ M\_EL\_V\_TO\_START\ 8\ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\#define\ M\_STOP\_DUTY\ 25\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#define\ M\_MAX\_DUTY\ 100\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#define\ M\_AZ\_SETTLING\_TIME\_MS\ 80\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ M\_EL\_SETTLING\_TIME\_MS\ 150\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#define\ AZIMUTH\_RESOLUTION\_angle\ 0.225\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#define\ ELEVATION\_RESOLUTION\_mm\ 0.8\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#define\ CURRENT\_AZIMUTH\_MAX\_mA\ 1000.0\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#define\ CURRENT\_ELEVATION\_MAX\_mA\ 1000.0\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#define\ CURRENT\_HOMING\_mA\ 10.0\ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#define\ CURRENT\_OFFSETS\_SAMPLES\ 100\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#define\ TIMER\_PREESCALER\ 80\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#define\ DEFAULT\_SAMPLE\_TIME\_US\ 500\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#define\ SAMPLE\_TIME\_US\ 500\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#define\ SAMPLE\_TIME\_S\ (SAMPLE\_TIME\_US\ /\ 1000000.0)\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#define\ SAMPLE\_TIME\_SGP4\_MS\ 50\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\#define\ KP\_AZIMUTH\ 10.0\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#define\ KI\_AZIMUTH\ 1\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#define\ KP\_ELEVATION\ 10.0\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00185\ \textcolor{preprocessor}{\#define\ KI\_ELEVATION\ 0.5\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#define\ REED\_AZ\_SOFT\_LIMIT\_HIGH\ 1610\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#define\ REED\_EL\_SOFT\_LIMIT\_HIGH\ 435\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#define\ REED\_AZ\_SOFT\_LIMIT\_LOW\ -\/5\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#define\ REED\_EL\_SOFT\_LIMIT\_LOW\ -\/5\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#define\ EL\_MIN\_DEG\ 0\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00205\ \textcolor{preprocessor}{\#define\ EL\_MAX\_DEG\ 90\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#define\ AZ\_MIN\_DEG\ 0\ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\#define\ AZ\_MAX\_DEG\ 340\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\#define\ PWM\_FREQ\_HZ\ 2500\ }\textcolor{comment}{//\ Note:\ It\ increases\ power\ dissipation\ in\ MOSFETS}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00216\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SIGNAL\ ADAPTATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00217\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#define\ SHUNT\_AZ\_OHM\ 0.3333333\ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\#define\ CURRENT\_GAIN\_AZ\ 2.11988\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00226\ \textcolor{preprocessor}{\#define\ SHUNT\_EL\_OHM\ 0.09\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00227\ \textcolor{preprocessor}{\#define\ CURRENT\_GAIN\_EL\ 7.07773\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00231\ \textcolor{comment}{/*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FreeRTOS\ TASK\ CONFIGURATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00232\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00239\ \textcolor{preprocessor}{\#define\ TASK\_STOP\_MOTION\_PRIORITY\ 17}}
+\DoxyCodeLine{00240\ \textcolor{preprocessor}{\#define\ TASK\_HOME\_PRIORITY\ 16}}
+\DoxyCodeLine{00241\ \textcolor{preprocessor}{\#define\ TASK\_GPS\_PRIORITY\ 15}}
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#define\ TASK\_TRACKING\_CALCULATION\_PRIORITY\ 14}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\#define\ TASK\_MOTION\_CONTROL\_PRIORITY\ 14}}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\#define\ TASK\_CURRENT\_MONITOR\_PRIORITY\ 12}}
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\#define\ TASK\_TELEMETRY\_PRIORITY\ 11}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00253\ \textcolor{preprocessor}{\#define\ TASK\_LOOP\_DELAY\ 1000\ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\#define\ TASK\_GPS\_DELAY\ 1000\ \ \ \ \ \ \ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00255\ \textcolor{preprocessor}{\#define\ TASK\_CURRENT\_MONITOR\_DELAY\ 3000\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00256\ \textcolor{preprocessor}{\#define\ TASK\_HOME\_CURRENT\_DELAY\ 200\ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00257\ \textcolor{preprocessor}{\#define\ TASK\_TELEMETRY\_DELAY\ 1000\ \ \ \ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00265\ \textcolor{preprocessor}{\#define\ MAX\_STACK\_SIZE\ 8192\ \ \ \ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\#define\ MEDIUM\_STACK\_SIZE\ 2048\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\#define\ MIN\_STACK\_SIZE\ 1024\ \ \ \ }\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

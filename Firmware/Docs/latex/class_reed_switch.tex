@@ -1,0 +1,185 @@
+\doxysection{Reed\+Switch Class Reference}
+\hypertarget{class_reed_switch}{}\label{class_reed_switch}\index{ReedSwitch@{ReedSwitch}}
+
+
+Class for interfacing with a Reed Switch using the ESP32\textquotesingle{}s Pulse Counter (PCNT) peripheral.  
+
+
+
+
+{\ttfamily \+\#include $<$reed.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_reed_switch_a29728aba596b8b8298e05c136a43f5ad}{Reed\+Switch}} (gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}{pin}}, pcnt\+\_\+unit\+\_\+t \doxymbox{\hyperlink{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}{unit}}, pcnt\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_reed_switch_a60293fe900881818f2c3d4be351970c4}{channel}}, uint16\+\_\+t l\+\_\+lim, uint16\+\_\+t h\+\_\+lim, void(\texorpdfstring{$\ast$}{*}event\+Handler)(void \texorpdfstring{$\ast$}{*}))
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{class_reed_switch}{Reed\+Switch} class. \end{DoxyCompactList}\item 
+int16\+\_\+t \doxymbox{\hyperlink{class_reed_switch_a121facbd6912d45fe8daa9d9211dab49}{get\+Count}} ()
+\begin{DoxyCompactList}\small\item\em Gets the current pulse count value. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_reed_switch_a82e324bdf37bebfede6df4f939dc8946}{stop\+Count}} ()
+\begin{DoxyCompactList}\small\item\em Stops the pulse counter. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_reed_switch_a15c8f45bdb78384f2591899738df2010}{start\+Count}} ()
+\begin{DoxyCompactList}\small\item\em Starts the pulse counter. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_reed_switch_aae13b3b63ce1500d9b2ffc651fe811d9}{reset\+Count}} ()
+\begin{DoxyCompactList}\small\item\em Resets the pulse counter to zero. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_reed_switch_af0629aa0bd61c29e6076f157d94d45bf}{count\+Direction}} (\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} dir)
+\begin{DoxyCompactList}\small\item\em Sets the counting direction for the PCNT unit. \end{DoxyCompactList}\item 
+pcnt\+\_\+unit\+\_\+t \doxymbox{\hyperlink{class_reed_switch_ad320a2716e1d6ba64d8d4f55f43bebb2}{get\+Unit}} ()
+\begin{DoxyCompactList}\small\item\em Gets the PCNT unit assigned to this sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+gpio\+\_\+num\+\_\+t \doxymbox{\hyperlink{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}{pin}}
+\item 
+pcnt\+\_\+unit\+\_\+t \doxymbox{\hyperlink{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}{unit}}
+\item 
+pcnt\+\_\+channel\+\_\+t \doxymbox{\hyperlink{class_reed_switch_a60293fe900881818f2c3d4be351970c4}{channel}}
+\item 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} \doxymbox{\hyperlink{class_reed_switch_aa99dcbcc731581cbf179757f183cce2e}{current\+\_\+dir}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for interfacing with a Reed Switch using the ESP32\textquotesingle{}s Pulse Counter (PCNT) peripheral. 
+
+This class configures a GPIO pin as an input for the Reed Switch, sets up a PCNT unit and channel to count pulses (e.\+g., for rotation or events), and handles configurations like debouncing and event limits. 
+
+\label{doc-constructors}
+\Hypertarget{class_reed_switch_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_reed_switch_a29728aba596b8b8298e05c136a43f5ad}\index{ReedSwitch@{ReedSwitch}!ReedSwitch@{ReedSwitch}}
+\index{ReedSwitch@{ReedSwitch}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{ReedSwitch()}{ReedSwitch()}}
+{\footnotesize\ttfamily \label{class_reed_switch_a29728aba596b8b8298e05c136a43f5ad} 
+Reed\+Switch::\+\+Reed\+Switch (\begin{DoxyParamCaption}\item[{gpio\+\_\+num\+\_\+t}]{pin}{, }\item[{pcnt\+\_\+unit\+\_\+t}]{unit}{, }\item[{pcnt\+\_\+channel\+\_\+t}]{channel}{, }\item[{uint16\+\_\+t}]{l\+\_\+lim}{, }\item[{uint16\+\_\+t}]{h\+\_\+lim}{, }\item[{void(\texorpdfstring{$\ast$}{*}}]{event\+Handler~}{)(void \texorpdfstring{$\ast$}{*})}\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{class_reed_switch}{Reed\+Switch} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}{pin}} & The GPIO pin connected to the Reed Switch. \\
+\hline
+{\em \doxylink{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}{unit}} & The PCNT unit to use (e.\+g., PCNT\+\_\+\+UNIT\+\_\+0). \\
+\hline
+{\em \doxylink{class_reed_switch_a60293fe900881818f2c3d4be351970c4}{channel}} & The PCNT channel to use (e.\+g., PCNT\+\_\+\+CHANNEL\+\_\+0). \\
+\hline
+{\em l\+\_\+lim} & The low limit value for generating a PCNT event interrupt. \\
+\hline
+{\em h\+\_\+lim} & The high limit value for generating a PCNT event interrupt. \\
+\hline
+{\em event\+Handler} & A callback function to be executed when a limit event occurs. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_reed_switch_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_reed_switch_af0629aa0bd61c29e6076f157d94d45bf}\index{ReedSwitch@{ReedSwitch}!countDirection@{countDirection}}
+\index{countDirection@{countDirection}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{countDirection()}{countDirection()}}
+{\footnotesize\ttfamily \label{class_reed_switch_af0629aa0bd61c29e6076f157d94d45bf} 
+void Reed\+Switch::\+count\+Direction (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}}]{dir}{}\end{DoxyParamCaption})}
+
+
+
+Sets the counting direction for the PCNT unit. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir} & The new counting direction (e.\+g., UP, DOWN, or ZERO). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_reed_switch_a121facbd6912d45fe8daa9d9211dab49}\index{ReedSwitch@{ReedSwitch}!getCount@{getCount}}
+\index{getCount@{getCount}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{getCount()}{getCount()}}
+{\footnotesize\ttfamily \label{class_reed_switch_a121facbd6912d45fe8daa9d9211dab49} 
+int16\+\_\+t Reed\+Switch::\+get\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the current pulse count value. 
+
+\begin{DoxyReturn}{Returns}
+The accumulated count value. 
+\end{DoxyReturn}
+\Hypertarget{class_reed_switch_ad320a2716e1d6ba64d8d4f55f43bebb2}\index{ReedSwitch@{ReedSwitch}!getUnit@{getUnit}}
+\index{getUnit@{getUnit}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{getUnit()}{getUnit()}}
+{\footnotesize\ttfamily \label{class_reed_switch_ad320a2716e1d6ba64d8d4f55f43bebb2} 
+pcnt\+\_\+unit\+\_\+t Reed\+Switch::\+get\+Unit (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Gets the PCNT unit assigned to this sensor. 
+
+\begin{DoxyReturn}{Returns}
+The PCNT unit ID. 
+\end{DoxyReturn}
+\Hypertarget{class_reed_switch_aae13b3b63ce1500d9b2ffc651fe811d9}\index{ReedSwitch@{ReedSwitch}!resetCount@{resetCount}}
+\index{resetCount@{resetCount}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{resetCount()}{resetCount()}}
+{\footnotesize\ttfamily \label{class_reed_switch_aae13b3b63ce1500d9b2ffc651fe811d9} 
+void Reed\+Switch::\+reset\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Resets the pulse counter to zero. 
+
+\Hypertarget{class_reed_switch_a15c8f45bdb78384f2591899738df2010}\index{ReedSwitch@{ReedSwitch}!startCount@{startCount}}
+\index{startCount@{startCount}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{startCount()}{startCount()}}
+{\footnotesize\ttfamily \label{class_reed_switch_a15c8f45bdb78384f2591899738df2010} 
+void Reed\+Switch::\+start\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts the pulse counter. 
+
+\Hypertarget{class_reed_switch_a82e324bdf37bebfede6df4f939dc8946}\index{ReedSwitch@{ReedSwitch}!stopCount@{stopCount}}
+\index{stopCount@{stopCount}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{stopCount()}{stopCount()}}
+{\footnotesize\ttfamily \label{class_reed_switch_a82e324bdf37bebfede6df4f939dc8946} 
+void Reed\+Switch::\+stop\+Count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the pulse counter. 
+
+
+
+\label{doc-variable-members}
+\Hypertarget{class_reed_switch_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_reed_switch_a60293fe900881818f2c3d4be351970c4}\index{ReedSwitch@{ReedSwitch}!channel@{channel}}
+\index{channel@{channel}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{channel}{channel}}
+{\footnotesize\ttfamily \label{class_reed_switch_a60293fe900881818f2c3d4be351970c4} 
+pcnt\+\_\+channel\+\_\+t Reed\+Switch::\+channel\hspace{0.3cm}{\ttfamily [private]}}
+
+PCNT channel within the unit. \Hypertarget{class_reed_switch_aa99dcbcc731581cbf179757f183cce2e}\index{ReedSwitch@{ReedSwitch}!current\_dir@{current\_dir}}
+\index{current\_dir@{current\_dir}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{current\_dir}{current\_dir}}
+{\footnotesize\ttfamily \label{class_reed_switch_aa99dcbcc731581cbf179757f183cce2e} 
+\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}} Reed\+Switch::\+current\+\_\+dir\hspace{0.3cm}{\ttfamily [private]}}
+
+Current counting direction (defined in \doxylink{utils_8h}{utils.\+h}). \Hypertarget{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}\index{ReedSwitch@{ReedSwitch}!pin@{pin}}
+\index{pin@{pin}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{pin}{pin}}
+{\footnotesize\ttfamily \label{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99} 
+gpio\+\_\+num\+\_\+t Reed\+Switch::\+pin\hspace{0.3cm}{\ttfamily [private]}}
+
+GPIO pin connected to the Reed Switch. \Hypertarget{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}\index{ReedSwitch@{ReedSwitch}!unit@{unit}}
+\index{unit@{unit}!ReedSwitch@{ReedSwitch}}
+\doxysubsubsection{\texorpdfstring{unit}{unit}}
+{\footnotesize\ttfamily \label{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8} 
+pcnt\+\_\+unit\+\_\+t Reed\+Switch::\+unit\hspace{0.3cm}{\ttfamily [private]}}
+
+PCNT unit assigned to this sensor. 
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+include/\+\doxymbox{\hyperlink{reed_8h}{reed.\+h}}\item 
+src/\+\doxymbox{\hyperlink{reed_8cpp}{reed.\+cpp}}\end{DoxyCompactItemize}

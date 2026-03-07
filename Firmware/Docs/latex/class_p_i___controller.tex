@@ -1,0 +1,279 @@
+\doxysection{PI\+\_\+\+Controller Class Reference}
+\hypertarget{class_p_i___controller}{}\label{class_p_i___controller}\index{PI\_Controller@{PI\_Controller}}
+
+
+Discrete Proportional–\+Integral (PI) controller implementation.  
+
+
+
+
+{\ttfamily \+\#include $<$PI\+\_\+\+Controller.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_p_i___controller_ae5552082a60f3972c1312903d9356a41}{PI\+\_\+\+Controller}} (double kp, double ki, double \doxymbox{\hyperlink{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}{sample\+Time}}, double \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{dead\+Zone}}, double \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\+\_\+max}})
+\begin{DoxyCompactList}\small\item\em Construct a new PI controller. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_p_i___controller_a98f967bd89ddd481ac99dc1c7d3b5cb4}{set\+Gains}} (double kp, double ki)
+\begin{DoxyCompactList}\small\item\em Update controller gains. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_p_i___controller_aa94d3181925e322e559dfa57927af4c4}{set\+Max\+Output}} (double \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\+\_\+max}})
+\begin{DoxyCompactList}\small\item\em Set the maximum output value. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_p_i___controller_a0d911d276aa09f01184111413d7f9e1e}{set\+Dead\+Zone}} (double \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{dead\+Zone}})
+\begin{DoxyCompactList}\small\item\em Set the controller dead-\/zone. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_p_i___controller_a6a9a3946edb5b9c2b5568330bff839e6}{reset}} ()
+\begin{DoxyCompactList}\small\item\em Reset controller internal states. \end{DoxyCompactList}\item 
+float \doxymbox{\hyperlink{class_p_i___controller_a2a30c243057cb81b4f80438e9a2880fc}{output}} (float input, float set\+Point)
+\begin{DoxyCompactList}\small\item\em Compute the controller output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a1b945e4f31e41b4f63c7c49f6f3653ae}{a}}
+\begin{DoxyCompactList}\small\item\em Controller coefficients derived from PI gains. \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a5a791f88a66a9db76a739bb6fd0a9062}{b}}
+\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}{sample\+Time}}
+\begin{DoxyCompactList}\small\item\em Sampling period of the controller (seconds). \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{dead\+Zone}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Dead zone applied to the error signal. \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\+\_\+max}}
+\begin{DoxyCompactList}\small\item\em Maximum absolute output value (saturation limit). \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_a629679bf97a432ab1edcb028a4ef7e9a}{i\+\_\+f}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Integrator internal state. \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_ae9b575ee7049389040a5f832f10f751a}{e}} \+[2]\+ = \{0.\+0,0.\+0\}
+\begin{DoxyCompactList}\small\item\em Error history buffer. \end{DoxyCompactList}\item 
+double \doxymbox{\hyperlink{class_p_i___controller_af151ee53b5b82be81f1ac22f18329163}{u}} \+[2]\+ = \{0.\+0,0.\+0\}
+\begin{DoxyCompactList}\small\item\em Control output history buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Discrete Proportional–\+Integral (PI) controller implementation. 
+
+This class implements a discrete-\/time PI controller using the incremental (velocity) form of the control equation. It is designed for embedded control applications such as motor control in the satellite tracking system.
+
+The controller supports:\+
+\begin{DoxyItemize}
+\item Adjustable proportional and integral gains
+\item Output saturation
+\item Dead-\/zone around the error
+\item State reset
+\end{DoxyItemize}
+
+The controller internal equation follows:\+
+
+\[u[k] = u[k-1] + a\,e[k] + b\,e[k-1]
+\]
+
+where:\+
+\begin{DoxyItemize}
+\item $e[k]$ is the current error
+\item $u[k]$ is the control output
+\item $a$ and $b$ are coefficients derived from PI gains
+\end{DoxyItemize}
+
+This implementation is suitable for real-\/time control loops running at fixed sampling periods. 
+
+\label{doc-constructors}
+\Hypertarget{class_p_i___controller_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_p_i___controller_ae5552082a60f3972c1312903d9356a41}\index{PI\_Controller@{PI\_Controller}!PI\_Controller@{PI\_Controller}}
+\index{PI\_Controller@{PI\_Controller}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{PI\_Controller()}{PI\_Controller()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_ae5552082a60f3972c1312903d9356a41} 
+PI\+\_\+\+Controller::\+\+PI\+\_\+\+Controller (\begin{DoxyParamCaption}\item[{double}]{kp}{, }\item[{double}]{ki}{, }\item[{double}]{sample\+Time}{, }\item[{double}]{dead\+Zone}{, }\item[{double}]{u\+\_\+max}{}\end{DoxyParamCaption})}
+
+
+
+Construct a new PI controller. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kp} & Proportional gain \\
+\hline
+{\em ki} & Integral gain \\
+\hline
+{\em \doxylink{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}{sample\+Time}} & Controller sampling time (seconds) \\
+\hline
+{\em \doxylink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{dead\+Zone}} & Dead-\/zone applied to the error \\
+\hline
+{\em \doxylink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\+\_\+max}} & Maximum controller output (saturation) \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_p_i___controller_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_p_i___controller_a2a30c243057cb81b4f80438e9a2880fc}\index{PI\_Controller@{PI\_Controller}!output@{output}}
+\index{output@{output}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{output()}{output()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a2a30c243057cb81b4f80438e9a2880fc} 
+float PI\+\_\+\+Controller::\+output (\begin{DoxyParamCaption}\item[{float}]{input}{, }\item[{float}]{set\+Point}{}\end{DoxyParamCaption})}
+
+
+
+Compute the controller output. 
+
+Calculates the control action given the current system measurement and desired reference.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Current system measurement \\
+\hline
+{\em set\+Point} & Desired reference value\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Control signal generated by the PI controller 
+\end{DoxyReturn}
+\Hypertarget{class_p_i___controller_a6a9a3946edb5b9c2b5568330bff839e6}\index{PI\_Controller@{PI\_Controller}!reset@{reset}}
+\index{reset@{reset}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a6a9a3946edb5b9c2b5568330bff839e6} 
+void PI\+\_\+\+Controller::\+reset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reset controller internal states. 
+
+Clears integrator state, error history, and output history. \Hypertarget{class_p_i___controller_a0d911d276aa09f01184111413d7f9e1e}\index{PI\_Controller@{PI\_Controller}!setDeadZone@{setDeadZone}}
+\index{setDeadZone@{setDeadZone}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{setDeadZone()}{setDeadZone()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a0d911d276aa09f01184111413d7f9e1e} 
+void PI\+\_\+\+Controller::\+set\+Dead\+Zone (\begin{DoxyParamCaption}\item[{double}]{dead\+Zone}{}\end{DoxyParamCaption})}
+
+
+
+Set the controller dead-\/zone. 
+
+Errors smaller than this value will be ignored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{dead\+Zone}} & Dead-\/zone threshold \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_p_i___controller_a98f967bd89ddd481ac99dc1c7d3b5cb4}\index{PI\_Controller@{PI\_Controller}!setGains@{setGains}}
+\index{setGains@{setGains}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{setGains()}{setGains()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a98f967bd89ddd481ac99dc1c7d3b5cb4} 
+void PI\+\_\+\+Controller::\+set\+Gains (\begin{DoxyParamCaption}\item[{double}]{kp}{, }\item[{double}]{ki}{}\end{DoxyParamCaption})}
+
+
+
+Update controller gains. 
+
+Recomputes internal coefficients using the new gains.
+
+
+\begin{DoxyParams}{Parameters}
+{\em kp} & New proportional gain \\
+\hline
+{\em ki} & New integral gain \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_p_i___controller_aa94d3181925e322e559dfa57927af4c4}\index{PI\_Controller@{PI\_Controller}!setMaxOutput@{setMaxOutput}}
+\index{setMaxOutput@{setMaxOutput}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{setMaxOutput()}{setMaxOutput()}}
+{\footnotesize\ttfamily \label{class_p_i___controller_aa94d3181925e322e559dfa57927af4c4} 
+void PI\+\_\+\+Controller::\+set\+Max\+Output (\begin{DoxyParamCaption}\item[{double}]{u\+\_\+max}{}\end{DoxyParamCaption})}
+
+
+
+Set the maximum output value. 
+
+This limits the controller output to avoid actuator saturation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \doxylink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\+\_\+max}} & Maximum allowed control signal \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-variable-members}
+\Hypertarget{class_p_i___controller_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_p_i___controller_a1b945e4f31e41b4f63c7c49f6f3653ae}\index{PI\_Controller@{PI\_Controller}!a@{a}}
+\index{a@{a}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{a}{a}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a1b945e4f31e41b4f63c7c49f6f3653ae} 
+double PI\+\_\+\+Controller::\+a\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Controller coefficients derived from PI gains. 
+
+\Hypertarget{class_p_i___controller_a5a791f88a66a9db76a739bb6fd0a9062}\index{PI\_Controller@{PI\_Controller}!b@{b}}
+\index{b@{b}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{b}{b}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a5a791f88a66a9db76a739bb6fd0a9062} 
+double PI\+\_\+\+Controller::\+b\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}\index{PI\_Controller@{PI\_Controller}!deadZone@{deadZone}}
+\index{deadZone@{deadZone}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{deadZone}{deadZone}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c} 
+double PI\+\_\+\+Controller::\+dead\+Zone = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Dead zone applied to the error signal. 
+
+Errors with absolute value smaller than this threshold are considered zero to avoid oscillations. \Hypertarget{class_p_i___controller_ae9b575ee7049389040a5f832f10f751a}\index{PI\_Controller@{PI\_Controller}!e@{e}}
+\index{e@{e}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{e}{e}}
+{\footnotesize\ttfamily \label{class_p_i___controller_ae9b575ee7049389040a5f832f10f751a} 
+double PI\+\_\+\+Controller::\+e\+[2]\+ = \{0.\+0,0.\+0\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Error history buffer. 
+
+e\+[0]\+ = current error ~\newline
+ e\+[1]\+ = previous error \Hypertarget{class_p_i___controller_a629679bf97a432ab1edcb028a4ef7e9a}\index{PI\_Controller@{PI\_Controller}!i\_f@{i\_f}}
+\index{i\_f@{i\_f}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{i\_f}{i\_f}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a629679bf97a432ab1edcb028a4ef7e9a} 
+double PI\+\_\+\+Controller::\+i\+\_\+f = 0.\+0\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Integrator internal state. 
+
+\Hypertarget{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}\index{PI\_Controller@{PI\_Controller}!sampleTime@{sampleTime}}
+\index{sampleTime@{sampleTime}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{sampleTime}{sampleTime}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487} 
+double PI\+\_\+\+Controller::\+sample\+Time\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Sampling period of the controller (seconds). 
+
+\Hypertarget{class_p_i___controller_af151ee53b5b82be81f1ac22f18329163}\index{PI\_Controller@{PI\_Controller}!u@{u}}
+\index{u@{u}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{u}{u}}
+{\footnotesize\ttfamily \label{class_p_i___controller_af151ee53b5b82be81f1ac22f18329163} 
+double PI\+\_\+\+Controller::\+u\+[2]\+ = \{0.\+0,0.\+0\}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Control output history buffer. 
+
+u\+[0]\+ = current control output ~\newline
+ u\+[1]\+ = previous control output \Hypertarget{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}\index{PI\_Controller@{PI\_Controller}!u\_max@{u\_max}}
+\index{u\_max@{u\_max}!PI\_Controller@{PI\_Controller}}
+\doxysubsubsection{\texorpdfstring{u\_max}{u\_max}}
+{\footnotesize\ttfamily \label{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922} 
+double PI\+\_\+\+Controller::\+u\+\_\+max\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Maximum absolute output value (saturation limit). 
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+include/\+\doxymbox{\hyperlink{_p_i___controller_8h}{PI\+\_\+\+Controller.\+h}}\item 
+src/\+\doxymbox{\hyperlink{_p_i___controller_8cpp}{PI\+\_\+\+Controller.\+cpp}}\end{DoxyCompactItemize}

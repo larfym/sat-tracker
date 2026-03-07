@@ -1,0 +1,109 @@
+\doxysection{include/\+current\+Sensor.h File Reference}
+\hypertarget{current_sensor_8h}{}\label{current_sensor_8h}\index{include/currentSensor.h@{include/currentSensor.h}}
+{\ttfamily \+\#include "{}esp\+\_\+adc\+\_\+cal.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+adc.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}}
+\begin{DoxyCompactList}\small\item\em Class for current reading using an ESP32 ADC channel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{Indent}\textbf{ ADC Configuration}\par
+{\em Constants for configuring the ESP32\textquotesingle{}s ADC unit. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a9851d7403086e8d8ce491625b0f8863d}{ADC\+\_\+\+ATTEN}}~ADC\+\_\+\+ATTEN\+\_\+\+DB\+\_\+0
+\begin{DoxyCompactList}\small\item\em ADC attenuation (range of 100 mV to 950 mV) for high precision. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a7274e11e5026e6364ff703661611b25e}{ADC\+\_\+\+NUM\+\_\+1}}~ADC\+\_\+\+UNIT\+\_\+1
+\begin{DoxyCompactList}\small\item\em ADC unit used (ADC1). \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_ae7be6136584e673152582baf499d6a6c}{ADC\+\_\+\+WIDTH}}~ADC\+\_\+\+WIDTH\+\_\+\+BIT\+\_\+12
+\begin{DoxyCompactList}\small\item\em ADC resolution (12 bits = 4096 levels). \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a60a309e5f8aedc2bd1244ff2ccbd6aef}{ADC\+\_\+\+DEFAULT\+\_\+\+VREF}}~1100
+\begin{DoxyCompactList}\small\item\em Default value of the internal ADC reference voltage (in mV). \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}{ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES}}~128
+\begin{DoxyCompactList}\small\item\em Number of samples to take for averaging during measurement. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Current Measurement Constants}\par
+{\em Constants specific to the current measurement circuit. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\+\_\+\+SHUNT\+\_\+\+VALUE\+\_\+\+OHM}}~0.\+22f
+\begin{DoxyCompactList}\small\item\em Shunt resistor value in Ohms. \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}{DEFAULT\+\_\+\+OPAMP\+\_\+\+GAIN}}~2.\+12f
+\begin{DoxyCompactList}\small\item\em Operational amplifier gain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\label{doc-define-members}
+\Hypertarget{current_sensor_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{current_sensor_8h_a9851d7403086e8d8ce491625b0f8863d}\index{currentSensor.h@{currentSensor.h}!ADC\_ATTEN@{ADC\_ATTEN}}
+\index{ADC\_ATTEN@{ADC\_ATTEN}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_ATTEN}{ADC\_ATTEN}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a9851d7403086e8d8ce491625b0f8863d} 
+\+\#define ADC\+\_\+\+ATTEN~ADC\+\_\+\+ATTEN\+\_\+\+DB\+\_\+0}
+
+
+
+ADC attenuation (range of 100 mV to 950 mV) for high precision. 
+
+\Hypertarget{current_sensor_8h_a60a309e5f8aedc2bd1244ff2ccbd6aef}\index{currentSensor.h@{currentSensor.h}!ADC\_DEFAULT\_VREF@{ADC\_DEFAULT\_VREF}}
+\index{ADC\_DEFAULT\_VREF@{ADC\_DEFAULT\_VREF}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_DEFAULT\_VREF}{ADC\_DEFAULT\_VREF}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a60a309e5f8aedc2bd1244ff2ccbd6aef} 
+\+\#define ADC\+\_\+\+DEFAULT\+\_\+\+VREF~1100}
+
+
+
+Default value of the internal ADC reference voltage (in mV). 
+
+\Hypertarget{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}\index{currentSensor.h@{currentSensor.h}!ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}}
+\index{ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_MEASURE\_SAMPLES}{ADC\_MEASURE\_SAMPLES}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a8a4220fddcc006052f5142591343b76b} 
+\+\#define ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES~128}
+
+
+
+Number of samples to take for averaging during measurement. 
+
+\Hypertarget{current_sensor_8h_a7274e11e5026e6364ff703661611b25e}\index{currentSensor.h@{currentSensor.h}!ADC\_NUM\_1@{ADC\_NUM\_1}}
+\index{ADC\_NUM\_1@{ADC\_NUM\_1}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_NUM\_1}{ADC\_NUM\_1}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a7274e11e5026e6364ff703661611b25e} 
+\+\#define ADC\+\_\+\+NUM\+\_\+1~ADC\+\_\+\+UNIT\+\_\+1}
+
+
+
+ADC unit used (ADC1). 
+
+\Hypertarget{current_sensor_8h_ae7be6136584e673152582baf499d6a6c}\index{currentSensor.h@{currentSensor.h}!ADC\_WIDTH@{ADC\_WIDTH}}
+\index{ADC\_WIDTH@{ADC\_WIDTH}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_WIDTH}{ADC\_WIDTH}}
+{\footnotesize\ttfamily \label{current_sensor_8h_ae7be6136584e673152582baf499d6a6c} 
+\+\#define ADC\+\_\+\+WIDTH~ADC\+\_\+\+WIDTH\+\_\+\+BIT\+\_\+12}
+
+
+
+ADC resolution (12 bits = 4096 levels). 
+
+\Hypertarget{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}\index{currentSensor.h@{currentSensor.h}!DEFAULT\_OPAMP\_GAIN@{DEFAULT\_OPAMP\_GAIN}}
+\index{DEFAULT\_OPAMP\_GAIN@{DEFAULT\_OPAMP\_GAIN}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_OPAMP\_GAIN}{DEFAULT\_OPAMP\_GAIN}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8} 
+\+\#define DEFAULT\+\_\+\+OPAMP\+\_\+\+GAIN~2.\+12f}
+
+
+
+Operational amplifier gain. 
+
+\Hypertarget{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}\index{currentSensor.h@{currentSensor.h}!DEFAULT\_SHUNT\_VALUE\_OHM@{DEFAULT\_SHUNT\_VALUE\_OHM}}
+\index{DEFAULT\_SHUNT\_VALUE\_OHM@{DEFAULT\_SHUNT\_VALUE\_OHM}!currentSensor.h@{currentSensor.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_SHUNT\_VALUE\_OHM}{DEFAULT\_SHUNT\_VALUE\_OHM}}
+{\footnotesize\ttfamily \label{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896} 
+\+\#define DEFAULT\+\_\+\+SHUNT\+\_\+\+VALUE\+\_\+\+OHM~0.\+22f}
+
+
+
+Shunt resistor value in Ohms. 
+

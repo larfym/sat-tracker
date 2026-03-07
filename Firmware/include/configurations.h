@@ -75,6 +75,7 @@
 #define D_ANT 156.0f
 #define E_ANT 80.0f
 #define F_ANT 255.00f
+///@}
 
 /* -------------------------------------------------------------------------- */
 /*                          WIFI & SERVER CONFIGURATION                       */

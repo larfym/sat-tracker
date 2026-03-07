@@ -1,0 +1,714 @@
+\doxysection{include/\+configurations.h File Reference}
+\hypertarget{configurations_8h}{}\label{configurations_8h}\index{include/configurations.h@{include/configurations.h}}
+{\ttfamily \+\#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}~2500
+\begin{DoxyCompactList}\small\item\em PWM frequency for PWM motor speed control (Hz). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Azimuth Motor Pins (AZ)}\par
+{\em Control and measurement pins for the Azimuth motor driver. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24}{IN1\+\_\+\+AZ\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+25
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ab18abfaf88f25a5ba352779defd5b333}{EN\+\_\+\+AZ\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+12
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4}{IN2\+\_\+\+AZ\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+26
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ab1858222d0c9bde8f3a6dc0bfd6c6602}{I\+\_\+\+AZ\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+36
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20}{I\+\_\+\+AZ\+\_\+\+CHANNEL}}~ADC1\+\_\+\+CHANNEL\+\_\+0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Elevation Motor Pins (EL)}\par
+{\em Control and measurement pins for the Elevation motor driver. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+27
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+13
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+14
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aad16931d726a00fa1f731f95541eef10}{I\+\_\+\+EL\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+39
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a879a26029e799249e6786c5890d9f7e1}{I\+\_\+\+EL\+\_\+\+CHANNEL}}~ADC1\+\_\+\+CHANNEL\+\_\+3
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Communication \& Sensor Pins}\par
+{\em Pins for external modules (GPS) and reed switch. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a6f8927970de9eedcbb8f6c14b1d0d6c3}{GPS\+\_\+\+RX\+\_\+\+PIN}}~16
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_acae14b9c1767cfec367a4b96009c94e5}{GPS\+\_\+\+TX\+\_\+\+PIN}}~17
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa87d687897e717dea73184063e2b3be1}{REED\+\_\+\+AZ\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+22
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7}{REED\+\_\+\+EL\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+23
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Antenna Mount Dimensions}\par
+{\em Geometric parameters of the antenna mount for non-\/linearity compensation.
+
+\begin{DoxyNote}{Note}
+See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in millimeters. 
+\end{DoxyNote}
+}\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}}~50.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}{BP\+\_\+\+ANT}}~230.\+66f
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}~260.\+00f
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}}~156.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}}~80.\+0f
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}}~255.\+00f
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Wi\+Fi Configuration}\par
+{\em Default parameters for Wi\+Fi access point and m\+DNS service. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a7ea92631acc3bc41ae5eadc069323267}{DEFAULT\+\_\+\+WIFI\+\_\+\+SSID}}~"{}Tracker\+LARFy\+M"{}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a151690ecdd7d2c7b69586e6df164676c}{DEFAULT\+\_\+\+WIFI\+\_\+\+PASSWORD}}~"{}"{}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}~80
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a2597be4e15dcb4d93d323730f9ac2838}{MDNS\+\_\+\+SERVICE\+\_\+\+NAME}}~"{}Tracker"{}
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Serial Debugging}\par
+{\em Default serial monitor parameters. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a89f82a9d44beaa52b00c7245a50a105c}{SERIAL\+\_\+\+BAUDRATE}}~115200
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ GPS Parameters}\par
+{\em UART settings and default fallback position/\+time. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a0276fa67794ae64b565fe0da6db4fc9d}{GPS\+\_\+\+UART}}~1
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ac81ef7244c62ee5ea3a9a637a07ac921}{GPS\+\_\+\+BAUDRATE}}~9600
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ DC Motor Configuration.}\par
+{\em Non Linearity \& Nominal Tension (Saturation) }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}~36
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_af612d680313c8e405272d106245d0fe6}{M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}~15.\+5
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}~8
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_adf6dcd893480852d7a468e561027c267}{M\+\_\+\+STOP\+\_\+\+DUTY}}~25
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ac37c3874949285db365830a0af9ba6f0}{M\+\_\+\+MAX\+\_\+\+DUTY}}~100
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0}{M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~80
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a}{M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~150
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Actuator pulses resolution}\par
+{\em Resolution per pulses of reed. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a618a262e13ca80c7900729cce273a2ac}{AZIMUTH\+\_\+\+RESOLUTION\+\_\+angle}}~0.\+225
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a391fdd14353e44f4001f8754e497dbec}{ELEVATION\+\_\+\+RESOLUTION\+\_\+mm}}~0.\+8
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Motor Current Limits}\par
+{\em Safety current limits for motor protection. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a53f290d4e302a2bc20466bea8c913956}{CURRENT\+\_\+\+AZIMUTH\+\_\+\+MAX\+\_\+mA}}~1000.\+0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a23704dd1aa5111b43de738b89232a9e2}{CURRENT\+\_\+\+ELEVATION\+\_\+\+MAX\+\_\+mA}}~1000.\+0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ada73a694caa3cc91084dd186c39d41e1}{CURRENT\+\_\+\+HOMING\+\_\+mA}}~10.\+0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ab1c010192107735bc198c55953da3ef6}{CURRENT\+\_\+\+OFFSETS\+\_\+\+SAMPLES}}~100
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Timing Parameters}\par
+{\em Control-\/loop timing settings. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ab51c362d04fd48de5e648831613ceb9b}{TIMER\+\_\+\+PREESCALER}}~80
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}{DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US}}~500
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a71e747b23aad740159d5c63f2d28f097}{SAMPLE\+\_\+\+TIME\+\_\+\+US}}~500
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}~(\doxymbox{\hyperlink{configurations_8h_a71e747b23aad740159d5c63f2d28f097}{SAMPLE\+\_\+\+TIME\+\_\+\+US}} /\+ 1000000.\+0)
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a3e0f664cc702c0239f5996a93e2e61de}{SAMPLE\+\_\+\+TIME\+\_\+\+SGP4\+\_\+\+MS}}~50
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ PID Gains — Azimuth}\par
+{\em Gains for the Azimuth axis PI controller. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67}{KP\+\_\+\+AZIMUTH}}~10.\+0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a84c8a48add65471b6d7a3df86ded588a}{KI\+\_\+\+AZIMUTH}}~1
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ PID Gains — Elevation}\par
+{\em Gains for the Elevation axis PI controller. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}~10.\+0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}~0.\+5
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Soft Limit Positions}\par
+{\em Encoder/\+step limits for mechanical range enforcement. }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a9fc5bef92112470db8255986b6ecebcb}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}~1610
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a7de64bbb117e66e561add80d7f24374e}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}~435
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_acdaca90d9569b370599f231928e32845}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}~-\/5
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a08a68068b1a658d3b0e967b799a84100}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}~-\/5
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Hardware Limit Positions}\par
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ad23baeb01d87433d396f0fe003b8786d}{EL\+\_\+\+MIN\+\_\+\+DEG}}~0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a256d7fdd4d6568904b4d60a6764b3fd1}{EL\+\_\+\+MAX\+\_\+\+DEG}}~90
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa9c6275c5b158a9c5367abcc0a1a51d1}{AZ\+\_\+\+MIN\+\_\+\+DEG}}~0
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1}{AZ\+\_\+\+MAX\+\_\+\+DEG}}~340
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Current signal Adaptation}\par
+{\em gain \& shunt value }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa25a725425da550762ed5792cf0a1b65}{SHUNT\+\_\+\+AZ\+\_\+\+OHM}}~0.\+3333333
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ab363ea10e9d0da7012f8f6cbdcee7882}{CURRENT\+\_\+\+GAIN\+\_\+\+AZ}}~2.\+11988
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_afd090c34883b15dab99c6ff746a4af76}{SHUNT\+\_\+\+EL\+\_\+\+OHM}}~0.\+09
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a62b33caa3a185c31056a204f70eba631}{CURRENT\+\_\+\+GAIN\+\_\+\+EL}}~7.\+07773
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Task Priorities}\par
+{\em Priorities for Free\+RTOS tasks (0 = lowest priority). }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a6a03ad7d94899986123153626e22f20e}{TASK\+\_\+\+STOP\+\_\+\+MOTION\+\_\+\+PRIORITY}}~17
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a6b00c9b90fcc5568a4740fca93e954b3}{TASK\+\_\+\+HOME\+\_\+\+PRIORITY}}~16
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_abe8130df0295957593947f186524a786}{TASK\+\_\+\+GPS\+\_\+\+PRIORITY}}~15
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_af85d4f2634be8dc9a6bd6255f1f8688e}{TASK\+\_\+\+TRACKING\+\_\+\+CALCULATION\+\_\+\+PRIORITY}}~14
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a3887054e089a66a41ada671027994436}{TASK\+\_\+\+MOTION\+\_\+\+CONTROL\+\_\+\+PRIORITY}}~14
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ac438e71fd931e96cd5d66b3a30630ad9}{TASK\+\_\+\+CURRENT\+\_\+\+MONITOR\+\_\+\+PRIORITY}}~12
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a8d137660d77a1310d990d0616a8c2b48}{TASK\+\_\+\+TELEMETRY\+\_\+\+PRIORITY}}~11
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Task Timing Parameters}\par
+{\em Timing parameters for Free\+RTOS tasks (in milliseconds). }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a7f179f9e3432a2afae54c63142143cba}{TASK\+\_\+\+LOOP\+\_\+\+DELAY}}~1000
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a49fd20d40240fe22eaf939ab4d7f0ead}{TASK\+\_\+\+GPS\+\_\+\+DELAY}}~1000
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a21b4e7669d6c855ecc63462be14d163e}{TASK\+\_\+\+CURRENT\+\_\+\+MONITOR\+\_\+\+DELAY}}~3000
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a34f3c557893c6a9c133f63f9f3647669}{TASK\+\_\+\+HOME\+\_\+\+CURRENT\+\_\+\+DELAY}}~200
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ae38a7f5e2f24d06689d8b847a35e5ccf}{TASK\+\_\+\+TELEMETRY\+\_\+\+DELAY}}~1000
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Task Stack Sizes}\par
+{\em Stack sizes for Free\+RTOS tasks (in bytes). }\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_accbb358028675c83675d8b34c386268d}{MAX\+\_\+\+STACK\+\_\+\+SIZE}}~8192
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a214a51a36ae692b76f900157fbd5148d}{MEDIUM\+\_\+\+STACK\+\_\+\+SIZE}}~2048
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_ac9a8e754ddaa2697e9e675579912a15f}{MIN\+\_\+\+STACK\+\_\+\+SIZE}}~1024
+\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\label{doc-define-members}
+\Hypertarget{configurations_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{configurations_8h_a39a4aef518070719f955536fb18f6636}\index{configurations.h@{configurations.h}!A\_ANT@{A\_ANT}}
+\index{A\_ANT@{A\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{A\_ANT}{A\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_a39a4aef518070719f955536fb18f6636} 
+\+\#define A\+\_\+\+ANT~50.\+0f}
+
+\Hypertarget{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1}\index{configurations.h@{configurations.h}!AZ\_MAX\_DEG@{AZ\_MAX\_DEG}}
+\index{AZ\_MAX\_DEG@{AZ\_MAX\_DEG}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{AZ\_MAX\_DEG}{AZ\_MAX\_DEG}}
+{\footnotesize\ttfamily \label{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1} 
+\+\#define AZ\+\_\+\+MAX\+\_\+\+DEG~340}
+
+Upper Set\+Point limit for Azimuth. \Hypertarget{configurations_8h_aa9c6275c5b158a9c5367abcc0a1a51d1}\index{configurations.h@{configurations.h}!AZ\_MIN\_DEG@{AZ\_MIN\_DEG}}
+\index{AZ\_MIN\_DEG@{AZ\_MIN\_DEG}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{AZ\_MIN\_DEG}{AZ\_MIN\_DEG}}
+{\footnotesize\ttfamily \label{configurations_8h_aa9c6275c5b158a9c5367abcc0a1a51d1} 
+\+\#define AZ\+\_\+\+MIN\+\_\+\+DEG~0}
+
+Lower Set\+Point limit for Azimuth. \Hypertarget{configurations_8h_a618a262e13ca80c7900729cce273a2ac}\index{configurations.h@{configurations.h}!AZIMUTH\_RESOLUTION\_angle@{AZIMUTH\_RESOLUTION\_angle}}
+\index{AZIMUTH\_RESOLUTION\_angle@{AZIMUTH\_RESOLUTION\_angle}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{AZIMUTH\_RESOLUTION\_angle}{AZIMUTH\_RESOLUTION\_angle}}
+{\footnotesize\ttfamily \label{configurations_8h_a618a262e13ca80c7900729cce273a2ac} 
+\+\#define AZIMUTH\+\_\+\+RESOLUTION\+\_\+angle~0.\+225}
+
+Degrees per reed pulse for Azimuth. \Hypertarget{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}\index{configurations.h@{configurations.h}!BP\_ANT@{BP\_ANT}}
+\index{BP\_ANT@{BP\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{BP\_ANT}{BP\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b} 
+\+\#define BP\+\_\+\+ANT~230.\+66f}
+
+\Hypertarget{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}\index{configurations.h@{configurations.h}!C\_ANT@{C\_ANT}}
+\index{C\_ANT@{C\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{C\_ANT}{C\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a} 
+\+\#define C\+\_\+\+ANT~260.\+00f}
+
+\Hypertarget{configurations_8h_a53f290d4e302a2bc20466bea8c913956}\index{configurations.h@{configurations.h}!CURRENT\_AZIMUTH\_MAX\_mA@{CURRENT\_AZIMUTH\_MAX\_mA}}
+\index{CURRENT\_AZIMUTH\_MAX\_mA@{CURRENT\_AZIMUTH\_MAX\_mA}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_AZIMUTH\_MAX\_mA}{CURRENT\_AZIMUTH\_MAX\_mA}}
+{\footnotesize\ttfamily \label{configurations_8h_a53f290d4e302a2bc20466bea8c913956} 
+\+\#define CURRENT\+\_\+\+AZIMUTH\+\_\+\+MAX\+\_\+mA~1000.\+0}
+
+Max DC current for Azimuth motor (mA). \Hypertarget{configurations_8h_a23704dd1aa5111b43de738b89232a9e2}\index{configurations.h@{configurations.h}!CURRENT\_ELEVATION\_MAX\_mA@{CURRENT\_ELEVATION\_MAX\_mA}}
+\index{CURRENT\_ELEVATION\_MAX\_mA@{CURRENT\_ELEVATION\_MAX\_mA}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_ELEVATION\_MAX\_mA}{CURRENT\_ELEVATION\_MAX\_mA}}
+{\footnotesize\ttfamily \label{configurations_8h_a23704dd1aa5111b43de738b89232a9e2} 
+\+\#define CURRENT\+\_\+\+ELEVATION\+\_\+\+MAX\+\_\+mA~1000.\+0}
+
+Max DC current for Elevation motor (mA). \Hypertarget{configurations_8h_ab363ea10e9d0da7012f8f6cbdcee7882}\index{configurations.h@{configurations.h}!CURRENT\_GAIN\_AZ@{CURRENT\_GAIN\_AZ}}
+\index{CURRENT\_GAIN\_AZ@{CURRENT\_GAIN\_AZ}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_GAIN\_AZ}{CURRENT\_GAIN\_AZ}}
+{\footnotesize\ttfamily \label{configurations_8h_ab363ea10e9d0da7012f8f6cbdcee7882} 
+\+\#define CURRENT\+\_\+\+GAIN\+\_\+\+AZ~2.\+11988}
+
+Signal Adaptation gain for Azimuth current sensing. \Hypertarget{configurations_8h_a62b33caa3a185c31056a204f70eba631}\index{configurations.h@{configurations.h}!CURRENT\_GAIN\_EL@{CURRENT\_GAIN\_EL}}
+\index{CURRENT\_GAIN\_EL@{CURRENT\_GAIN\_EL}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_GAIN\_EL}{CURRENT\_GAIN\_EL}}
+{\footnotesize\ttfamily \label{configurations_8h_a62b33caa3a185c31056a204f70eba631} 
+\+\#define CURRENT\+\_\+\+GAIN\+\_\+\+EL~7.\+07773}
+
+Signal Adaptation gain for Elevation current sensing. \Hypertarget{configurations_8h_ada73a694caa3cc91084dd186c39d41e1}\index{configurations.h@{configurations.h}!CURRENT\_HOMING\_mA@{CURRENT\_HOMING\_mA}}
+\index{CURRENT\_HOMING\_mA@{CURRENT\_HOMING\_mA}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_HOMING\_mA}{CURRENT\_HOMING\_mA}}
+{\footnotesize\ttfamily \label{configurations_8h_ada73a694caa3cc91084dd186c39d41e1} 
+\+\#define CURRENT\+\_\+\+HOMING\+\_\+mA~10.\+0}
+
+Max current for considering the motor turned off. \Hypertarget{configurations_8h_ab1c010192107735bc198c55953da3ef6}\index{configurations.h@{configurations.h}!CURRENT\_OFFSETS\_SAMPLES@{CURRENT\_OFFSETS\_SAMPLES}}
+\index{CURRENT\_OFFSETS\_SAMPLES@{CURRENT\_OFFSETS\_SAMPLES}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{CURRENT\_OFFSETS\_SAMPLES}{CURRENT\_OFFSETS\_SAMPLES}}
+{\footnotesize\ttfamily \label{configurations_8h_ab1c010192107735bc198c55953da3ef6} 
+\+\#define CURRENT\+\_\+\+OFFSETS\+\_\+\+SAMPLES~100}
+
+Number of samples for averaging measurements. \Hypertarget{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}\index{configurations.h@{configurations.h}!D\_ANT@{D\_ANT}}
+\index{D\_ANT@{D\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{D\_ANT}{D\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_a2ac51fcc017948d66c75b95473b426c4} 
+\+\#define D\+\_\+\+ANT~156.\+0f}
+
+\Hypertarget{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}\index{configurations.h@{configurations.h}!DEFAULT\_SAMPLE\_TIME\_US@{DEFAULT\_SAMPLE\_TIME\_US}}
+\index{DEFAULT\_SAMPLE\_TIME\_US@{DEFAULT\_SAMPLE\_TIME\_US}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_SAMPLE\_TIME\_US}{DEFAULT\_SAMPLE\_TIME\_US}}
+{\footnotesize\ttfamily \label{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb} 
+\+\#define DEFAULT\+\_\+\+SAMPLE\+\_\+\+TIME\+\_\+\+US~500}
+
+Default control loop sample time (µs). \Hypertarget{configurations_8h_af257e2a3e091629829857a2eb8931a7a}\index{configurations.h@{configurations.h}!DEFAULT\_SERVER\_PORT@{DEFAULT\_SERVER\_PORT}}
+\index{DEFAULT\_SERVER\_PORT@{DEFAULT\_SERVER\_PORT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_SERVER\_PORT}{DEFAULT\_SERVER\_PORT}}
+{\footnotesize\ttfamily \label{configurations_8h_af257e2a3e091629829857a2eb8931a7a} 
+\+\#define DEFAULT\+\_\+\+SERVER\+\_\+\+PORT~80}
+
+Web server port. \Hypertarget{configurations_8h_a151690ecdd7d2c7b69586e6df164676c}\index{configurations.h@{configurations.h}!DEFAULT\_WIFI\_PASSWORD@{DEFAULT\_WIFI\_PASSWORD}}
+\index{DEFAULT\_WIFI\_PASSWORD@{DEFAULT\_WIFI\_PASSWORD}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_WIFI\_PASSWORD}{DEFAULT\_WIFI\_PASSWORD}}
+{\footnotesize\ttfamily \label{configurations_8h_a151690ecdd7d2c7b69586e6df164676c} 
+\+\#define DEFAULT\+\_\+\+WIFI\+\_\+\+PASSWORD~"{}"{}}
+
+Default AP password (empty = open AP). \Hypertarget{configurations_8h_a7ea92631acc3bc41ae5eadc069323267}\index{configurations.h@{configurations.h}!DEFAULT\_WIFI\_SSID@{DEFAULT\_WIFI\_SSID}}
+\index{DEFAULT\_WIFI\_SSID@{DEFAULT\_WIFI\_SSID}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_WIFI\_SSID}{DEFAULT\_WIFI\_SSID}}
+{\footnotesize\ttfamily \label{configurations_8h_a7ea92631acc3bc41ae5eadc069323267} 
+\+\#define DEFAULT\+\_\+\+WIFI\+\_\+\+SSID~"{}Tracker\+LARFy\+M"{}}
+
+Default AP SSID. \Hypertarget{configurations_8h_aed5df61912c8c1b1f45d597496d14625}\index{configurations.h@{configurations.h}!E\_ANT@{E\_ANT}}
+\index{E\_ANT@{E\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{E\_ANT}{E\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_aed5df61912c8c1b1f45d597496d14625} 
+\+\#define E\+\_\+\+ANT~80.\+0f}
+
+\Hypertarget{configurations_8h_a256d7fdd4d6568904b4d60a6764b3fd1}\index{configurations.h@{configurations.h}!EL\_MAX\_DEG@{EL\_MAX\_DEG}}
+\index{EL\_MAX\_DEG@{EL\_MAX\_DEG}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{EL\_MAX\_DEG}{EL\_MAX\_DEG}}
+{\footnotesize\ttfamily \label{configurations_8h_a256d7fdd4d6568904b4d60a6764b3fd1} 
+\+\#define EL\+\_\+\+MAX\+\_\+\+DEG~90}
+
+Upper Set\+Point limit for Elevation. \Hypertarget{configurations_8h_ad23baeb01d87433d396f0fe003b8786d}\index{configurations.h@{configurations.h}!EL\_MIN\_DEG@{EL\_MIN\_DEG}}
+\index{EL\_MIN\_DEG@{EL\_MIN\_DEG}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{EL\_MIN\_DEG}{EL\_MIN\_DEG}}
+{\footnotesize\ttfamily \label{configurations_8h_ad23baeb01d87433d396f0fe003b8786d} 
+\+\#define EL\+\_\+\+MIN\+\_\+\+DEG~0}
+
+Lower Set\+Point limit for Elevation. \Hypertarget{configurations_8h_a391fdd14353e44f4001f8754e497dbec}\index{configurations.h@{configurations.h}!ELEVATION\_RESOLUTION\_mm@{ELEVATION\_RESOLUTION\_mm}}
+\index{ELEVATION\_RESOLUTION\_mm@{ELEVATION\_RESOLUTION\_mm}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{ELEVATION\_RESOLUTION\_mm}{ELEVATION\_RESOLUTION\_mm}}
+{\footnotesize\ttfamily \label{configurations_8h_a391fdd14353e44f4001f8754e497dbec} 
+\+\#define ELEVATION\+\_\+\+RESOLUTION\+\_\+mm~0.\+8}
+
+Millimeters per reed pulse for Elevation. \Hypertarget{configurations_8h_ab18abfaf88f25a5ba352779defd5b333}\index{configurations.h@{configurations.h}!EN\_AZ\_PIN@{EN\_AZ\_PIN}}
+\index{EN\_AZ\_PIN@{EN\_AZ\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{EN\_AZ\_PIN}{EN\_AZ\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_ab18abfaf88f25a5ba352779defd5b333} 
+\+\#define EN\+\_\+\+AZ\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+12}
+
+Enable/\+\+PWM pin for Azimuth motor. \Hypertarget{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}\index{configurations.h@{configurations.h}!EN\_EL\_PIN@{EN\_EL\_PIN}}
+\index{EN\_EL\_PIN@{EN\_EL\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{EN\_EL\_PIN}{EN\_EL\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a48348f346a55b4cdd6249e8d8491242d} 
+\+\#define EN\+\_\+\+EL\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+13}
+
+Enable/\+\+PWM pin for Elevation motor. \Hypertarget{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}\index{configurations.h@{configurations.h}!F\_ANT@{F\_ANT}}
+\index{F\_ANT@{F\_ANT}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{F\_ANT}{F\_ANT}}
+{\footnotesize\ttfamily \label{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5} 
+\+\#define F\+\_\+\+ANT~255.\+00f}
+
+\Hypertarget{configurations_8h_ac81ef7244c62ee5ea3a9a637a07ac921}\index{configurations.h@{configurations.h}!GPS\_BAUDRATE@{GPS\_BAUDRATE}}
+\index{GPS\_BAUDRATE@{GPS\_BAUDRATE}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{GPS\_BAUDRATE}{GPS\_BAUDRATE}}
+{\footnotesize\ttfamily \label{configurations_8h_ac81ef7244c62ee5ea3a9a637a07ac921} 
+\+\#define GPS\+\_\+\+BAUDRATE~9600}
+
+GPS communication baud rate. \Hypertarget{configurations_8h_a6f8927970de9eedcbb8f6c14b1d0d6c3}\index{configurations.h@{configurations.h}!GPS\_RX\_PIN@{GPS\_RX\_PIN}}
+\index{GPS\_RX\_PIN@{GPS\_RX\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{GPS\_RX\_PIN}{GPS\_RX\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a6f8927970de9eedcbb8f6c14b1d0d6c3} 
+\+\#define GPS\+\_\+\+RX\+\_\+\+PIN~16}
+
+GPS UART RX pin. \Hypertarget{configurations_8h_acae14b9c1767cfec367a4b96009c94e5}\index{configurations.h@{configurations.h}!GPS\_TX\_PIN@{GPS\_TX\_PIN}}
+\index{GPS\_TX\_PIN@{GPS\_TX\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{GPS\_TX\_PIN}{GPS\_TX\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_acae14b9c1767cfec367a4b96009c94e5} 
+\+\#define GPS\+\_\+\+TX\+\_\+\+PIN~17}
+
+GPS UART TX pin. \Hypertarget{configurations_8h_a0276fa67794ae64b565fe0da6db4fc9d}\index{configurations.h@{configurations.h}!GPS\_UART@{GPS\_UART}}
+\index{GPS\_UART@{GPS\_UART}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{GPS\_UART}{GPS\_UART}}
+{\footnotesize\ttfamily \label{configurations_8h_a0276fa67794ae64b565fe0da6db4fc9d} 
+\+\#define GPS\+\_\+\+UART~1}
+
+UART index used by GPS. \Hypertarget{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20}\index{configurations.h@{configurations.h}!I\_AZ\_CHANNEL@{I\_AZ\_CHANNEL}}
+\index{I\_AZ\_CHANNEL@{I\_AZ\_CHANNEL}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{I\_AZ\_CHANNEL}{I\_AZ\_CHANNEL}}
+{\footnotesize\ttfamily \label{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20} 
+\+\#define I\+\_\+\+AZ\+\_\+\+CHANNEL~ADC1\+\_\+\+CHANNEL\+\_\+0}
+
+ADC1 channel for Azimuth current sensing. \Hypertarget{configurations_8h_ab1858222d0c9bde8f3a6dc0bfd6c6602}\index{configurations.h@{configurations.h}!I\_AZ\_PIN@{I\_AZ\_PIN}}
+\index{I\_AZ\_PIN@{I\_AZ\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{I\_AZ\_PIN}{I\_AZ\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_ab1858222d0c9bde8f3a6dc0bfd6c6602} 
+\+\#define I\+\_\+\+AZ\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+36}
+
+Analog pin (VP) for Azimuth current sensing. \Hypertarget{configurations_8h_a879a26029e799249e6786c5890d9f7e1}\index{configurations.h@{configurations.h}!I\_EL\_CHANNEL@{I\_EL\_CHANNEL}}
+\index{I\_EL\_CHANNEL@{I\_EL\_CHANNEL}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{I\_EL\_CHANNEL}{I\_EL\_CHANNEL}}
+{\footnotesize\ttfamily \label{configurations_8h_a879a26029e799249e6786c5890d9f7e1} 
+\+\#define I\+\_\+\+EL\+\_\+\+CHANNEL~ADC1\+\_\+\+CHANNEL\+\_\+3}
+
+ADC1 channel for Elevation current sensing. \Hypertarget{configurations_8h_aad16931d726a00fa1f731f95541eef10}\index{configurations.h@{configurations.h}!I\_EL\_PIN@{I\_EL\_PIN}}
+\index{I\_EL\_PIN@{I\_EL\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{I\_EL\_PIN}{I\_EL\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_aad16931d726a00fa1f731f95541eef10} 
+\+\#define I\+\_\+\+EL\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+39}
+
+Analog pin (VN) for Elevation current sensing. \Hypertarget{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24}\index{configurations.h@{configurations.h}!IN1\_AZ\_PIN@{IN1\_AZ\_PIN}}
+\index{IN1\_AZ\_PIN@{IN1\_AZ\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{IN1\_AZ\_PIN}{IN1\_AZ\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24} 
+\+\#define IN1\+\_\+\+AZ\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+25}
+
+Input pin 1 of the Azimuth motor driver. \Hypertarget{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}\index{configurations.h@{configurations.h}!IN1\_EL\_PIN@{IN1\_EL\_PIN}}
+\index{IN1\_EL\_PIN@{IN1\_EL\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{IN1\_EL\_PIN}{IN1\_EL\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698} 
+\+\#define IN1\+\_\+\+EL\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+27}
+
+Input pin 1 of the Elevation motor driver. \Hypertarget{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4}\index{configurations.h@{configurations.h}!IN2\_AZ\_PIN@{IN2\_AZ\_PIN}}
+\index{IN2\_AZ\_PIN@{IN2\_AZ\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{IN2\_AZ\_PIN}{IN2\_AZ\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4} 
+\+\#define IN2\+\_\+\+AZ\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+26}
+
+Input pin 2 of the Azimuth motor driver. \Hypertarget{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}\index{configurations.h@{configurations.h}!IN2\_EL\_PIN@{IN2\_EL\_PIN}}
+\index{IN2\_EL\_PIN@{IN2\_EL\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{IN2\_EL\_PIN}{IN2\_EL\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_a3c8358b42b349a816f9ef990377fd98b} 
+\+\#define IN2\+\_\+\+EL\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+14}
+
+Input pin 2 of the Elevation motor driver. \Hypertarget{configurations_8h_a84c8a48add65471b6d7a3df86ded588a}\index{configurations.h@{configurations.h}!KI\_AZIMUTH@{KI\_AZIMUTH}}
+\index{KI\_AZIMUTH@{KI\_AZIMUTH}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{KI\_AZIMUTH}{KI\_AZIMUTH}}
+{\footnotesize\ttfamily \label{configurations_8h_a84c8a48add65471b6d7a3df86ded588a} 
+\+\#define KI\+\_\+\+AZIMUTH~1}
+
+Integral gain (AZ). 0.\+1 \Hypertarget{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}\index{configurations.h@{configurations.h}!KI\_ELEVATION@{KI\_ELEVATION}}
+\index{KI\_ELEVATION@{KI\_ELEVATION}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{KI\_ELEVATION}{KI\_ELEVATION}}
+{\footnotesize\ttfamily \label{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4} 
+\+\#define KI\+\_\+\+ELEVATION~0.\+5}
+
+Integral gain (EL). 0.\+001 \Hypertarget{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67}\index{configurations.h@{configurations.h}!KP\_AZIMUTH@{KP\_AZIMUTH}}
+\index{KP\_AZIMUTH@{KP\_AZIMUTH}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{KP\_AZIMUTH}{KP\_AZIMUTH}}
+{\footnotesize\ttfamily \label{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67} 
+\+\#define KP\+\_\+\+AZIMUTH~10.\+0}
+
+Proportional gain (AZ). 10 \Hypertarget{configurations_8h_aa837cea21a670725c8482e7379c50b84}\index{configurations.h@{configurations.h}!KP\_ELEVATION@{KP\_ELEVATION}}
+\index{KP\_ELEVATION@{KP\_ELEVATION}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{KP\_ELEVATION}{KP\_ELEVATION}}
+{\footnotesize\ttfamily \label{configurations_8h_aa837cea21a670725c8482e7379c50b84} 
+\+\#define KP\+\_\+\+ELEVATION~10.\+0}
+
+Proportional gain (EL). 5 \Hypertarget{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0}\index{configurations.h@{configurations.h}!M\_AZ\_SETTLING\_TIME\_MS@{M\_AZ\_SETTLING\_TIME\_MS}}
+\index{M\_AZ\_SETTLING\_TIME\_MS@{M\_AZ\_SETTLING\_TIME\_MS}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_AZ\_SETTLING\_TIME\_MS}{M\_AZ\_SETTLING\_TIME\_MS}}
+{\footnotesize\ttfamily \label{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0} 
+\+\#define M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~80}
+
+Settling time for Azimuth motor (ms). \Hypertarget{configurations_8h_af612d680313c8e405272d106245d0fe6}\index{configurations.h@{configurations.h}!M\_AZ\_V\_TO\_START@{M\_AZ\_V\_TO\_START}}
+\index{M\_AZ\_V\_TO\_START@{M\_AZ\_V\_TO\_START}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_AZ\_V\_TO\_START}{M\_AZ\_V\_TO\_START}}
+{\footnotesize\ttfamily \label{configurations_8h_af612d680313c8e405272d106245d0fe6} 
+\+\#define M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START~15.\+5}
+
+Minimum voltage to overcome static friction (Azimuth). Note:\+ Values from PWM modulation \Hypertarget{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a}\index{configurations.h@{configurations.h}!M\_EL\_SETTLING\_TIME\_MS@{M\_EL\_SETTLING\_TIME\_MS}}
+\index{M\_EL\_SETTLING\_TIME\_MS@{M\_EL\_SETTLING\_TIME\_MS}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_EL\_SETTLING\_TIME\_MS}{M\_EL\_SETTLING\_TIME\_MS}}
+{\footnotesize\ttfamily \label{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a} 
+\+\#define M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~150}
+
+Settling time for Elevation motor (ms). \Hypertarget{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}\index{configurations.h@{configurations.h}!M\_EL\_V\_TO\_START@{M\_EL\_V\_TO\_START}}
+\index{M\_EL\_V\_TO\_START@{M\_EL\_V\_TO\_START}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_EL\_V\_TO\_START}{M\_EL\_V\_TO\_START}}
+{\footnotesize\ttfamily \label{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b} 
+\+\#define M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START~8}
+
+Minimum voltage to overcome static friction (Elevation). Note:\+ Values from PWM modulation \Hypertarget{configurations_8h_ac37c3874949285db365830a0af9ba6f0}\index{configurations.h@{configurations.h}!M\_MAX\_DUTY@{M\_MAX\_DUTY}}
+\index{M\_MAX\_DUTY@{M\_MAX\_DUTY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_MAX\_DUTY}{M\_MAX\_DUTY}}
+{\footnotesize\ttfamily \label{configurations_8h_ac37c3874949285db365830a0af9ba6f0} 
+\+\#define M\+\_\+\+MAX\+\_\+\+DUTY~100}
+
+Maximum duty cycle for motors (0-\/100\%). \Hypertarget{configurations_8h_adf6dcd893480852d7a468e561027c267}\index{configurations.h@{configurations.h}!M\_STOP\_DUTY@{M\_STOP\_DUTY}}
+\index{M\_STOP\_DUTY@{M\_STOP\_DUTY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_STOP\_DUTY}{M\_STOP\_DUTY}}
+{\footnotesize\ttfamily \label{configurations_8h_adf6dcd893480852d7a468e561027c267} 
+\+\#define M\+\_\+\+STOP\+\_\+\+DUTY~25}
+
+Duty cycle to apply for stopping the motors (0-\/100\%). \Hypertarget{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}\index{configurations.h@{configurations.h}!M\_V\_NOMINAL@{M\_V\_NOMINAL}}
+\index{M\_V\_NOMINAL@{M\_V\_NOMINAL}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_V\_NOMINAL}{M\_V\_NOMINAL}}
+{\footnotesize\ttfamily \label{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1} 
+\+\#define M\+\_\+\+V\+\_\+\+NOMINAL~36}
+
+Nominal voltage for motors (V). \Hypertarget{configurations_8h_accbb358028675c83675d8b34c386268d}\index{configurations.h@{configurations.h}!MAX\_STACK\_SIZE@{MAX\_STACK\_SIZE}}
+\index{MAX\_STACK\_SIZE@{MAX\_STACK\_SIZE}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_STACK\_SIZE}{MAX\_STACK\_SIZE}}
+{\footnotesize\ttfamily \label{configurations_8h_accbb358028675c83675d8b34c386268d} 
+\+\#define MAX\+\_\+\+STACK\+\_\+\+SIZE~8192}
+
+Maximum stack size for Free\+RTOS tasks (bytes). \Hypertarget{configurations_8h_a2597be4e15dcb4d93d323730f9ac2838}\index{configurations.h@{configurations.h}!MDNS\_SERVICE\_NAME@{MDNS\_SERVICE\_NAME}}
+\index{MDNS\_SERVICE\_NAME@{MDNS\_SERVICE\_NAME}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{MDNS\_SERVICE\_NAME}{MDNS\_SERVICE\_NAME}}
+{\footnotesize\ttfamily \label{configurations_8h_a2597be4e15dcb4d93d323730f9ac2838} 
+\+\#define MDNS\+\_\+\+SERVICE\+\_\+\+NAME~"{}Tracker"{}}
+
+m\+DNS hostname. \Hypertarget{configurations_8h_a214a51a36ae692b76f900157fbd5148d}\index{configurations.h@{configurations.h}!MEDIUM\_STACK\_SIZE@{MEDIUM\_STACK\_SIZE}}
+\index{MEDIUM\_STACK\_SIZE@{MEDIUM\_STACK\_SIZE}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{MEDIUM\_STACK\_SIZE}{MEDIUM\_STACK\_SIZE}}
+{\footnotesize\ttfamily \label{configurations_8h_a214a51a36ae692b76f900157fbd5148d} 
+\+\#define MEDIUM\+\_\+\+STACK\+\_\+\+SIZE~2048}
+
+Medium stack size for Free\+RTOS tasks (bytes). \Hypertarget{configurations_8h_ac9a8e754ddaa2697e9e675579912a15f}\index{configurations.h@{configurations.h}!MIN\_STACK\_SIZE@{MIN\_STACK\_SIZE}}
+\index{MIN\_STACK\_SIZE@{MIN\_STACK\_SIZE}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{MIN\_STACK\_SIZE}{MIN\_STACK\_SIZE}}
+{\footnotesize\ttfamily \label{configurations_8h_ac9a8e754ddaa2697e9e675579912a15f} 
+\+\#define MIN\+\_\+\+STACK\+\_\+\+SIZE~1024}
+
+Minimum stack size for Free\+RTOS tasks (bytes). \Hypertarget{configurations_8h_a56e165627f596c2f42f843ae6571de0e}\index{configurations.h@{configurations.h}!PWM\_FREQ\_HZ@{PWM\_FREQ\_HZ}}
+\index{PWM\_FREQ\_HZ@{PWM\_FREQ\_HZ}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{PWM\_FREQ\_HZ}{PWM\_FREQ\_HZ}}
+{\footnotesize\ttfamily \label{configurations_8h_a56e165627f596c2f42f843ae6571de0e} 
+\+\#define PWM\+\_\+\+FREQ\+\_\+\+HZ~2500}
+
+
+
+PWM frequency for PWM motor speed control (Hz). 
+
+\Hypertarget{configurations_8h_aa87d687897e717dea73184063e2b3be1}\index{configurations.h@{configurations.h}!REED\_AZ\_PIN@{REED\_AZ\_PIN}}
+\index{REED\_AZ\_PIN@{REED\_AZ\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_AZ\_PIN}{REED\_AZ\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_aa87d687897e717dea73184063e2b3be1} 
+\+\#define REED\+\_\+\+AZ\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+22}
+
+Reed switch for Azimuth limit detection. \Hypertarget{configurations_8h_a9fc5bef92112470db8255986b6ecebcb}\index{configurations.h@{configurations.h}!REED\_AZ\_SOFT\_LIMIT\_HIGH@{REED\_AZ\_SOFT\_LIMIT\_HIGH}}
+\index{REED\_AZ\_SOFT\_LIMIT\_HIGH@{REED\_AZ\_SOFT\_LIMIT\_HIGH}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_AZ\_SOFT\_LIMIT\_HIGH}{REED\_AZ\_SOFT\_LIMIT\_HIGH}}
+{\footnotesize\ttfamily \label{configurations_8h_a9fc5bef92112470db8255986b6ecebcb} 
+\+\#define REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH~1610}
+
+Upper soft limit for Azimuth. (362.\+25° máx) \Hypertarget{configurations_8h_acdaca90d9569b370599f231928e32845}\index{configurations.h@{configurations.h}!REED\_AZ\_SOFT\_LIMIT\_LOW@{REED\_AZ\_SOFT\_LIMIT\_LOW}}
+\index{REED\_AZ\_SOFT\_LIMIT\_LOW@{REED\_AZ\_SOFT\_LIMIT\_LOW}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_AZ\_SOFT\_LIMIT\_LOW}{REED\_AZ\_SOFT\_LIMIT\_LOW}}
+{\footnotesize\ttfamily \label{configurations_8h_acdaca90d9569b370599f231928e32845} 
+\+\#define REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW~-\/5}
+
+Lower soft limit for Azimuth \Hypertarget{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7}\index{configurations.h@{configurations.h}!REED\_EL\_PIN@{REED\_EL\_PIN}}
+\index{REED\_EL\_PIN@{REED\_EL\_PIN}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_EL\_PIN}{REED\_EL\_PIN}}
+{\footnotesize\ttfamily \label{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7} 
+\+\#define REED\+\_\+\+EL\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+23}
+
+Reed switch for Elevation limit detection. \Hypertarget{configurations_8h_a7de64bbb117e66e561add80d7f24374e}\index{configurations.h@{configurations.h}!REED\_EL\_SOFT\_LIMIT\_HIGH@{REED\_EL\_SOFT\_LIMIT\_HIGH}}
+\index{REED\_EL\_SOFT\_LIMIT\_HIGH@{REED\_EL\_SOFT\_LIMIT\_HIGH}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_EL\_SOFT\_LIMIT\_HIGH}{REED\_EL\_SOFT\_LIMIT\_HIGH}}
+{\footnotesize\ttfamily \label{configurations_8h_a7de64bbb117e66e561add80d7f24374e} 
+\+\#define REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH~435}
+
+Upper soft limit for Elevation. (348mm máx) \Hypertarget{configurations_8h_a08a68068b1a658d3b0e967b799a84100}\index{configurations.h@{configurations.h}!REED\_EL\_SOFT\_LIMIT\_LOW@{REED\_EL\_SOFT\_LIMIT\_LOW}}
+\index{REED\_EL\_SOFT\_LIMIT\_LOW@{REED\_EL\_SOFT\_LIMIT\_LOW}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{REED\_EL\_SOFT\_LIMIT\_LOW}{REED\_EL\_SOFT\_LIMIT\_LOW}}
+{\footnotesize\ttfamily \label{configurations_8h_a08a68068b1a658d3b0e967b799a84100} 
+\+\#define REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW~-\/5}
+
+Lower soft limit for Elevation \Hypertarget{configurations_8h_a048e4fab329b80f602ac97b6aed12979}\index{configurations.h@{configurations.h}!SAMPLE\_TIME\_S@{SAMPLE\_TIME\_S}}
+\index{SAMPLE\_TIME\_S@{SAMPLE\_TIME\_S}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SAMPLE\_TIME\_S}{SAMPLE\_TIME\_S}}
+{\footnotesize\ttfamily \label{configurations_8h_a048e4fab329b80f602ac97b6aed12979} 
+\+\#define SAMPLE\+\_\+\+TIME\+\_\+S~(\doxymbox{\hyperlink{configurations_8h_a71e747b23aad740159d5c63f2d28f097}{SAMPLE\+\_\+\+TIME\+\_\+\+US}} /\+ 1000000.\+0)}
+
+Control loop sample time (s). \Hypertarget{configurations_8h_a3e0f664cc702c0239f5996a93e2e61de}\index{configurations.h@{configurations.h}!SAMPLE\_TIME\_SGP4\_MS@{SAMPLE\_TIME\_SGP4\_MS}}
+\index{SAMPLE\_TIME\_SGP4\_MS@{SAMPLE\_TIME\_SGP4\_MS}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SAMPLE\_TIME\_SGP4\_MS}{SAMPLE\_TIME\_SGP4\_MS}}
+{\footnotesize\ttfamily \label{configurations_8h_a3e0f664cc702c0239f5996a93e2e61de} 
+\+\#define SAMPLE\+\_\+\+TIME\+\_\+\+SGP4\+\_\+\+MS~50}
+
+SGP4 Trayectory estimation time (ms). \Hypertarget{configurations_8h_a71e747b23aad740159d5c63f2d28f097}\index{configurations.h@{configurations.h}!SAMPLE\_TIME\_US@{SAMPLE\_TIME\_US}}
+\index{SAMPLE\_TIME\_US@{SAMPLE\_TIME\_US}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SAMPLE\_TIME\_US}{SAMPLE\_TIME\_US}}
+{\footnotesize\ttfamily \label{configurations_8h_a71e747b23aad740159d5c63f2d28f097} 
+\+\#define SAMPLE\+\_\+\+TIME\+\_\+\+US~500}
+
+Control loop sample time (µs). \Hypertarget{configurations_8h_a89f82a9d44beaa52b00c7245a50a105c}\index{configurations.h@{configurations.h}!SERIAL\_BAUDRATE@{SERIAL\_BAUDRATE}}
+\index{SERIAL\_BAUDRATE@{SERIAL\_BAUDRATE}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SERIAL\_BAUDRATE}{SERIAL\_BAUDRATE}}
+{\footnotesize\ttfamily \label{configurations_8h_a89f82a9d44beaa52b00c7245a50a105c} 
+\+\#define SERIAL\+\_\+\+BAUDRATE~115200}
+
+Baud rate for USB serial monitor. \Hypertarget{configurations_8h_aa25a725425da550762ed5792cf0a1b65}\index{configurations.h@{configurations.h}!SHUNT\_AZ\_OHM@{SHUNT\_AZ\_OHM}}
+\index{SHUNT\_AZ\_OHM@{SHUNT\_AZ\_OHM}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SHUNT\_AZ\_OHM}{SHUNT\_AZ\_OHM}}
+{\footnotesize\ttfamily \label{configurations_8h_aa25a725425da550762ed5792cf0a1b65} 
+\+\#define SHUNT\+\_\+\+AZ\+\_\+\+OHM~0.\+3333333}
+
+Shunt resistor value for Azimuth current sensing (Ohms). \Hypertarget{configurations_8h_afd090c34883b15dab99c6ff746a4af76}\index{configurations.h@{configurations.h}!SHUNT\_EL\_OHM@{SHUNT\_EL\_OHM}}
+\index{SHUNT\_EL\_OHM@{SHUNT\_EL\_OHM}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{SHUNT\_EL\_OHM}{SHUNT\_EL\_OHM}}
+{\footnotesize\ttfamily \label{configurations_8h_afd090c34883b15dab99c6ff746a4af76} 
+\+\#define SHUNT\+\_\+\+EL\+\_\+\+OHM~0.\+09}
+
+Shunt resistor value for Elevation current sensing (Ohms). \Hypertarget{configurations_8h_a21b4e7669d6c855ecc63462be14d163e}\index{configurations.h@{configurations.h}!TASK\_CURRENT\_MONITOR\_DELAY@{TASK\_CURRENT\_MONITOR\_DELAY}}
+\index{TASK\_CURRENT\_MONITOR\_DELAY@{TASK\_CURRENT\_MONITOR\_DELAY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_CURRENT\_MONITOR\_DELAY}{TASK\_CURRENT\_MONITOR\_DELAY}}
+{\footnotesize\ttfamily \label{configurations_8h_a21b4e7669d6c855ecc63462be14d163e} 
+\+\#define TASK\+\_\+\+CURRENT\+\_\+\+MONITOR\+\_\+\+DELAY~3000}
+
+Delay for Current Monitor task (ms). \Hypertarget{configurations_8h_ac438e71fd931e96cd5d66b3a30630ad9}\index{configurations.h@{configurations.h}!TASK\_CURRENT\_MONITOR\_PRIORITY@{TASK\_CURRENT\_MONITOR\_PRIORITY}}
+\index{TASK\_CURRENT\_MONITOR\_PRIORITY@{TASK\_CURRENT\_MONITOR\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_CURRENT\_MONITOR\_PRIORITY}{TASK\_CURRENT\_MONITOR\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_ac438e71fd931e96cd5d66b3a30630ad9} 
+\+\#define TASK\+\_\+\+CURRENT\+\_\+\+MONITOR\+\_\+\+PRIORITY~12}
+
+\Hypertarget{configurations_8h_a49fd20d40240fe22eaf939ab4d7f0ead}\index{configurations.h@{configurations.h}!TASK\_GPS\_DELAY@{TASK\_GPS\_DELAY}}
+\index{TASK\_GPS\_DELAY@{TASK\_GPS\_DELAY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_GPS\_DELAY}{TASK\_GPS\_DELAY}}
+{\footnotesize\ttfamily \label{configurations_8h_a49fd20d40240fe22eaf939ab4d7f0ead} 
+\+\#define TASK\+\_\+\+GPS\+\_\+\+DELAY~1000}
+
+Delay for GPS task (ms). \Hypertarget{configurations_8h_abe8130df0295957593947f186524a786}\index{configurations.h@{configurations.h}!TASK\_GPS\_PRIORITY@{TASK\_GPS\_PRIORITY}}
+\index{TASK\_GPS\_PRIORITY@{TASK\_GPS\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_GPS\_PRIORITY}{TASK\_GPS\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_abe8130df0295957593947f186524a786} 
+\+\#define TASK\+\_\+\+GPS\+\_\+\+PRIORITY~15}
+
+\Hypertarget{configurations_8h_a34f3c557893c6a9c133f63f9f3647669}\index{configurations.h@{configurations.h}!TASK\_HOME\_CURRENT\_DELAY@{TASK\_HOME\_CURRENT\_DELAY}}
+\index{TASK\_HOME\_CURRENT\_DELAY@{TASK\_HOME\_CURRENT\_DELAY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_HOME\_CURRENT\_DELAY}{TASK\_HOME\_CURRENT\_DELAY}}
+{\footnotesize\ttfamily \label{configurations_8h_a34f3c557893c6a9c133f63f9f3647669} 
+\+\#define TASK\+\_\+\+HOME\+\_\+\+CURRENT\+\_\+\+DELAY~200}
+
+Delay for Home Current task (ms). \Hypertarget{configurations_8h_a6b00c9b90fcc5568a4740fca93e954b3}\index{configurations.h@{configurations.h}!TASK\_HOME\_PRIORITY@{TASK\_HOME\_PRIORITY}}
+\index{TASK\_HOME\_PRIORITY@{TASK\_HOME\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_HOME\_PRIORITY}{TASK\_HOME\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_a6b00c9b90fcc5568a4740fca93e954b3} 
+\+\#define TASK\+\_\+\+HOME\+\_\+\+PRIORITY~16}
+
+\Hypertarget{configurations_8h_a7f179f9e3432a2afae54c63142143cba}\index{configurations.h@{configurations.h}!TASK\_LOOP\_DELAY@{TASK\_LOOP\_DELAY}}
+\index{TASK\_LOOP\_DELAY@{TASK\_LOOP\_DELAY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_LOOP\_DELAY}{TASK\_LOOP\_DELAY}}
+{\footnotesize\ttfamily \label{configurations_8h_a7f179f9e3432a2afae54c63142143cba} 
+\+\#define TASK\+\_\+\+LOOP\+\_\+\+DELAY~1000}
+
+Delay for main loop task (ms). \Hypertarget{configurations_8h_a3887054e089a66a41ada671027994436}\index{configurations.h@{configurations.h}!TASK\_MOTION\_CONTROL\_PRIORITY@{TASK\_MOTION\_CONTROL\_PRIORITY}}
+\index{TASK\_MOTION\_CONTROL\_PRIORITY@{TASK\_MOTION\_CONTROL\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_MOTION\_CONTROL\_PRIORITY}{TASK\_MOTION\_CONTROL\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_a3887054e089a66a41ada671027994436} 
+\+\#define TASK\+\_\+\+MOTION\+\_\+\+CONTROL\+\_\+\+PRIORITY~14}
+
+\Hypertarget{configurations_8h_a6a03ad7d94899986123153626e22f20e}\index{configurations.h@{configurations.h}!TASK\_STOP\_MOTION\_PRIORITY@{TASK\_STOP\_MOTION\_PRIORITY}}
+\index{TASK\_STOP\_MOTION\_PRIORITY@{TASK\_STOP\_MOTION\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_STOP\_MOTION\_PRIORITY}{TASK\_STOP\_MOTION\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_a6a03ad7d94899986123153626e22f20e} 
+\+\#define TASK\+\_\+\+STOP\+\_\+\+MOTION\+\_\+\+PRIORITY~17}
+
+\Hypertarget{configurations_8h_ae38a7f5e2f24d06689d8b847a35e5ccf}\index{configurations.h@{configurations.h}!TASK\_TELEMETRY\_DELAY@{TASK\_TELEMETRY\_DELAY}}
+\index{TASK\_TELEMETRY\_DELAY@{TASK\_TELEMETRY\_DELAY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_TELEMETRY\_DELAY}{TASK\_TELEMETRY\_DELAY}}
+{\footnotesize\ttfamily \label{configurations_8h_ae38a7f5e2f24d06689d8b847a35e5ccf} 
+\+\#define TASK\+\_\+\+TELEMETRY\+\_\+\+DELAY~1000}
+
+Delay for Telemetry task (ms). \Hypertarget{configurations_8h_a8d137660d77a1310d990d0616a8c2b48}\index{configurations.h@{configurations.h}!TASK\_TELEMETRY\_PRIORITY@{TASK\_TELEMETRY\_PRIORITY}}
+\index{TASK\_TELEMETRY\_PRIORITY@{TASK\_TELEMETRY\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_TELEMETRY\_PRIORITY}{TASK\_TELEMETRY\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_a8d137660d77a1310d990d0616a8c2b48} 
+\+\#define TASK\+\_\+\+TELEMETRY\+\_\+\+PRIORITY~11}
+
+\Hypertarget{configurations_8h_af85d4f2634be8dc9a6bd6255f1f8688e}\index{configurations.h@{configurations.h}!TASK\_TRACKING\_CALCULATION\_PRIORITY@{TASK\_TRACKING\_CALCULATION\_PRIORITY}}
+\index{TASK\_TRACKING\_CALCULATION\_PRIORITY@{TASK\_TRACKING\_CALCULATION\_PRIORITY}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TASK\_TRACKING\_CALCULATION\_PRIORITY}{TASK\_TRACKING\_CALCULATION\_PRIORITY}}
+{\footnotesize\ttfamily \label{configurations_8h_af85d4f2634be8dc9a6bd6255f1f8688e} 
+\+\#define TASK\+\_\+\+TRACKING\+\_\+\+CALCULATION\+\_\+\+PRIORITY~14}
+
+\Hypertarget{configurations_8h_ab51c362d04fd48de5e648831613ceb9b}\index{configurations.h@{configurations.h}!TIMER\_PREESCALER@{TIMER\_PREESCALER}}
+\index{TIMER\_PREESCALER@{TIMER\_PREESCALER}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{TIMER\_PREESCALER}{TIMER\_PREESCALER}}
+{\footnotesize\ttfamily \label{configurations_8h_ab51c362d04fd48de5e648831613ceb9b} 
+\+\#define TIMER\+\_\+\+PREESCALER~80}
+
+Prescaler → 1 MHz timer base (80 MHz /\+ 80). 

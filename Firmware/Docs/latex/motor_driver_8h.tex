@@ -1,0 +1,27 @@
+\doxysection{include/\+motor\+Driver.h File Reference}
+\hypertarget{motor_driver_8h}{}\label{motor_driver_8h}\index{include/motorDriver.h@{include/motorDriver.h}}
+
+
+Definition of the \doxylink{class_motor_driver}{Motor\+Driver} class for controlling DC motors using the ESP32.  
+
+
+{\ttfamily \+\#include $<$driver/\+gpio.\+h$>$}\newline
+{\ttfamily \+\#include $<$driver/\+ledc.\+h$>$}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+{\ttfamily \+\#include "{}utils.\+h"{}}\newline
+{\ttfamily \+\#include "{}configurations.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}}
+\begin{DoxyCompactList}\small\item\em Class for controlling DC motors with PWM speed control and direction pins. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Definition of the \doxylink{class_motor_driver}{Motor\+Driver} class for controlling DC motors using the ESP32. 
+
+
+\begin{DoxyItemize}
+\item This class encapsulates the logic to control the direction and speed of a DC motor via an L6205 H-\/bridge driver. It uses the ESP32\textquotesingle{}s LEDC peripheral (PWM) for speed control (Duty Cycle) and GPIO pins for direction control. 
+\end{DoxyItemize}

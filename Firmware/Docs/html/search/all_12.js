@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['tag_0',['TAG',['../main_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;main.cpp'],['../motor_driver_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;motorDriver.cpp'],['../_p_i___controller_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;PI_Controller.cpp'],['../server_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;server.cpp'],['../utils_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;utils.cpp']]],
+  ['target_1',['target',['../main_8cpp.html#aa1640530e67e212dcb768554b678353b',1,'target:&#160;main.cpp'],['../server_8h.html#aa1640530e67e212dcb768554b678353b',1,'target:&#160;main.cpp']]],
+  ['task_5fcurrent_5fmonitor_5fdelay_2',['TASK_CURRENT_MONITOR_DELAY',['../configurations_8h.html#a21b4e7669d6c855ecc63462be14d163e',1,'configurations.h']]],
+  ['task_5fcurrent_5fmonitor_5fpriority_3',['TASK_CURRENT_MONITOR_PRIORITY',['../configurations_8h.html#ac438e71fd931e96cd5d66b3a30630ad9',1,'configurations.h']]],
+  ['task_5fgps_5fdelay_4',['TASK_GPS_DELAY',['../configurations_8h.html#a49fd20d40240fe22eaf939ab4d7f0ead',1,'configurations.h']]],
+  ['task_5fgps_5fpriority_5',['TASK_GPS_PRIORITY',['../configurations_8h.html#abe8130df0295957593947f186524a786',1,'configurations.h']]],
+  ['task_5fhome_5fcurrent_5fdelay_6',['TASK_HOME_CURRENT_DELAY',['../configurations_8h.html#a34f3c557893c6a9c133f63f9f3647669',1,'configurations.h']]],
+  ['task_5fhome_5fpriority_7',['TASK_HOME_PRIORITY',['../configurations_8h.html#a6b00c9b90fcc5568a4740fca93e954b3',1,'configurations.h']]],
+  ['task_5floop_5fdelay_8',['TASK_LOOP_DELAY',['../configurations_8h.html#a7f179f9e3432a2afae54c63142143cba',1,'configurations.h']]],
+  ['task_5fmotion_5fcontrol_5fpriority_9',['TASK_MOTION_CONTROL_PRIORITY',['../configurations_8h.html#a3887054e089a66a41ada671027994436',1,'configurations.h']]],
+  ['task_5fstop_5fmotion_5fpriority_10',['TASK_STOP_MOTION_PRIORITY',['../configurations_8h.html#a6a03ad7d94899986123153626e22f20e',1,'configurations.h']]],
+  ['task_5ftelemetry_5fdelay_11',['TASK_TELEMETRY_DELAY',['../configurations_8h.html#ae38a7f5e2f24d06689d8b847a35e5ccf',1,'configurations.h']]],
+  ['task_5ftelemetry_5fpriority_12',['TASK_TELEMETRY_PRIORITY',['../configurations_8h.html#a8d137660d77a1310d990d0616a8c2b48',1,'configurations.h']]],
+  ['task_5ftracking_5fcalculation_5fpriority_13',['TASK_TRACKING_CALCULATION_PRIORITY',['../configurations_8h.html#af85d4f2634be8dc9a6bd6255f1f8688e',1,'configurations.h']]],
+  ['telemetry_5ftask_14',['telemetry_Task',['../main_8cpp.html#a5ca458d67906822bc0070de63d3bab8f',1,'main.cpp']]],
+  ['timer_5fpreescaler_15',['TIMER_PREESCALER',['../configurations_8h.html#ab51c362d04fd48de5e648831613ceb9b',1,'configurations.h']]],
+  ['toggletracking_5fhandle_16',['toggleTracking_handle',['../class_server_handler.html#a5bea35635c69b5090c8ba8724482084e',1,'ServerHandler']]],
+  ['tracker_5ferror_5fnone_17',['TRACKER_ERROR_NONE',['../utils_8h.html#a124755c819bc8940253539ec67404eacaff67568fe805bd7db360df2083f619e8',1,'utils.h']]],
+  ['tracker_5ferror_5fovercurrent_5faz_18',['TRACKER_ERROR_OVERCURRENT_AZ',['../utils_8h.html#a124755c819bc8940253539ec67404eaca7f48686adfcafd2c0a6cdf632ff57239',1,'utils.h']]],
+  ['tracker_5ferror_5fovercurrent_5fel_19',['TRACKER_ERROR_OVERCURRENT_EL',['../utils_8h.html#a124755c819bc8940253539ec67404eacab9313257aacbd3040dd97aa2b4fc0b79',1,'utils.h']]],
+  ['tracker_5ferror_5fsoft_5fendstop_20',['TRACKER_ERROR_SOFT_ENDSTOP',['../utils_8h.html#a124755c819bc8940253539ec67404eacab1ce6667b386c13bdcd9dcff0941c786',1,'utils.h']]],
+  ['tracker_5ferror_5funknown_21',['TRACKER_ERROR_UNKNOWN',['../utils_8h.html#a124755c819bc8940253539ec67404eaca74116c88aa3f88c77efe8c4d5aa8d133',1,'utils.h']]],
+  ['trackerstatus_5ft_22',['trackerStatus_t',['../utils_8h.html#af8a35661022926a438bb0e33cf4e84d2',1,'utils.h']]],
+  ['trackingpredictor_5ftask_23',['TrackingPredictor_Task',['../main_8cpp.html#abde6d73b52e488a03bf8a31fddbeb554',1,'main.cpp']]],
+  ['trackingpredictor_5ftaskhandle_24',['TrackingPredictor_TaskHandle',['../main_8cpp.html#abefc65e0e269b258dd4ed3f4c340658a',1,'main.cpp']]]
+];

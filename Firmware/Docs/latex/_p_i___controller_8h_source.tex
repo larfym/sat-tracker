@@ -1,0 +1,42 @@
+\doxysection{PI\+\_\+\+Controller.\+h}
+\hypertarget{_p_i___controller_8h_source}{}\label{_p_i___controller_8h_source}\index{include/PI\_Controller.h@{include/PI\_Controller.h}}
+\doxymbox{\hyperlink{_p_i___controller_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <driver/timer.h>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <esp\_log.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_p_i___controller_ae5552082a60f3972c1312903d9356a41}{PI\_Controller}}}
+\DoxyCodeLine{00035\ \{}
+\DoxyCodeLine{00036\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a1b945e4f31e41b4f63c7c49f6f3653ae}{a}},\ \doxymbox{\hyperlink{class_p_i___controller_a5a791f88a66a9db76a739bb6fd0a9062}{b}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}{sampleTime}};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{deadZone}}\ =\ 0.0;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\_max}};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a629679bf97a432ab1edcb028a4ef7e9a}{i\_f}}\ =\ 0.0;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_ae9b575ee7049389040a5f832f10f751a}{e}}[2]\ =\ \{0.0,0.0\};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_af151ee53b5b82be81f1ac22f18329163}{u}}[2]\ =\ \{0.0,0.0\};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00093\ \ \ \ \ \doxymbox{\hyperlink{class_p_i___controller_ae5552082a60f3972c1312903d9356a41}{PI\_Controller}}(\textcolor{keywordtype}{double}\ kp,\ \textcolor{keywordtype}{double}\ ki,\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a3682eb0db9fc1edb9196ac4d6decf487}{sampleTime}},\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{deadZone}},\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\_max}});}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_p_i___controller_a98f967bd89ddd481ac99dc1c7d3b5cb4}{setGains}}(\textcolor{keywordtype}{double}\ kp,\ \textcolor{keywordtype}{double}\ ki);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_p_i___controller_aa94d3181925e322e559dfa57927af4c4}{setMaxOutput}}(\textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a94c25a8526a26f92fe18e272e26b7922}{u\_max}});}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_p_i___controller_a0d911d276aa09f01184111413d7f9e1e}{setDeadZone}}(\textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{class_p_i___controller_a119f0d6354a6954a4240b2421bd8ad4c}{deadZone}});}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_p_i___controller_a6a9a3946edb5b9c2b5568330bff839e6}{reset}}();}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_p_i___controller_a2a30c243057cb81b4f80438e9a2880fc}{output}}(\textcolor{keywordtype}{float}\ input,\ \textcolor{keywordtype}{float}\ setPoint);}
+\DoxyCodeLine{00142\ \};}
+
+\end{DoxyCode}

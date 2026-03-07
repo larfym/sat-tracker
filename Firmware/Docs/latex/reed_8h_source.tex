@@ -1,0 +1,43 @@
+\doxysection{reed.\+h}
+\hypertarget{reed_8h_source}{}\label{reed_8h_source}\index{include/reed.h@{include/reed.h}}
+\doxymbox{\hyperlink{reed_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ REED\_SW\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ REED\_SW\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}driver/pcnt.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{utils_8h}{utils.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ APB\_CLK\_FREQ\_MHZ\ 80}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ REED\_DEBOUNCE\ 1023}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_reed_switch_a29728aba596b8b8298e05c136a43f5ad}{ReedSwitch}}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \ \ gpio\_num\_t\ \doxymbox{\hyperlink{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}{pin}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ pcnt\_unit\_t\ \doxymbox{\hyperlink{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}{unit}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ pcnt\_channel\_t\ \doxymbox{\hyperlink{class_reed_switch_a60293fe900881818f2c3d4be351970c4}{channel}};\ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}\ \doxymbox{\hyperlink{class_reed_switch_aa99dcbcc731581cbf179757f183cce2e}{current\_dir}};\ \ \ \ \ \ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \doxymbox{\hyperlink{class_reed_switch_a29728aba596b8b8298e05c136a43f5ad}{ReedSwitch}}(gpio\_num\_t\ \doxymbox{\hyperlink{class_reed_switch_a2b12da49460153283312ef6c2c9cfd99}{pin}},\ pcnt\_unit\_t\ \doxymbox{\hyperlink{class_reed_switch_ae38cf4037343963223ebaee7dd0e2ec8}{unit}},\ pcnt\_channel\_t\ \doxymbox{\hyperlink{class_reed_switch_a60293fe900881818f2c3d4be351970c4}{channel}},\ uint16\_t\ l\_lim,\ uint16\_t\ h\_lim,\ \textcolor{keywordtype}{void}\ (*eventHandler)(\textcolor{keywordtype}{void}\ *));}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00048\ \ \ \ \ int16\_t\ \doxymbox{\hyperlink{class_reed_switch_a121facbd6912d45fe8daa9d9211dab49}{getCount}}();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_reed_switch_a82e324bdf37bebfede6df4f939dc8946}{stopCount}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_reed_switch_a15c8f45bdb78384f2591899738df2010}{startCount}}();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_reed_switch_aae13b3b63ce1500d9b2ffc651fe811d9}{resetCount}}();}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_reed_switch_af0629aa0bd61c29e6076f157d94d45bf}{countDirection}}(\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}\ dir);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00075\ \ \ \ \ pcnt\_unit\_t\ \doxymbox{\hyperlink{class_reed_switch_ad320a2716e1d6ba64d8d4f55f43bebb2}{getUnit}}();}
+\DoxyCodeLine{00076\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ REED\_SW\_H}}
+
+\end{DoxyCode}

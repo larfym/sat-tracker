@@ -1,0 +1,365 @@
+\doxysection{src/\+main.cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \+\#include "{}utils.\+h"{}}\newline
+{\ttfamily \+\#include "{}PI\+\_\+\+Controller.\+h"{}}\newline
+{\ttfamily \+\#include "{}server.\+h"{}}\newline
+{\ttfamily \+\#include "{}current\+Sensor.\+h"{}}\newline
+{\ttfamily \+\#include "{}reed.\+h"{}}\newline
+{\ttfamily \+\#include "{}motor\+Driver.\+h"{}}\newline
+{\ttfamily \+\#include "{}configurations.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Hardware\+Serial \doxymbox{\hyperlink{main_8cpp_aa9d2f9a14d5cc2f236faff4c3b095783}{gps\+Serial}} (\doxymbox{\hyperlink{configurations_8h_a0276fa67794ae64b565fe0da6db4fc9d}{GPS\+\_\+\+UART}})
+\item 
+void IRAM\+\_\+\+ATTR \doxymbox{\hyperlink{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a}{reed\+Az\+\_\+event\+\_\+handler}} (void \texorpdfstring{$\ast$}{*}arg)
+\item 
+void IRAM\+\_\+\+ATTR \doxymbox{\hyperlink{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360}{reed\+El\+\_\+event\+\_\+handler}} (void \texorpdfstring{$\ast$}{*}arg)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_a5402996288dcbab1df2ffbafda7d0985}{control\+Timer\+\_\+\+ISR}} (void \texorpdfstring{$\ast$}{*}arg)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_a6d1916a61bfaa459847afb810ae15e86}{GPS\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_abde6d73b52e488a03bf8a31fddbeb554}{Tracking\+Predictor\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_adf5de4c65ad946ce5eb1139a9ee94d1b}{Motion\+Control\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_aab021fe7caed981cc28cbcd3ceb9a00f}{Stop\+Motion\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_ae6d71ec394438a8016b4e129fdad483d}{Calibration\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_a2ea8a96e91a3c3fc270e8608157fdcc1}{Current\+Monitor\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_a5ca458d67906822bc0070de63d3bab8f}{telemetry\+\_\+\+Task}} (void \texorpdfstring{$\ast$}{*}pv\+Parameters)
+\item 
+void \doxymbox{\hyperlink{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d}{setup}} ()
+\item 
+void \doxymbox{\hyperlink{main_8cpp_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Sgp4 \doxymbox{\hyperlink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}}
+\begin{DoxyCompactList}\small\item\em Global SGP4 object for satellite orbit prediction. \end{DoxyCompactList}\item 
+Preferences \doxymbox{\hyperlink{main_8cpp_a95d592edb81dd40b1f9085628e7698a8}{config}}
+\begin{DoxyCompactList}\small\item\em Global object for managing persistent configuration data (NVS). \end{DoxyCompactList}\item 
+Tiny\+GPSPlus \doxymbox{\hyperlink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}}
+\item 
+\doxymbox{\hyperlink{class_server_handler}{Server\+Handler}} \doxymbox{\hyperlink{main_8cpp_a30f0d942420b66dee65de9c062b2466b}{server\+Handler}} (\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}})
+\item 
+\doxymbox{\hyperlink{class_p_i___controller}{PI\+\_\+\+Controller}} \doxymbox{\hyperlink{main_8cpp_ac4a9a510f261e05b2f128b05c332b242}{controller\+Az}} (\doxymbox{\hyperlink{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67}{KP\+\_\+\+AZIMUTH}}, \doxymbox{\hyperlink{configurations_8h_a84c8a48add65471b6d7a3df86ded588a}{KI\+\_\+\+AZIMUTH}}, \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}, \doxymbox{\hyperlink{configurations_8h_af612d680313c8e405272d106245d0fe6}{M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}, \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}})
+\item 
+\doxymbox{\hyperlink{class_p_i___controller}{PI\+\_\+\+Controller}} \doxymbox{\hyperlink{main_8cpp_a5373cc9382078d0e12734ddfe3d352c2}{controller\+El}} (\doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}, \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}, \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}})
+\item 
+\doxymbox{\hyperlink{class_reed_switch}{Reed\+Switch}} \doxymbox{\hyperlink{main_8cpp_a2c5a73a4c30d5441190eb5440c7d971b}{reed\+Az}} (\doxymbox{\hyperlink{configurations_8h_aa87d687897e717dea73184063e2b3be1}{REED\+\_\+\+AZ\+\_\+\+PIN}}, PCNT\+\_\+\+UNIT\+\_\+0, PCNT\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_acdaca90d9569b370599f231928e32845}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}, \doxymbox{\hyperlink{configurations_8h_a9fc5bef92112470db8255986b6ecebcb}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}, \doxymbox{\hyperlink{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a}{reed\+Az\+\_\+event\+\_\+handler}})
+\item 
+\doxymbox{\hyperlink{class_reed_switch}{Reed\+Switch}} \doxymbox{\hyperlink{main_8cpp_a32c123ba4604b420b78493bc54f3ede4}{reed\+El}} (\doxymbox{\hyperlink{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7}{REED\+\_\+\+EL\+\_\+\+PIN}}, PCNT\+\_\+\+UNIT\+\_\+1, PCNT\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_a08a68068b1a658d3b0e967b799a84100}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}, \doxymbox{\hyperlink{configurations_8h_a7de64bbb117e66e561add80d7f24374e}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}, \doxymbox{\hyperlink{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360}{reed\+El\+\_\+event\+\_\+handler}})
+\item 
+\doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}} \doxymbox{\hyperlink{main_8cpp_a71c3efb3b6c68db64b67301de23c2c47}{motor\+Az}} (\doxymbox{\hyperlink{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24}{IN1\+\_\+\+AZ\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4}{IN2\+\_\+\+AZ\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_ab18abfaf88f25a5ba352779defd5b333}{EN\+\_\+\+AZ\+\_\+\+PIN}}, LEDC\+\_\+\+TIMER\+\_\+0, LEDC\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}})
+\item 
+\doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}} \doxymbox{\hyperlink{main_8cpp_a75ce768f93f1fd4332896623d2635209}{motor\+El}} (\doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}, LEDC\+\_\+\+TIMER\+\_\+0, LEDC\+\_\+\+CHANNEL\+\_\+1, \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}})
+\item 
+\doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}} \doxymbox{\hyperlink{main_8cpp_a4bc81131529c2d9516c48205ad81ab20}{current\+Az}} (\doxymbox{\hyperlink{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20}{I\+\_\+\+AZ\+\_\+\+CHANNEL}})
+\item 
+\doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}} \doxymbox{\hyperlink{main_8cpp_a5bde5389f1e43c031d8188a5f6d5ae98}{current\+El}} (\doxymbox{\hyperlink{configurations_8h_a879a26029e799249e6786c5890d9f7e1}{I\+\_\+\+EL\+\_\+\+CHANNEL}})
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_a31044d4fc6e109ea0df731c5e5c559ea}{GPS\+\_\+\+Task\+Handle}} = NULL
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_abefc65e0e269b258dd4ed3f4c340658a}{Tracking\+Predictor\+\_\+\+Task\+Handle}} = NULL
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_aee44830b05e02ea9dd8829f08f3fbb8e}{Motion\+Control\+\_\+\+Task\+Handle}} = NULL
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_a76bda418f1aad970979562c0a0d5ecd4}{Stop\+Motion\+\_\+\+Task\+Handle}} = NULL
+\item 
+Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_a5f8db47b664833fcd348f6d72d7ff77e}{Calibration\+\_\+\+Task\+Handle}} = NULL
+\item 
+static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{main_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}MAIN"{}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_aa1640530e67e212dcb768554b678353b}{target}} = \{0\}
+\begin{DoxyCompactList}\small\item\em Global structure for the target (commanded) antenna position. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a86d01031f56184d375fc9279c4c34a72}{manual\+\_\+target}} = \{0\}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_ae943811bd5317049756e8b65016b27c3}{current}} = \{0\}
+\begin{DoxyCompactList}\small\item\em Global structure for the current (measured) antenna position. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a90109f2113f530203eb0317caf3bd744}{offsets\+\_\+ant}} = \{0\}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a913f412e93da307b5b28dfe6926b8574}{set\+\_\+angle}} = \{0\}
+\item 
+\doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a13242e46cf88322a36d0a21f463814d6}{flags}}
+\begin{DoxyCompactList}\small\item\em Global structure holding the current mount flags. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_ae231754aa856e7e4956e423e1b308ee9}{status}}
+\begin{DoxyCompactList}\small\item\em Global structure holding the current operational status of the tracker. \end{DoxyCompactList}\item 
+unsigned long \doxymbox{\hyperlink{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea}{next\+\_\+pass\+\_\+unix}} = 0
+\begin{DoxyCompactList}\small\item\em Next pass start time in unix. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{main_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_ae6d71ec394438a8016b4e129fdad483d}\index{main.cpp@{main.cpp}!Calibration\_Task@{Calibration\_Task}}
+\index{Calibration\_Task@{Calibration\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{Calibration\_Task()}{Calibration\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_ae6d71ec394438a8016b4e129fdad483d} 
+void Calibration\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a5402996288dcbab1df2ffbafda7d0985}\index{main.cpp@{main.cpp}!controlTimer\_ISR@{controlTimer\_ISR}}
+\index{controlTimer\_ISR@{controlTimer\_ISR}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{controlTimer\_ISR()}{controlTimer\_ISR()}}
+{\footnotesize\ttfamily \label{main_8cpp_a5402996288dcbab1df2ffbafda7d0985} 
+void IRAM\+\_\+\+ATTR control\+Timer\+\_\+\+ISR (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a2ea8a96e91a3c3fc270e8608157fdcc1}\index{main.cpp@{main.cpp}!CurrentMonitor\_Task@{CurrentMonitor\_Task}}
+\index{CurrentMonitor\_Task@{CurrentMonitor\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{CurrentMonitor\_Task()}{CurrentMonitor\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_a2ea8a96e91a3c3fc270e8608157fdcc1} 
+void Current\+Monitor\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a6d1916a61bfaa459847afb810ae15e86}\index{main.cpp@{main.cpp}!GPS\_Task@{GPS\_Task}}
+\index{GPS\_Task@{GPS\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{GPS\_Task()}{GPS\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_a6d1916a61bfaa459847afb810ae15e86} 
+void GPS\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_aa9d2f9a14d5cc2f236faff4c3b095783}\index{main.cpp@{main.cpp}!gpsSerial@{gpsSerial}}
+\index{gpsSerial@{gpsSerial}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gpsSerial()}{gpsSerial()}}
+{\footnotesize\ttfamily \label{main_8cpp_aa9d2f9a14d5cc2f236faff4c3b095783} 
+Hardware\+Serial gps\+Serial (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a0276fa67794ae64b565fe0da6db4fc9d}{GPS\+\_\+\+UART}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_afe461d27b9c48d5921c00d521181f12f}\index{main.cpp@{main.cpp}!loop@{loop}}
+\index{loop@{loop}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily \label{main_8cpp_afe461d27b9c48d5921c00d521181f12f} 
+void loop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_adf5de4c65ad946ce5eb1139a9ee94d1b}\index{main.cpp@{main.cpp}!MotionControl\_Task@{MotionControl\_Task}}
+\index{MotionControl\_Task@{MotionControl\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{MotionControl\_Task()}{MotionControl\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_adf5de4c65ad946ce5eb1139a9ee94d1b} 
+void Motion\+Control\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a}\index{main.cpp@{main.cpp}!reedAz\_event\_handler@{reedAz\_event\_handler}}
+\index{reedAz\_event\_handler@{reedAz\_event\_handler}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{reedAz\_event\_handler()}{reedAz\_event\_handler()}}
+{\footnotesize\ttfamily \label{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a} 
+void IRAM\+\_\+\+ATTR reed\+Az\+\_\+event\+\_\+handler (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360}\index{main.cpp@{main.cpp}!reedEl\_event\_handler@{reedEl\_event\_handler}}
+\index{reedEl\_event\_handler@{reedEl\_event\_handler}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{reedEl\_event\_handler()}{reedEl\_event\_handler()}}
+{\footnotesize\ttfamily \label{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360} 
+void IRAM\+\_\+\+ATTR reed\+El\+\_\+event\+\_\+handler (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d}\index{main.cpp@{main.cpp}!setup@{setup}}
+\index{setup@{setup}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily \label{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d} 
+void setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_aab021fe7caed981cc28cbcd3ceb9a00f}\index{main.cpp@{main.cpp}!StopMotion\_Task@{StopMotion\_Task}}
+\index{StopMotion\_Task@{StopMotion\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{StopMotion\_Task()}{StopMotion\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_aab021fe7caed981cc28cbcd3ceb9a00f} 
+void Stop\+Motion\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a5ca458d67906822bc0070de63d3bab8f}\index{main.cpp@{main.cpp}!telemetry\_Task@{telemetry\_Task}}
+\index{telemetry\_Task@{telemetry\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{telemetry\_Task()}{telemetry\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_a5ca458d67906822bc0070de63d3bab8f} 
+void telemetry\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_abde6d73b52e488a03bf8a31fddbeb554}\index{main.cpp@{main.cpp}!TrackingPredictor\_Task@{TrackingPredictor\_Task}}
+\index{TrackingPredictor\_Task@{TrackingPredictor\_Task}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TrackingPredictor\_Task()}{TrackingPredictor\_Task()}}
+{\footnotesize\ttfamily \label{main_8cpp_abde6d73b52e488a03bf8a31fddbeb554} 
+void Tracking\+Predictor\+\_\+\+Task (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{pv\+Parameters}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{main_8cpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8cpp_a5f8db47b664833fcd348f6d72d7ff77e}\index{main.cpp@{main.cpp}!Calibration\_TaskHandle@{Calibration\_TaskHandle}}
+\index{Calibration\_TaskHandle@{Calibration\_TaskHandle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{Calibration\_TaskHandle}{Calibration\_TaskHandle}}
+{\footnotesize\ttfamily \label{main_8cpp_a5f8db47b664833fcd348f6d72d7ff77e} 
+Task\+Handle\+\_\+t Calibration\+\_\+\+Task\+Handle = NULL}
+
+\Hypertarget{main_8cpp_a95d592edb81dd40b1f9085628e7698a8}\index{main.cpp@{main.cpp}!config@{config}}
+\index{config@{config}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{config}{config}}
+{\footnotesize\ttfamily \label{main_8cpp_a95d592edb81dd40b1f9085628e7698a8} 
+Preferences config}
+
+
+
+Global object for managing persistent configuration data (NVS). 
+
+External reference to the global Preferences storage handler. \Hypertarget{main_8cpp_ac4a9a510f261e05b2f128b05c332b242}\index{main.cpp@{main.cpp}!controllerAz@{controllerAz}}
+\index{controllerAz@{controllerAz}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{controllerAz}{controllerAz}}
+{\footnotesize\ttfamily \label{main_8cpp_ac4a9a510f261e05b2f128b05c332b242} 
+\doxymbox{\hyperlink{class_p_i___controller}{PI\+\_\+\+Controller}} controller\+Az(\doxymbox{\hyperlink{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67}{KP\+\_\+\+AZIMUTH}}, \doxymbox{\hyperlink{configurations_8h_a84c8a48add65471b6d7a3df86ded588a}{KI\+\_\+\+AZIMUTH}}, \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}, \doxymbox{\hyperlink{configurations_8h_af612d680313c8e405272d106245d0fe6}{M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}, \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_aeb86acb27e54b9755fcdac7881be9a67}{KP\+\_\+\+AZIMUTH}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a84c8a48add65471b6d7a3df86ded588a}{KI\+\_\+\+AZIMUTH}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_af612d680313c8e405272d106245d0fe6}{M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a5373cc9382078d0e12734ddfe3d352c2}\index{main.cpp@{main.cpp}!controllerEl@{controllerEl}}
+\index{controllerEl@{controllerEl}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{controllerEl}{controllerEl}}
+{\footnotesize\ttfamily \label{main_8cpp_a5373cc9382078d0e12734ddfe3d352c2} 
+\doxymbox{\hyperlink{class_p_i___controller}{PI\+\_\+\+Controller}} controller\+El(\doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}, \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}, \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_ae943811bd5317049756e8b65016b27c3}\index{main.cpp@{main.cpp}!current@{current}}
+\index{current@{current}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{current}{current}}
+{\footnotesize\ttfamily \label{main_8cpp_ae943811bd5317049756e8b65016b27c3} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} current = \{0\}}
+
+
+
+Global structure for the current (measured) antenna position. 
+
+\Hypertarget{main_8cpp_a4bc81131529c2d9516c48205ad81ab20}\index{main.cpp@{main.cpp}!currentAz@{currentAz}}
+\index{currentAz@{currentAz}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{currentAz}{currentAz}}
+{\footnotesize\ttfamily \label{main_8cpp_a4bc81131529c2d9516c48205ad81ab20} 
+\doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}} current\+Az(\doxymbox{\hyperlink{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20}{I\+\_\+\+AZ\+\_\+\+CHANNEL}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a4c9747a154da64ff447148d8d4fa5a20}{I\+\_\+\+AZ\+\_\+\+CHANNEL}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a5bde5389f1e43c031d8188a5f6d5ae98}\index{main.cpp@{main.cpp}!currentEl@{currentEl}}
+\index{currentEl@{currentEl}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{currentEl}{currentEl}}
+{\footnotesize\ttfamily \label{main_8cpp_a5bde5389f1e43c031d8188a5f6d5ae98} 
+\doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}} current\+El(\doxymbox{\hyperlink{configurations_8h_a879a26029e799249e6786c5890d9f7e1}{I\+\_\+\+EL\+\_\+\+CHANNEL}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a879a26029e799249e6786c5890d9f7e1}{I\+\_\+\+EL\+\_\+\+CHANNEL}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a13242e46cf88322a36d0a21f463814d6}\index{main.cpp@{main.cpp}!flags@{flags}}
+\index{flags@{flags}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{flags}{flags}}
+{\footnotesize\ttfamily \label{main_8cpp_a13242e46cf88322a36d0a21f463814d6} 
+\doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}} flags}
+
+
+
+Global structure holding the current mount flags. 
+
+\Hypertarget{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}\index{main.cpp@{main.cpp}!gps@{gps}}
+\index{gps@{gps}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gps}{gps}}
+{\footnotesize\ttfamily \label{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8} 
+Tiny\+GPSPlus gps}
+
+\Hypertarget{main_8cpp_a31044d4fc6e109ea0df731c5e5c559ea}\index{main.cpp@{main.cpp}!GPS\_TaskHandle@{GPS\_TaskHandle}}
+\index{GPS\_TaskHandle@{GPS\_TaskHandle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{GPS\_TaskHandle}{GPS\_TaskHandle}}
+{\footnotesize\ttfamily \label{main_8cpp_a31044d4fc6e109ea0df731c5e5c559ea} 
+Task\+Handle\+\_\+t GPS\+\_\+\+Task\+Handle = NULL}
+
+\Hypertarget{main_8cpp_a86d01031f56184d375fc9279c4c34a72}\index{main.cpp@{main.cpp}!manual\_target@{manual\_target}}
+\index{manual\_target@{manual\_target}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{manual\_target}{manual\_target}}
+{\footnotesize\ttfamily \label{main_8cpp_a86d01031f56184d375fc9279c4c34a72} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} manual\+\_\+target = \{0\}}
+
+\Hypertarget{main_8cpp_aee44830b05e02ea9dd8829f08f3fbb8e}\index{main.cpp@{main.cpp}!MotionControl\_TaskHandle@{MotionControl\_TaskHandle}}
+\index{MotionControl\_TaskHandle@{MotionControl\_TaskHandle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{MotionControl\_TaskHandle}{MotionControl\_TaskHandle}}
+{\footnotesize\ttfamily \label{main_8cpp_aee44830b05e02ea9dd8829f08f3fbb8e} 
+Task\+Handle\+\_\+t Motion\+Control\+\_\+\+Task\+Handle = NULL}
+
+\Hypertarget{main_8cpp_a71c3efb3b6c68db64b67301de23c2c47}\index{main.cpp@{main.cpp}!motorAz@{motorAz}}
+\index{motorAz@{motorAz}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{motorAz}{motorAz}}
+{\footnotesize\ttfamily \label{main_8cpp_a71c3efb3b6c68db64b67301de23c2c47} 
+\doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}} motor\+Az(\doxymbox{\hyperlink{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24}{IN1\+\_\+\+AZ\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4}{IN2\+\_\+\+AZ\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_ab18abfaf88f25a5ba352779defd5b333}{EN\+\_\+\+AZ\+\_\+\+PIN}}, LEDC\+\_\+\+TIMER\+\_\+0, LEDC\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a9ce983ce5b08d7846d8fa31118021b24}{IN1\+\_\+\+AZ\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a9d57a6e7ffc17486374ef9dc813b76f4}{IN2\+\_\+\+AZ\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_ab18abfaf88f25a5ba352779defd5b333}{EN\+\_\+\+AZ\+\_\+\+PIN}}}]{}{, }\item[{LEDC\+\_\+\+TIMER\+\_\+0}]{}{, }\item[{LEDC\+\_\+\+CHANNEL\+\_\+0}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a75ce768f93f1fd4332896623d2635209}\index{main.cpp@{main.cpp}!motorEl@{motorEl}}
+\index{motorEl@{motorEl}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{motorEl}{motorEl}}
+{\footnotesize\ttfamily \label{main_8cpp_a75ce768f93f1fd4332896623d2635209} 
+\doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}} motor\+El(\doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}, LEDC\+\_\+\+TIMER\+\_\+0, LEDC\+\_\+\+CHANNEL\+\_\+1, \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{LEDC\+\_\+\+TIMER\+\_\+0}]{}{, }\item[{LEDC\+\_\+\+CHANNEL\+\_\+1}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea}\index{main.cpp@{main.cpp}!next\_pass\_unix@{next\_pass\_unix}}
+\index{next\_pass\_unix@{next\_pass\_unix}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{next\_pass\_unix}{next\_pass\_unix}}
+{\footnotesize\ttfamily \label{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea} 
+unsigned long next\+\_\+pass\+\_\+unix = 0}
+
+
+
+Next pass start time in unix. 
+
+\Hypertarget{main_8cpp_a90109f2113f530203eb0317caf3bd744}\index{main.cpp@{main.cpp}!offsets\_ant@{offsets\_ant}}
+\index{offsets\_ant@{offsets\_ant}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{offsets\_ant}{offsets\_ant}}
+{\footnotesize\ttfamily \label{main_8cpp_a90109f2113f530203eb0317caf3bd744} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} offsets\+\_\+ant = \{0\}}
+
+\Hypertarget{main_8cpp_a2c5a73a4c30d5441190eb5440c7d971b}\index{main.cpp@{main.cpp}!reedAz@{reedAz}}
+\index{reedAz@{reedAz}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{reedAz}{reedAz}}
+{\footnotesize\ttfamily \label{main_8cpp_a2c5a73a4c30d5441190eb5440c7d971b} 
+\doxymbox{\hyperlink{class_reed_switch}{Reed\+Switch}} reed\+Az(\doxymbox{\hyperlink{configurations_8h_aa87d687897e717dea73184063e2b3be1}{REED\+\_\+\+AZ\+\_\+\+PIN}}, PCNT\+\_\+\+UNIT\+\_\+0, PCNT\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_acdaca90d9569b370599f231928e32845}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}, \doxymbox{\hyperlink{configurations_8h_a9fc5bef92112470db8255986b6ecebcb}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}, \doxymbox{\hyperlink{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a}{reed\+Az\+\_\+event\+\_\+handler}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_aa87d687897e717dea73184063e2b3be1}{REED\+\_\+\+AZ\+\_\+\+PIN}}}]{}{, }\item[{PCNT\+\_\+\+UNIT\+\_\+0}]{}{, }\item[{PCNT\+\_\+\+CHANNEL\+\_\+0}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_acdaca90d9569b370599f231928e32845}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a9fc5bef92112470db8255986b6ecebcb}{REED\+\_\+\+AZ\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}}]{}{, }\item[{\doxymbox{\hyperlink{main_8cpp_a1dd4b93df00922d511a5f6925175bc6a}{reed\+Az\+\_\+event\+\_\+handler}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a32c123ba4604b420b78493bc54f3ede4}\index{main.cpp@{main.cpp}!reedEl@{reedEl}}
+\index{reedEl@{reedEl}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{reedEl}{reedEl}}
+{\footnotesize\ttfamily \label{main_8cpp_a32c123ba4604b420b78493bc54f3ede4} 
+\doxymbox{\hyperlink{class_reed_switch}{Reed\+Switch}} reed\+El(\doxymbox{\hyperlink{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7}{REED\+\_\+\+EL\+\_\+\+PIN}}, PCNT\+\_\+\+UNIT\+\_\+1, PCNT\+\_\+\+CHANNEL\+\_\+0, \doxymbox{\hyperlink{configurations_8h_a08a68068b1a658d3b0e967b799a84100}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}, \doxymbox{\hyperlink{configurations_8h_a7de64bbb117e66e561add80d7f24374e}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}, \doxymbox{\hyperlink{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360}{reed\+El\+\_\+event\+\_\+handler}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_ac623bf5b9b1b5e841f3d5358f5ce36f7}{REED\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{PCNT\+\_\+\+UNIT\+\_\+1}]{}{, }\item[{PCNT\+\_\+\+CHANNEL\+\_\+0}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a08a68068b1a658d3b0e967b799a84100}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+LOW}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a7de64bbb117e66e561add80d7f24374e}{REED\+\_\+\+EL\+\_\+\+SOFT\+\_\+\+LIMIT\+\_\+\+HIGH}}}]{}{, }\item[{\doxymbox{\hyperlink{main_8cpp_ab8fa2c4464e56c5bc776469aadd26360}{reed\+El\+\_\+event\+\_\+handler}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}\index{main.cpp@{main.cpp}!satellite@{satellite}}
+\index{satellite@{satellite}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{satellite}{satellite}}
+{\footnotesize\ttfamily \label{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373} 
+Sgp4 satellite}
+
+
+
+Global SGP4 object for satellite orbit prediction. 
+
+\Hypertarget{main_8cpp_a30f0d942420b66dee65de9c062b2466b}\index{main.cpp@{main.cpp}!serverHandler@{serverHandler}}
+\index{serverHandler@{serverHandler}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{serverHandler}{serverHandler}}
+{\footnotesize\ttfamily \label{main_8cpp_a30f0d942420b66dee65de9c062b2466b} 
+\doxymbox{\hyperlink{class_server_handler}{Server\+Handler}} server\+Handler(\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a913f412e93da307b5b28dfe6926b8574}\index{main.cpp@{main.cpp}!set\_angle@{set\_angle}}
+\index{set\_angle@{set\_angle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{set\_angle}{set\_angle}}
+{\footnotesize\ttfamily \label{main_8cpp_a913f412e93da307b5b28dfe6926b8574} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} set\+\_\+angle = \{0\}}
+
+\Hypertarget{main_8cpp_ae231754aa856e7e4956e423e1b308ee9}\index{main.cpp@{main.cpp}!status@{status}}
+\index{status@{status}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{status}{status}}
+{\footnotesize\ttfamily \label{main_8cpp_ae231754aa856e7e4956e423e1b308ee9} 
+\doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}} status}
+
+
+
+Global structure holding the current operational status of the tracker. 
+
+\Hypertarget{main_8cpp_a76bda418f1aad970979562c0a0d5ecd4}\index{main.cpp@{main.cpp}!StopMotion\_TaskHandle@{StopMotion\_TaskHandle}}
+\index{StopMotion\_TaskHandle@{StopMotion\_TaskHandle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{StopMotion\_TaskHandle}{StopMotion\_TaskHandle}}
+{\footnotesize\ttfamily \label{main_8cpp_a76bda418f1aad970979562c0a0d5ecd4} 
+Task\+Handle\+\_\+t Stop\+Motion\+\_\+\+Task\+Handle = NULL}
+
+\Hypertarget{main_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c}\index{main.cpp@{main.cpp}!TAG@{TAG}}
+\index{TAG@{TAG}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TAG}{TAG}}
+{\footnotesize\ttfamily \label{main_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c} 
+const char\texorpdfstring{$\ast$}{*} TAG = "{}MAIN"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{main_8cpp_aa1640530e67e212dcb768554b678353b}\index{main.cpp@{main.cpp}!target@{target}}
+\index{target@{target}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{target}{target}}
+{\footnotesize\ttfamily \label{main_8cpp_aa1640530e67e212dcb768554b678353b} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} target = \{0\}}
+
+
+
+Global structure for the target (commanded) antenna position. 
+
+\Hypertarget{main_8cpp_abefc65e0e269b258dd4ed3f4c340658a}\index{main.cpp@{main.cpp}!TrackingPredictor\_TaskHandle@{TrackingPredictor\_TaskHandle}}
+\index{TrackingPredictor\_TaskHandle@{TrackingPredictor\_TaskHandle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TrackingPredictor\_TaskHandle}{TrackingPredictor\_TaskHandle}}
+{\footnotesize\ttfamily \label{main_8cpp_abefc65e0e269b258dd4ed3f4c340658a} 
+Task\+Handle\+\_\+t Tracking\+Predictor\+\_\+\+Task\+Handle = NULL}
+

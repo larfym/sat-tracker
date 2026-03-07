@@ -1,0 +1,67 @@
+\doxysection{server.\+h}
+\hypertarget{server_8h_source}{}\label{server_8h_source}\index{include/server.h@{include/server.h}}
+\doxymbox{\hyperlink{server_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SERVER\_HANDLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SERVER\_HANDLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <WiFi.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <ESPmDNS.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <ESPAsyncWebServer.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <ArduinoJson.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <Preferences.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <Sgp4.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <SPIFFS.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <sys/time.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{utils_8h}{utils.h}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{configurations_8h}{configurations.h}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ 1.\ GLOBAL\ STATE\ VARIABLES}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{extern}\ Sgp4\ \doxymbox{\hyperlink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}};}
+\DoxyCodeLine{00023\ \textcolor{keyword}{extern}\ Preferences\ \doxymbox{\hyperlink{main_8cpp_a95d592edb81dd40b1f9085628e7698a8}{config}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{extern}\ \doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{trackerStatus\_t}}\ \doxymbox{\hyperlink{main_8cpp_ae231754aa856e7e4956e423e1b308ee9}{status}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{extern}\ \doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mountFlags\_t}}\ \doxymbox{\hyperlink{main_8cpp_a13242e46cf88322a36d0a21f463814d6}{flags}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esfericalAngles\_t}}\ \doxymbox{\hyperlink{main_8cpp_aa1640530e67e212dcb768554b678353b}{target}},\ \doxymbox{\hyperlink{main_8cpp_a86d01031f56184d375fc9279c4c34a72}{manual\_target}},\ \doxymbox{\hyperlink{main_8cpp_a913f412e93da307b5b28dfe6926b8574}{set\_angle}};}
+\DoxyCodeLine{00031\ \textcolor{keyword}{extern}\ \doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esfericalAngles\_t}}\ \doxymbox{\hyperlink{main_8cpp_ae943811bd5317049756e8b65016b27c3}{current}},\ \doxymbox{\hyperlink{main_8cpp_a90109f2113f530203eb0317caf3bd744}{offsets\_ant}};}
+\DoxyCodeLine{00033\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea}{next\_pass\_unix}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{const}\ String\ \doxymbox{\hyperlink{server_8h_aa38c0701eb53381ac57e7746726f9c93}{default\_wifi\_ssid}}\ =\ \doxymbox{\hyperlink{configurations_8h_a7ea92631acc3bc41ae5eadc069323267}{DEFAULT\_WIFI\_SSID}};}
+\DoxyCodeLine{00039\ \textcolor{keyword}{const}\ String\ \doxymbox{\hyperlink{server_8h_a503b8dc7d8a5cfc34c43cbca79ef2f2c}{default\_wifi\_password}}\ =\ \doxymbox{\hyperlink{configurations_8h_a151690ecdd7d2c7b69586e6df164676c}{DEFAULT\_WIFI\_PASSWORD}};}
+\DoxyCodeLine{00041\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \doxymbox{\hyperlink{server_8h_a456838f31e186c4db88d9ae1be3d5365}{JSON\_BUFFER\_SIZE}}\ =\ 384;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_server_handler_a5cf587cdb9447374cd2c942d04582fcb}{ServerHandler}}}
+\DoxyCodeLine{00052\ \{}
+\DoxyCodeLine{00053\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00058\ \ \ \ \ \doxymbox{\hyperlink{class_server_handler_a5cf587cdb9447374cd2c942d04582fcb}{ServerHandler}}(\textcolor{keywordtype}{int}\ port\ =\ \doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\_SERVER\_PORT}});}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00064\ \ \ \ \ esp\_err\_t\ \doxymbox{\hyperlink{class_server_handler_a27ee242fdee793aa97f918f9ca1f62e2}{start}}();}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a3c04b7cee6ab3e4d5d5271cc1327eb98}{sendTelemetry}}();}
+\DoxyCodeLine{00067\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00068\ \ \ \ \ AsyncWebServer\ \doxymbox{\hyperlink{class_server_handler_ace8a80fd9f1be4723f98929acdc07598}{server}};\ }
+\DoxyCodeLine{00069\ \ \ \ \ AsyncEventSource\ \doxymbox{\hyperlink{class_server_handler_a610f92f089c9773f99e0b7901af69de2}{events}};\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a810dbe15d1c1951dd92b50c57fd0c7ba}{saveTLE\_handle}}(AsyncWebServerRequest\ *request,\ uint8\_t\ *data,\ \textcolor{keywordtype}{size\_t}\ len,\ \textcolor{keywordtype}{size\_t}\ index,\ \textcolor{keywordtype}{size\_t}\ total);}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_ad78a32d068c5ecbf9c0481d1bb4a3836}{saveOffsets\_handle}}(AsyncWebServerRequest\ *request,\ uint8\_t\ *data,\ \textcolor{keywordtype}{size\_t}\ len,\ \textcolor{keywordtype}{size\_t}\ index,\ \textcolor{keywordtype}{size\_t}\ total);}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a5d949f5c8cacb7e50f93cc9b5d54c196}{manualTrack\_handle}}(AsyncWebServerRequest\ *request,\ uint8\_t\ *data,\ \textcolor{keywordtype}{size\_t}\ len,\ \textcolor{keywordtype}{size\_t}\ index,\ \textcolor{keywordtype}{size\_t}\ total);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a5bea35635c69b5090c8ba8724482084e}{toggleTracking\_handle}}(AsyncWebServerRequest\ *request);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_ac7feeebede1592a2bd95156a0229f9b6}{GeoTime\_handle}}(AsyncWebServerRequest\ *request,\ uint8\_t\ *data,\ \textcolor{keywordtype}{size\_t}\ len,\ \textcolor{keywordtype}{size\_t}\ index,\ \textcolor{keywordtype}{size\_t}\ total);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a02c8a40cd5765cbee3ae7da3051f70b5}{reset\_handle}}(AsyncWebServerRequest\ *request);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_server_handler_a26002f17e5af09ad55b04ff9e64a0c6c}{NotFount\_handle}}(AsyncWebServerRequest\ *request);}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SERVER\_HANDLER\_H}}
+
+\end{DoxyCode}

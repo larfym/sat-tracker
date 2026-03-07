@@ -1,0 +1,43 @@
+\doxysection{include/\+reed.h File Reference}
+\hypertarget{reed_8h}{}\label{reed_8h}\index{include/reed.h@{include/reed.h}}
+{\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
+{\ttfamily \+\#include "{}driver/\+pcnt.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}utils.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{class_reed_switch}{Reed\+Switch}}
+\begin{DoxyCompactList}\small\item\em Class for interfacing with a Reed Switch using the ESP32\textquotesingle{}s Pulse Counter (PCNT) peripheral. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{reed_8h_abc7273acedff08807f017e3b6d8e519e}{APB\+\_\+\+CLK\+\_\+\+FREQ\+\_\+\+MHZ}}~80
+\begin{DoxyCompactList}\small\item\em APB Clock Frequency in MHz (used for PCNT configuration). \end{DoxyCompactList}\item 
+\+\#define \doxymbox{\hyperlink{reed_8h_ad23788d8f9d8f571894c5193980aed8b}{REED\+\_\+\+DEBOUNCE}}~1023
+\begin{DoxyCompactList}\small\item\em Debounce filter limit for the Reed Switch (maximum value:\+ 1023). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-define-members}
+\Hypertarget{reed_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{reed_8h_abc7273acedff08807f017e3b6d8e519e}\index{reed.h@{reed.h}!APB\_CLK\_FREQ\_MHZ@{APB\_CLK\_FREQ\_MHZ}}
+\index{APB\_CLK\_FREQ\_MHZ@{APB\_CLK\_FREQ\_MHZ}!reed.h@{reed.h}}
+\doxysubsubsection{\texorpdfstring{APB\_CLK\_FREQ\_MHZ}{APB\_CLK\_FREQ\_MHZ}}
+{\footnotesize\ttfamily \label{reed_8h_abc7273acedff08807f017e3b6d8e519e} 
+\+\#define APB\+\_\+\+CLK\+\_\+\+FREQ\+\_\+\+MHZ~80}
+
+
+
+APB Clock Frequency in MHz (used for PCNT configuration). 
+
+\Hypertarget{reed_8h_ad23788d8f9d8f571894c5193980aed8b}\index{reed.h@{reed.h}!REED\_DEBOUNCE@{REED\_DEBOUNCE}}
+\index{REED\_DEBOUNCE@{REED\_DEBOUNCE}!reed.h@{reed.h}}
+\doxysubsubsection{\texorpdfstring{REED\_DEBOUNCE}{REED\_DEBOUNCE}}
+{\footnotesize\ttfamily \label{reed_8h_ad23788d8f9d8f571894c5193980aed8b} 
+\+\#define REED\+\_\+\+DEBOUNCE~1023}
+
+
+
+Debounce filter limit for the Reed Switch (maximum value:\+ 1023). 
+

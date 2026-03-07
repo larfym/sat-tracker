@@ -1,0 +1,47 @@
+\doxysection{motor\+Driver.\+h}
+\hypertarget{motor_driver_8h_source}{}\label{motor_driver_8h_source}\index{include/motorDriver.h@{include/motorDriver.h}}
+\doxymbox{\hyperlink{motor_driver_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#ifndef\ MOTORDRIVER\_H}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ MOTORDRIVER\_H}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <driver/gpio.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <driver/ledc.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}esp\_log.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{utils_8h}{utils.h}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{configurations_8h}{configurations.h}}"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_motor_driver_a0817fdbb78b2e42cc643a88fc1e7ef6d}{MotorDriver}}}
+\DoxyCodeLine{00024\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ uint8\_t\ \doxymbox{\hyperlink{class_motor_driver_a74fcb8c07e08c7709777c17c8cd09692}{id}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00034\ \ \ \ \ uint8\_t\ \doxymbox{\hyperlink{class_motor_driver_a19c7bb349c79021b40c56f79f1261b30}{instance\_id}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00040\ \ \ \ \ \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}\ \doxymbox{\hyperlink{class_motor_driver_a4faaaf49a22790b9deb25190b8e87efe}{current\_direction}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ \ \ \ \ gpio\_num\_t\ \doxymbox{\hyperlink{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}{IN1\_pin}},\ \doxymbox{\hyperlink{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}{IN2\_pin}};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00050\ \ \ \ \ ledc\_channel\_t\ \doxymbox{\hyperlink{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}{channel}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00062\ \ \ \ \ \doxymbox{\hyperlink{class_motor_driver_a0817fdbb78b2e42cc643a88fc1e7ef6d}{MotorDriver}}(gpio\_num\_t\ \doxymbox{\hyperlink{class_motor_driver_ae7da7526cec153099d71b9868b26ea85}{IN1\_pin}},\ gpio\_num\_t\ \doxymbox{\hyperlink{class_motor_driver_a0c52a37f487b8be40315bd90e204effe}{IN2\_pin}},\ gpio\_num\_t\ PWM\_pin,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ledc\_timer\_t\ timer,\ ledc\_channel\_t\ \doxymbox{\hyperlink{class_motor_driver_a5c40e5708ad916d3e598c7ac7223a087}{channel}},\ uint16\_t\ frequency);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_motor_driver_ab872c179920f8a606985a3c940919eb2}{setDuty}}(\textcolor{keywordtype}{double}\ percentage);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_motor_driver_a2fdca424033a431d7a2ee20f22427a83}{setMotorDuty}}(\textcolor{keywordtype}{double}\ percentage);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_motor_driver_acd4e0cd165d5b08de8dcc27240f56267}{setDirection}}(\doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}\ dir);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00088\ \ \ \ \ \doxymbox{\hyperlink{utils_8h_a99f26e6ee9fcd62f75203b5402df8098}{direction}}\ \doxymbox{\hyperlink{class_motor_driver_abd6167f1bfb974aab47cc0ca52a0d635}{getDirection}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{class_motor_driver_a4faaaf49a22790b9deb25190b8e87efe}{current\_direction}};\ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_motor_driver_a7a5f50f6b7238f0a55ef4fa6cebc16d9}{stop}}();}
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MOTORDRIVER\_H}}
+
+\end{DoxyCode}

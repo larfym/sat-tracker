@@ -1,0 +1,171 @@
+\doxysection{include/\+server.h File Reference}
+\hypertarget{server_8h}{}\label{server_8h}\index{include/server.h@{include/server.h}}
+{\ttfamily \+\#include $<$Wi\+Fi.\+h$>$}\newline
+{\ttfamily \+\#include $<$ESPm\+DNS.\+h$>$}\newline
+{\ttfamily \+\#include $<$ESPAsync\+Web\+Server.\+h$>$}\newline
+{\ttfamily \+\#include $<$Arduino\+Json.\+h$>$}\newline
+{\ttfamily \+\#include $<$Preferences.\+h$>$}\newline
+{\ttfamily \+\#include $<$Sgp4.\+h$>$}\newline
+{\ttfamily \+\#include $<$SPIFFS.\+h$>$}\newline
+{\ttfamily \+\#include $<$sys/\+time.\+h$>$}\newline
+{\ttfamily \+\#include "{}utils.\+h"{}}\newline
+{\ttfamily \+\#include "{}configurations.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+log.\+h"{}}\newline
+{\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{class_server_handler}{Server\+Handler}}
+\begin{DoxyCompactList}\small\item\em Manages the ESP32\textquotesingle{}s asynchronous web server, handles API requests, and serves configuration/\+status data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Sgp4 \doxymbox{\hyperlink{server_8h_a7a8e6488a647b64ac7902070f7d3a373}{satellite}}
+\begin{DoxyCompactList}\small\item\em Global SGP4 object for satellite orbit prediction. \end{DoxyCompactList}\item 
+Preferences \doxymbox{\hyperlink{server_8h_a95d592edb81dd40b1f9085628e7698a8}{config}}
+\begin{DoxyCompactList}\small\item\em Global object for managing persistent configuration data (NVS). \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}} \doxymbox{\hyperlink{server_8h_ae231754aa856e7e4956e423e1b308ee9}{status}}
+\begin{DoxyCompactList}\small\item\em Global structure holding the current operational status of the tracker. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}} \doxymbox{\hyperlink{server_8h_a13242e46cf88322a36d0a21f463814d6}{flags}}
+\begin{DoxyCompactList}\small\item\em Global structure holding the current mount flags. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{server_8h_aa1640530e67e212dcb768554b678353b}{target}}
+\begin{DoxyCompactList}\small\item\em Global structure for the target (commanded) antenna position. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{server_8h_a86d01031f56184d375fc9279c4c34a72}{manual\+\_\+target}}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{server_8h_a913f412e93da307b5b28dfe6926b8574}{set\+\_\+angle}}
+\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{server_8h_ae943811bd5317049756e8b65016b27c3}{current}}
+\begin{DoxyCompactList}\small\item\em Global structure for the current (measured) antenna position. \end{DoxyCompactList}\item 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{server_8h_a90109f2113f530203eb0317caf3bd744}{offsets\+\_\+ant}}
+\item 
+unsigned long \doxymbox{\hyperlink{server_8h_a2d6f596dfb29d9d1f9a0e92bc547ebea}{next\+\_\+pass\+\_\+unix}}
+\begin{DoxyCompactList}\small\item\em Next pass start time in unix. \end{DoxyCompactList}\item 
+const String \doxymbox{\hyperlink{server_8h_aa38c0701eb53381ac57e7746726f9c93}{default\+\_\+wifi\+\_\+ssid}} = \doxymbox{\hyperlink{configurations_8h_a7ea92631acc3bc41ae5eadc069323267}{DEFAULT\+\_\+\+WIFI\+\_\+\+SSID}}
+\begin{DoxyCompactList}\small\item\em Constant string for the default Wi\+Fi SSID. \end{DoxyCompactList}\item 
+const String \doxymbox{\hyperlink{server_8h_a503b8dc7d8a5cfc34c43cbca79ef2f2c}{default\+\_\+wifi\+\_\+password}} = \doxymbox{\hyperlink{configurations_8h_a151690ecdd7d2c7b69586e6df164676c}{DEFAULT\+\_\+\+WIFI\+\_\+\+PASSWORD}}
+\begin{DoxyCompactList}\small\item\em Constant string for the default Wi\+Fi password. \end{DoxyCompactList}\item 
+const size\+\_\+t \doxymbox{\hyperlink{server_8h_a456838f31e186c4db88d9ae1be3d5365}{JSON\+\_\+\+BUFFER\+\_\+\+SIZE}} = 384
+\begin{DoxyCompactList}\small\item\em Size of the Arduino\+Json buffer used for serializing/\+deserializing data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-var-members}
+\Hypertarget{server_8h_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{server_8h_a95d592edb81dd40b1f9085628e7698a8}\index{server.h@{server.h}!config@{config}}
+\index{config@{config}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{config}{config}}
+{\footnotesize\ttfamily \label{server_8h_a95d592edb81dd40b1f9085628e7698a8} 
+Preferences config\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global object for managing persistent configuration data (NVS). 
+
+\Hypertarget{server_8h_ae943811bd5317049756e8b65016b27c3}\index{server.h@{server.h}!current@{current}}
+\index{current@{current}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{current}{current}}
+{\footnotesize\ttfamily \label{server_8h_ae943811bd5317049756e8b65016b27c3} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} current\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global structure for the current (measured) antenna position. 
+
+\Hypertarget{server_8h_a503b8dc7d8a5cfc34c43cbca79ef2f2c}\index{server.h@{server.h}!default\_wifi\_password@{default\_wifi\_password}}
+\index{default\_wifi\_password@{default\_wifi\_password}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{default\_wifi\_password}{default\_wifi\_password}}
+{\footnotesize\ttfamily \label{server_8h_a503b8dc7d8a5cfc34c43cbca79ef2f2c} 
+const String default\+\_\+wifi\+\_\+password = \doxymbox{\hyperlink{configurations_8h_a151690ecdd7d2c7b69586e6df164676c}{DEFAULT\+\_\+\+WIFI\+\_\+\+PASSWORD}}}
+
+
+
+Constant string for the default Wi\+Fi password. 
+
+\Hypertarget{server_8h_aa38c0701eb53381ac57e7746726f9c93}\index{server.h@{server.h}!default\_wifi\_ssid@{default\_wifi\_ssid}}
+\index{default\_wifi\_ssid@{default\_wifi\_ssid}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{default\_wifi\_ssid}{default\_wifi\_ssid}}
+{\footnotesize\ttfamily \label{server_8h_aa38c0701eb53381ac57e7746726f9c93} 
+const String default\+\_\+wifi\+\_\+ssid = \doxymbox{\hyperlink{configurations_8h_a7ea92631acc3bc41ae5eadc069323267}{DEFAULT\+\_\+\+WIFI\+\_\+\+SSID}}}
+
+
+
+Constant string for the default Wi\+Fi SSID. 
+
+\Hypertarget{server_8h_a13242e46cf88322a36d0a21f463814d6}\index{server.h@{server.h}!flags@{flags}}
+\index{flags@{flags}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{flags}{flags}}
+{\footnotesize\ttfamily \label{server_8h_a13242e46cf88322a36d0a21f463814d6} 
+\doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}} flags\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global structure holding the current mount flags. 
+
+\Hypertarget{server_8h_a456838f31e186c4db88d9ae1be3d5365}\index{server.h@{server.h}!JSON\_BUFFER\_SIZE@{JSON\_BUFFER\_SIZE}}
+\index{JSON\_BUFFER\_SIZE@{JSON\_BUFFER\_SIZE}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{JSON\_BUFFER\_SIZE}{JSON\_BUFFER\_SIZE}}
+{\footnotesize\ttfamily \label{server_8h_a456838f31e186c4db88d9ae1be3d5365} 
+const size\+\_\+t JSON\+\_\+\+BUFFER\+\_\+\+SIZE = 384}
+
+
+
+Size of the Arduino\+Json buffer used for serializing/\+deserializing data. 
+
+\Hypertarget{server_8h_a86d01031f56184d375fc9279c4c34a72}\index{server.h@{server.h}!manual\_target@{manual\_target}}
+\index{manual\_target@{manual\_target}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{manual\_target}{manual\_target}}
+{\footnotesize\ttfamily \label{server_8h_a86d01031f56184d375fc9279c4c34a72} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} manual\+\_\+target}
+
+\Hypertarget{server_8h_a2d6f596dfb29d9d1f9a0e92bc547ebea}\index{server.h@{server.h}!next\_pass\_unix@{next\_pass\_unix}}
+\index{next\_pass\_unix@{next\_pass\_unix}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{next\_pass\_unix}{next\_pass\_unix}}
+{\footnotesize\ttfamily \label{server_8h_a2d6f596dfb29d9d1f9a0e92bc547ebea} 
+unsigned long next\+\_\+pass\+\_\+unix\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Next pass start time in unix. 
+
+\Hypertarget{server_8h_a90109f2113f530203eb0317caf3bd744}\index{server.h@{server.h}!offsets\_ant@{offsets\_ant}}
+\index{offsets\_ant@{offsets\_ant}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{offsets\_ant}{offsets\_ant}}
+{\footnotesize\ttfamily \label{server_8h_a90109f2113f530203eb0317caf3bd744} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} offsets\+\_\+ant}
+
+\Hypertarget{server_8h_a7a8e6488a647b64ac7902070f7d3a373}\index{server.h@{server.h}!satellite@{satellite}}
+\index{satellite@{satellite}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{satellite}{satellite}}
+{\footnotesize\ttfamily \label{server_8h_a7a8e6488a647b64ac7902070f7d3a373} 
+Sgp4 satellite\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global SGP4 object for satellite orbit prediction. 
+
+\Hypertarget{server_8h_a913f412e93da307b5b28dfe6926b8574}\index{server.h@{server.h}!set\_angle@{set\_angle}}
+\index{set\_angle@{set\_angle}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{set\_angle}{set\_angle}}
+{\footnotesize\ttfamily \label{server_8h_a913f412e93da307b5b28dfe6926b8574} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} set\+\_\+angle}
+
+\Hypertarget{server_8h_ae231754aa856e7e4956e423e1b308ee9}\index{server.h@{server.h}!status@{status}}
+\index{status@{status}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{status}{status}}
+{\footnotesize\ttfamily \label{server_8h_ae231754aa856e7e4956e423e1b308ee9} 
+\doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}} status\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global structure holding the current operational status of the tracker. 
+
+\Hypertarget{server_8h_aa1640530e67e212dcb768554b678353b}\index{server.h@{server.h}!target@{target}}
+\index{target@{target}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{target}{target}}
+{\footnotesize\ttfamily \label{server_8h_aa1640530e67e212dcb768554b678353b} 
+\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} target\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Global structure for the target (commanded) antenna position. 
+
