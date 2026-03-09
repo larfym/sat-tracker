@@ -71,9 +71,12 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 )
-(C:\Users\alfon\AppData\Local\Programs\MiKTeX\tex/latex/newunicodechar\newunico
-dechar.sty
-Package: newunicodechar 2018/04/08 v1.2 Defining Unicode characters
+! Interruption.
+<argument> \__file_size:n {newunicodechar.sty}
+                                              
+l.9   \makeatletter
+                   
+? acters
 )
 (C:\Users\alfon\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-dvi
 ps.def
