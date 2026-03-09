@@ -253,24 +253,36 @@ void MotionControl_Task(void *pvParameters)
     // Azimut
     if (new_dir_az != current_dir_az)
     {
-      controllerAz.reset();
+      //Command stop & Check actual stopping
       motorAz.stop();
       vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
+      while(currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
+      {
+        vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+      }
+
+      controllerAz.reset();
       motorAz.setDuty(0);
-      motorAz.setDirection((direction)new_dir_az);
       reedAz.countDirection((direction)new_dir_az);
+      motorAz.setDirection((direction)new_dir_az);
       current_dir_az = new_dir_az;
     }
 
     // Elevation
     if (new_dir_el != current_dir_el)
     {
-      controllerEl.reset();
+      //Command stop & Check actual stopping
       motorEl.stop();
       vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
+      while(currentEl.getCurrent_mA() > CURRENT_HOMING_mA)
+      {
+        vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+      }
+
+      controllerEl.reset();
       motorEl.setDuty(0);
-      motorEl.setDirection((direction)new_dir_el);
       reedEl.countDirection((direction)new_dir_el);
+      motorEl.setDirection((direction)new_dir_el);
       current_dir_el = new_dir_el;
     }
 
@@ -455,17 +467,20 @@ void StopMotion_Task(void *pvParameters)
     MotionControl_TaskHandle = NULL;
   }
 
+  //Check actual motor stopped
   motorAz.stop();
   motorEl.stop();
-  vTaskDelay(pdMS_TO_TICKS(100));
+  while(currentEl.getCurrent_mA() > CURRENT_HOMING_mA && currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
+  {
+    vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+  }
+
   motorAz.setDuty(0);
   motorEl.setDuty(0);
-
   motorAz.setDirection(FORWARD);
   motorEl.setDirection(FORWARD);
   reedAz.countDirection(FORWARD);
   reedEl.countDirection(FORWARD);
-
   flags.stop_done = true;
   StopMotion_TaskHandle = NULL;
   vTaskDelete(NULL);

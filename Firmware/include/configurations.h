@@ -128,11 +128,12 @@
 ///@{
 #define M_V_NOMINAL 36            /**< Nominal voltage for motors (V). */
 #define M_AZ_V_TO_START 15.5      /**< Minimum voltage to overcome static friction (Azimuth). Note: Values from PWM modulation*/
-#define M_EL_V_TO_START 8         /**< Minimum voltage to overcome static friction (Elevation). Note: Values from PWM modulation*/
+#define M_EL_V_TO_START 9         /**< Minimum voltage to overcome static friction (Elevation). Note: Values from PWM modulation*/
 #define M_STOP_DUTY 25            /**< Duty cycle to apply for stopping the motors (0-100%). */
 #define M_MAX_DUTY 100            /**< Maximum duty cycle for motors (0-100%). */
-#define M_AZ_SETTLING_TIME_MS 80  /**< Settling time for Azimuth motor (ms). */
-#define M_EL_SETTLING_TIME_MS 150 /**< Settling time for Elevation motor (ms). */
+#define M_AZ_SETTLING_TIME_MS 65  /**< Settling time for Azimuth motor (ms). */
+#define M_EL_SETTLING_TIME_MS 100 /**< Settling time for Elevation motor (ms). */
+#define M_STOPPED_CHECK_INTERVAL_MS 10  /**< Checking time interval (ms) */
 ///@}
 
 /**

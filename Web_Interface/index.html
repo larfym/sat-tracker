@@ -503,7 +503,10 @@
 
             eventSource.onerror = function () {
                 console.warn('SSE Disconnected. Attempting to reconnect...');
-                setTimeout(connectSSE, 1000);
+                if(eventSource.readyState === EventSource.CLOSED)
+                {
+                    setTimeout(connectSSE, 1000);
+                }
             };
         }
 
@@ -704,8 +707,8 @@
             const az_ant = Number(p.az ?? 0) + Number(a.o_a ?? 0);
             const el_ant = Number(p.el ?? 0) + Number(a.o_e ?? 0);
 
-            setText("a_a", az_ant, " [°]");
-            setText("a_e", el_ant, " [°]");
+            setText("a_a", az_ant.toFixed(2), " [°]");
+            setText("a_e", el_ant.toFixed(2), " [°]");
             setText("a_of_a", a.o_a, " [°]");
             setText("a_of_e", a.o_e, " [°]");
 
@@ -966,6 +969,10 @@
                     showPage(pageId);
                 });
             });
+        });
+
+        window.addEventListener('online', () =>{
+            connectSSE();
         });
 
         drawLineChart("chart_az", x, az1, az2);
