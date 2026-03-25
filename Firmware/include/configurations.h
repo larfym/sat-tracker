@@ -70,11 +70,11 @@
  */
 ///@{
 #define A_ANT 50.0f
-#define BP_ANT 230.66f
-#define C_ANT 260.00f
-#define D_ANT 156.0f
+#define BP_ANT 220.11f
+#define C_ANT 276.00f
+#define D_ANT 145.0f
 #define E_ANT 80.0f
-#define F_ANT 255.00f
+#define F_ANT 258.00f
 ///@}
 
 /* -------------------------------------------------------------------------- */
@@ -181,7 +181,7 @@
  * @brief Gains for the Elevation axis PI controller.
  */
 ///@{
-#define KP_ELEVATION 10.0 /**< Proportional gain (EL). 5*/
+#define KP_ELEVATION 7.0 /**< Proportional gain (EL). 5*/
 #define KI_ELEVATION 0.5  /**< Integral gain (EL). 0.001*/
 ///@}
 

@@ -191,73 +191,76 @@ void MotionControl_Task(void *pvParameters)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    // SetPoint
-    if (status.manual_tracking == true)
+    if (StopMotion_TaskHandle == NULL)
     {
-      setPointAngle.azimuth = manualTargetAngle.azimuth;
-      setPointAngle.elevation = manualTargetAngle.elevation;
-    }
-    else
-    {
-      setPointAngle.azimuth = (targetAngle.azimuth < 0.0f)? targetAngle.azimuth + 360.0f : targetAngle.azimuth;
-      setPointAngle.elevation = targetAngle.elevation;
-    }
-
-    setPointAngle.azimuth = fmaxf(fminf(setPointAngle.azimuth, AZ_MAX_DEG), AZ_MIN_DEG);
-    setPointAngle.elevation = fmaxf(fminf(setPointAngle.elevation, EL_MAX_DEG), EL_MIN_DEG);
-
-    el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
-    mountAngle.elevation = elevation_deg_from_mm_lut(el_mm);
-    mountAngle.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
-
-    // PID Controller
-    output_az = controllerAz.output(mountAngle.azimuth, setPointAngle.azimuth);
-    output_el = controllerEl.output(el_mm, elevation_mm_from_deg_lut(setPointAngle.elevation));
-
-    // CONTROL ACTION
-    new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD
-                                                             : current_dir_az;
-    new_dir_el = (output_el > 0) ? FORWARD : (output_el < 0) ? BACKWARD
-                                                             : current_dir_el;
-
-    // Azimut
-    if (new_dir_az != current_dir_az)
-    {
-      //Command stop & Check actual stopping
-      motorAz.stop();
-      vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
-      while(currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
+      // SetPoint
+      if (status.manual_tracking == true)
       {
-        vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+        setPointAngle.azimuth = manualTargetAngle.azimuth;
+        setPointAngle.elevation = manualTargetAngle.elevation;
+      }
+      else
+      {
+        setPointAngle.azimuth = (targetAngle.azimuth < 0.0f) ? targetAngle.azimuth + 360.0f : targetAngle.azimuth;
+        setPointAngle.elevation = targetAngle.elevation;
       }
 
-      controllerAz.reset();
-      motorAz.setDuty(0);
-      reedAz.countDirection((direction)new_dir_az);
-      motorAz.setDirection((direction)new_dir_az);
-      current_dir_az = new_dir_az;
-    }
+      setPointAngle.azimuth = fmaxf(fminf(setPointAngle.azimuth, AZ_MAX_DEG), AZ_MIN_DEG);
+      setPointAngle.elevation = fmaxf(fminf(setPointAngle.elevation, EL_MAX_DEG), EL_MIN_DEG);
 
-    // Elevation
-    if (new_dir_el != current_dir_el)
-    {
-      //Command stop & Check actual stopping
-      motorEl.stop();
-      vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
-      while(currentEl.getCurrent_mA() > CURRENT_HOMING_mA)
+      el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
+      mountAngle.elevation = elevation_deg_from_mm_lut(el_mm);
+      mountAngle.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
+
+      // PID Controller
+      output_az = controllerAz.output(mountAngle.azimuth, setPointAngle.azimuth);
+      output_el = controllerEl.output(el_mm, elevation_mm_from_deg_lut(setPointAngle.elevation));
+
+      // CONTROL ACTION
+      new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD
+                                                               : current_dir_az;
+      new_dir_el = (output_el > 0) ? FORWARD : (output_el < 0) ? BACKWARD
+                                                               : current_dir_el;
+
+      // Azimut
+      if (new_dir_az != current_dir_az)
       {
-        vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+        // Command stop & Check actual stopping
+        motorAz.stop();
+        vTaskDelay(pdMS_TO_TICKS(M_AZ_SETTLING_TIME_MS));
+        while (currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
+        {
+          vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+        }
+
+        controllerAz.reset();
+        motorAz.setDuty(0);
+        reedAz.countDirection((direction)new_dir_az);
+        motorAz.setDirection((direction)new_dir_az);
+        current_dir_az = new_dir_az;
       }
 
-      controllerEl.reset();
-      motorEl.setDuty(0);
-      reedEl.countDirection((direction)new_dir_el);
-      motorEl.setDirection((direction)new_dir_el);
-      current_dir_el = new_dir_el;
-    }
+      // Elevation
+      if (new_dir_el != current_dir_el)
+      {
+        // Command stop & Check actual stopping
+        motorEl.stop();
+        vTaskDelay(pdMS_TO_TICKS(M_EL_SETTLING_TIME_MS));
+        while (currentEl.getCurrent_mA() > CURRENT_HOMING_mA)
+        {
+          vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
+        }
 
-    motorAz.setDuty(fabsf(output_az) * DUTY_SCALE);
-    motorEl.setDuty(fabsf(output_el) * DUTY_SCALE);
+        controllerEl.reset();
+        motorEl.setDuty(0);
+        reedEl.countDirection((direction)new_dir_el);
+        motorEl.setDirection((direction)new_dir_el);
+        current_dir_el = new_dir_el;
+      }
+
+      motorAz.setDuty(fabsf(output_az) * DUTY_SCALE);
+      motorEl.setDuty(fabsf(output_el) * DUTY_SCALE);
+    }
   }
 }
 
@@ -324,30 +327,31 @@ void TrackingPredictor_Task(void *pvParameters)
       }
     }
 
-    //Below Horizon - Next Pass Prediction
+    // Below Horizon - Next Pass Prediction
     if (sgp4TargetAngle.elevation < offsetAngle.elevation)
     {
       if (!flags.pred_done)
+      {
+        passinfo nextPass;
+        satellite.initpredpoint((unsigned long)time(NULL), offsetAngle.elevation);
+        if (satellite.nextpass(&nextPass, search_iterations, false, offsetAngle.elevation))
         {
-          passinfo nextPass;
-          satellite.initpredpoint((unsigned long)time(NULL), offsetAngle.elevation);
-          if (satellite.nextpass(&nextPass, search_iterations, false, offsetAngle.elevation))
-          {
-            nextPass_unix = jdToUnix(nextPass.jdstart);
-            targetAngle.azimuth = nextPass.azstart - offsetAngle.azimuth;
-            targetAngle.elevation = EL_MIN_DEG;
-            ESP_LOGI(TAG, "NextPass - Az: %.2f [°], El: %.2f [°]", nextPass.azstart, EL_MIN_DEG);
-          }
-          else
-          {
-            nextPass_unix = 0;
-            ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
-            targetAngle.azimuth = AZ_MIN_DEG;
-            targetAngle.elevation = EL_MAX_DEG;
-          }
-          flags.pred_done = true;
+          nextPass_unix = jdToUnix(nextPass.jdstart);
+          targetAngle.azimuth = nextPass.azstart - offsetAngle.azimuth;
+          targetAngle.elevation = EL_MIN_DEG;
+          ESP_LOGI(TAG, "NextPass - Az: %.2f [°], El: %.2f [°]", nextPass.azstart, EL_MIN_DEG);
         }
-    }else
+        else
+        {
+          nextPass_unix = 0;
+          ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
+          targetAngle.azimuth = AZ_MIN_DEG;
+          targetAngle.elevation = EL_MAX_DEG;
+        }
+        flags.pred_done = true;
+      }
+    }
+    else
     {
       nextPass_unix = 0;
       flags.pred_done = false;
@@ -458,6 +462,9 @@ void Calibration_Task(void *pvParameters)
 void StopMotion_Task(void *pvParameters)
 {
 
+  reedAz.countDirection(motorAz.getDirection());
+  reedEl.countDirection(motorEl.getDirection());
+
   if (Calibration_TaskHandle != NULL)
   {
     vTaskDelete(Calibration_TaskHandle);
@@ -471,10 +478,10 @@ void StopMotion_Task(void *pvParameters)
     MotionControl_TaskHandle = NULL;
   }
 
-  //Check actual motor stopped
+  // Check actual motor stopped
   motorAz.stop();
   motorEl.stop();
-  while(currentEl.getCurrent_mA() > CURRENT_HOMING_mA && currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
+  while (currentEl.getCurrent_mA() > CURRENT_HOMING_mA && currentAz.getCurrent_mA() > CURRENT_HOMING_mA)
   {
     vTaskDelay(pdMS_TO_TICKS(M_STOPPED_CHECK_INTERVAL_MS));
   }
