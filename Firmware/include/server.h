@@ -26,11 +26,11 @@ extern trackerStatus_t status;
 /** @brief Global structure holding the current mount flags. */
 extern mountFlags_t flags;
 /** @brief Global structure for the target (commanded) antenna position. */
-extern esfericalAngles_t target, manual_target, set_angle;
+extern sphericalAngles_t sgp4TargetAngle, manualTargetAngle, setPointAngle;
 /** @brief Global structure for the current (measured) antenna position. */
-extern esfericalAngles_t current, offsets_ant;
+extern sphericalAngles_t mountAngle, offsetAngle;
 /** @brief Next pass start time in unix*/
-extern unsigned long next_pass_unix;
+extern unsigned long nextPass_unix;
 
 
 /** @brief Constant string for the default WiFi SSID. */

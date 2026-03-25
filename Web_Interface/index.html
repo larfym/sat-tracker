@@ -407,14 +407,14 @@
             <div class="card">
                 <h3>Offsets de Antena</h3>
                 <ul>
-                    <li><span>Declinación Magnética</span><span class="input-value"><input type="number" id="mag-of"
-                                value="0.0" inputmode="decimal"></span></li>
-                    <li><span>Offset Antena</span><span class="input-value"><input type="number" id="ant-of" value="0.0"
-                                inputmode="decimal"></span></li>
-                    <li><span>Offset Azimut</span><span class="input-value"><input type="number" id="az-of" value="0.0"
-                                inputmode="decimal"></span></li>
-                    <li><span>Offset Elevación</span><span class="input-value"><input type="number" id="el-of"
-                                value="0.0" inputmode="decimal"></span></li>
+                    <li><span>Declinación Magnética</span><span class="input-value"><input type="text" id="mag-of"
+                        value="0.0" min="-180"></span></li>
+                    <li><span>Offset Antena</span><span class="input-value"><input type="text" id="ant-of"
+                        value="0.0" min="0.0"></span></li>
+                    <li><span>Offset Azimut</span><span class="input-value"><input type="text" id="az-of"
+                        value="0.0" min="-360"></span></li>
+                    <li><span>Offset Elevación</span><span class="input-value"><input type="text" id="el-of"
+                        value="0.0" min="0.0"></span></li>
                 </ul>
                 <button class="send-button" onclick="saveOffsets()">
                     <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
@@ -766,7 +766,7 @@
 
         //Send Manual Data
         function checkAngles(el, az) {
-            if (isNaN(az) || isNaN(el) || az < 0.0 || az > 360.0 || el < 0.0 || el > 90.0) {
+            if (isNaN(az) || isNaN(el) || Math.abs(az) > 360.0 || Math.abs(el) > 90.0) {
                 alert("❌ Ingrese rangos válidos.");
                 return false;
             }
@@ -777,7 +777,10 @@
             const az = parseFloat(document.getElementById('m-az').value);
             const el = parseFloat(document.getElementById('m-el').value);
 
-            if (!checkAngles(el, az)) return;
+            if (az < 0 || az > 360 || el < 0 || el > 90) {
+                alert("❌ Ingrese rangos válidos.");
+                return;
+            }
 
             const payload = { manual_az: az, manual_el: el };
 
@@ -803,7 +806,7 @@
             if (!checkAngles(el, az))
                 return;
 
-            const payload = { offset_az: az, offset_el: el };
+            const payload = { off_az: az, off_el: el };
 
             fetch("/saveOffsets", {
                 method: "POST",

@@ -153,7 +153,6 @@
 #define CURRENT_AZIMUTH_MAX_mA 1000.0   /**< Max DC current for Azimuth motor (mA). */
 #define CURRENT_ELEVATION_MAX_mA 1000.0 /**< Max DC current for Elevation motor (mA). */
 #define CURRENT_HOMING_mA 10.0          /**< Max current for considering the motor turned off. */
-#define CURRENT_OFFSETS_SAMPLES 100     /**< Number of samples for averaging measurements. */
 ///@}
 
 /**
@@ -226,6 +225,7 @@
 #define CURRENT_GAIN_AZ 2.11988 /**< Signal Adaptation gain for Azimuth current sensing. */
 #define SHUNT_EL_OHM 0.09       /**< Shunt resistor value for Elevation current sensing (Ohms). */
 #define CURRENT_GAIN_EL 7.07773 /**< Signal Adaptation gain for Elevation current sensing. */
+#define ADC_MEASURE_SAMPLES 128 /**< Number of samples to take for averaging during measurement. */
 ///@}
 
 /* -------------------------------------------------------------------------- */

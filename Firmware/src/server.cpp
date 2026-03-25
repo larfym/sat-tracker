@@ -94,7 +94,7 @@ void ServerHandler::saveTLE_handle(AsyncWebServerRequest *request, uint8_t *data
 
 void ServerHandler::saveOffsets_handle(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
-    if (index == total - len && request->contentType() == "application/json")
+    if (index == total - len && request->contentType().indexOf("application/json") >= 0)
     {
         JsonDocument doc;
         DeserializationError err = deserializeJson(doc, data, total);
@@ -105,8 +105,8 @@ void ServerHandler::saveOffsets_handle(AsyncWebServerRequest *request, uint8_t *
             return;
         }
 
-        String offset_az = doc["offset_az"];
-        String offset_el = doc["offset_el"];
+        String offset_az = doc["off_az"];
+        String offset_el = doc["off_el"];
 
         saveOffsets(offset_az.toFloat(), offset_el.toFloat());
         flags.offsets_updated = true;
@@ -174,8 +174,8 @@ void ServerHandler::manualTrack_handle(AsyncWebServerRequest *request, uint8_t *
         status.tracking = true;
         float az = doc["manual_az"];
         float el = doc["manual_el"];
-        manual_target.azimuth = az;
-        manual_target.elevation = el;
+        manualTargetAngle.azimuth = az;
+        manualTargetAngle.elevation = el;
 
         ESP_LOGI(TAG, "Manual Track Set to Az: %f, El: %f", az, el);
         ESP_LOGD(TAG, "Status - Tracking: %d, Manual Track: %d, GPS Fix: %d, TLE Inited: %d", status.tracking, status.manual_tracking, status.gps, status.tle);
@@ -234,14 +234,13 @@ void ServerHandler::sendTelemetry()
     sat["la"] = serialized(String(satellite.satLat, 6));
     sat["lo"] = serialized(String(satellite.satLon, 6));
     sat["al"] = serialized(String(satellite.satAlt, 2));
-    sat["a"] = serialized(String(satellite.satAz, 2));
-    sat["e"] = serialized(String(satellite.satEl, 2));
-    sat["p"] = next_pass_unix;
+    sat["a"] = serialized(String(sgp4TargetAngle.azimuth, 2));
+    sat["e"] = serialized(String(sgp4TargetAngle.elevation, 2));
+    sat["p"] = nextPass_unix;
     
     bool notdark;
     double deltaphi;
     int16_t vis = satellite.visible(notdark, deltaphi);
-
     if (satellite.satEl <= 0) {
         sat["v"] = "No visible";
     }
@@ -265,13 +264,13 @@ void ServerHandler::sendTelemetry()
     stat["man"] = status.manual_tracking;
     stat["tr"] = status.tracking;
     stat["err"] = status.error;
-    stat["a"] = serialized(String(set_angle.azimuth, 2));
-    stat["e"] = serialized(String(set_angle.elevation, 2));
+    stat["a"] = serialized(String(setPointAngle.azimuth, 2));
+    stat["e"] = serialized(String(setPointAngle.elevation, 2));
 
     //Antenna Data
     JsonObject ant = json["a"].to<JsonObject>(); 
-    ant["o_a"] = serialized(String(offsets_ant.azimuth, 2));
-    ant["o_e"] = serialized(String(offsets_ant.elevation, 2));
+    ant["o_a"] = serialized(String(offsetAngle.azimuth, 2));
+    ant["o_e"] = serialized(String(offsetAngle.elevation, 2));
 
     //Platform Data
     unsigned long unixtime = time(NULL);
@@ -279,8 +278,8 @@ void ServerHandler::sendTelemetry()
     platform["la"] = serialized(String(satellite.siteLat, 6));
     platform["lo"] = serialized(String(satellite.siteLon, 6));
     platform["al"] = serialized(String(satellite.siteAlt, 2));
-    platform["az"] = serialized(String(current.azimuth, 2));
-    platform["el"] = serialized(String(current.elevation, 2));
+    platform["az"] = serialized(String(mountAngle.azimuth, 2));
+    platform["el"] = serialized(String(mountAngle.elevation, 2));
     if(status.gps){
         platform["t"] = unixtime;
     }else{

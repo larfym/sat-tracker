@@ -50,14 +50,15 @@ void telemetry_Task(void *pvParameters);
 
 /* Global Variables */
 static const char *TAG = "MAIN";
-esfericalAngles_t target = {0};
-esfericalAngles_t manual_target = {0};
-esfericalAngles_t current = {0};
-esfericalAngles_t offsets_ant = {0};
-esfericalAngles_t set_angle = {0};
+sphericalAngles_t targetAngle = {0};
+sphericalAngles_t sgp4TargetAngle = {0};
+sphericalAngles_t manualTargetAngle = {0};
+sphericalAngles_t setPointAngle = {0};
+sphericalAngles_t mountAngle = {0};
+sphericalAngles_t offsetAngle = {0};
 mountFlags_t flags;
 trackerStatus_t status;
-unsigned long next_pass_unix = 0;
+unsigned long nextPass_unix = 0;
 
 void setup()
 {
@@ -71,11 +72,11 @@ void setup()
   currentEl.setShuntValue(SHUNT_EL_OHM);
   currentAz.setOpAmpGain(CURRENT_GAIN_AZ);
   currentEl.setOpAmpGain(CURRENT_GAIN_EL);
-  currentAz.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
-  currentEl.calibrateOffset(CURRENT_OFFSETS_SAMPLES);
+  currentAz.calibrateOffset();
+  currentEl.calibrateOffset();
   ESP_LOGI(TAG, "Shunt-Voltage-Offsets: Az %d [mV], El %d [mV]", currentAz.getOffset_mV(), currentEl.getOffset_mV());
-  offsets_ant = getSavedOffsets();
-  ESP_LOGI(TAG, "Antenna-Offsets: Az %.3f [°], El %.3f [°]", offsets_ant.azimuth, offsets_ant.elevation);
+  offsetAngle = getSavedOffsets();
+  ESP_LOGI(TAG, "Antenna-Offsets: Az %.3f [°], El %.3f [°]", offsetAngle.azimuth, offsetAngle.elevation);
 
   controllerAz.setDeadZone(M_AZ_V_TO_START);
   controllerEl.setDeadZone(M_EL_V_TO_START);
@@ -108,16 +109,16 @@ void loop()
     status.tle = (configSatellite(&satellite) ? true : false);
     flags.tle_updated = false;
     flags.pred_done = false;
-    next_pass_unix = 0;
+    nextPass_unix = 0;
   }
 
   // Update Offsets if changed
   if (flags.offsets_updated == true)
   {
-    offsets_ant = getSavedOffsets();
+    offsetAngle = getSavedOffsets();
     flags.offsets_updated = false;
     flags.pred_done = false;
-    next_pass_unix = 0;
+    nextPass_unix = 0;
   }
 
   // GPS Task When no data
@@ -181,7 +182,6 @@ void IRAM_ATTR controlTimer_ISR(void *arg)
 void MotionControl_Task(void *pvParameters)
 {
   constexpr float DUTY_SCALE = 100.0f / M_V_NOMINAL;
-  const uint8_t search_iterations = 30;
 
   float el_mm = 0.0f;
   float output_az = 0.0, output_el = 0.0;
@@ -191,58 +191,28 @@ void MotionControl_Task(void *pvParameters)
   {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    // SETPOINT Calculation with Offsets
+    // SetPoint
     if (status.manual_tracking == true)
     {
-      set_angle.azimuth = manual_target.azimuth;
-      set_angle.elevation = manual_target.elevation;
+      setPointAngle.azimuth = manualTargetAngle.azimuth;
+      setPointAngle.elevation = manualTargetAngle.elevation;
     }
     else
     {
-      // Below Horizon - Next Pass Prediction
-      if (target.elevation < offsets_ant.elevation)
-      {
-        if (!flags.pred_done)
-        {
-          passinfo next_pass;
-          satellite.initpredpoint((unsigned long)time(NULL), offsets_ant.elevation);
-          if (satellite.nextpass(&next_pass, search_iterations, false, offsets_ant.elevation))
-          {
-            next_pass_unix = jdToUnix(next_pass.jdstart);
-            set_angle.azimuth = next_pass.azstart - offsets_ant.azimuth;
-            set_angle.elevation = EL_MIN_DEG;
-            ESP_LOGI(TAG, "Next Pass - Azimuth: %.2f [°], Elevation: %.2f [°]", set_angle.azimuth, set_angle.elevation);
-          }
-          else
-          {
-            next_pass_unix = 0;
-            ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
-            set_angle.azimuth = AZ_MIN_DEG;
-            set_angle.elevation = EL_MAX_DEG;
-          }
-          flags.pred_done = true;
-        }
-      }
-      else
-      {
-        next_pass_unix = 0;
-        flags.pred_done = false;
-        set_angle.azimuth = target.azimuth - offsets_ant.azimuth;
-        set_angle.elevation = target.elevation - offsets_ant.elevation;
-      }
+      setPointAngle.azimuth = (targetAngle.azimuth < 0.0f)? targetAngle.azimuth + 360.0f : targetAngle.azimuth;
+      setPointAngle.elevation = targetAngle.elevation;
     }
 
-    // ANGLE SETPOINT LIMITS
-    set_angle.azimuth = fmaxf(fminf(set_angle.azimuth, AZ_MAX_DEG), AZ_MIN_DEG);
-    set_angle.elevation = fmaxf(fminf(set_angle.elevation, EL_MAX_DEG), EL_MIN_DEG);
+    setPointAngle.azimuth = fmaxf(fminf(setPointAngle.azimuth, AZ_MAX_DEG), AZ_MIN_DEG);
+    setPointAngle.elevation = fmaxf(fminf(setPointAngle.elevation, EL_MAX_DEG), EL_MIN_DEG);
 
     el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
-    current.elevation = elevation_deg_from_mm(el_mm);
-    current.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
+    mountAngle.elevation = elevation_deg_from_mm_lut(el_mm);
+    mountAngle.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
 
     // PID Controller
-    output_az = controllerAz.output(current.azimuth, set_angle.azimuth);
-    output_el = controllerEl.output(el_mm, elevation_mm_from_deg(set_angle.elevation));
+    output_az = controllerAz.output(mountAngle.azimuth, setPointAngle.azimuth);
+    output_el = controllerEl.output(el_mm, elevation_mm_from_deg_lut(setPointAngle.elevation));
 
     // CONTROL ACTION
     new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD
@@ -298,6 +268,8 @@ void TrackingPredictor_Task(void *pvParameters)
   unsigned long last_unixTime = 0;
   double az[2], el[2];
   bool first_run = true;
+  const uint8_t search_iterations = 30;
+
   for (;;)
   {
 
@@ -312,13 +284,13 @@ void TrackingPredictor_Task(void *pvParameters)
         double delta_s = (current_time_ms - time_ms_ref) / 1000.0;
         if (delta_s >= 1.0)
         {
-          target.azimuth = az[1];
-          target.elevation = el[1];
+          sgp4TargetAngle.azimuth = az[1];
+          sgp4TargetAngle.elevation = el[1];
         }
         else
         {
-          target.azimuth = az[0] + (az[1] - az[0]) * delta_s;
-          target.elevation = el[0] + (el[1] - el[0]) * delta_s;
+          sgp4TargetAngle.azimuth = az[0] + (az[1] - az[0]) * delta_s;
+          sgp4TargetAngle.elevation = el[0] + (el[1] - el[0]) * delta_s;
         }
       }
       else
@@ -347,10 +319,42 @@ void TrackingPredictor_Task(void *pvParameters)
         last_unixTime = current_unixTime;
         time_ms_ref = current_time_ms;
 
-        target.azimuth = az[0];
-        target.elevation = el[0];
+        sgp4TargetAngle.azimuth = az[0];
+        sgp4TargetAngle.elevation = el[0];
       }
     }
+
+    //Below Horizon - Next Pass Prediction
+    if (sgp4TargetAngle.elevation < offsetAngle.elevation)
+    {
+      if (!flags.pred_done)
+        {
+          passinfo nextPass;
+          satellite.initpredpoint((unsigned long)time(NULL), offsetAngle.elevation);
+          if (satellite.nextpass(&nextPass, search_iterations, false, offsetAngle.elevation))
+          {
+            nextPass_unix = jdToUnix(nextPass.jdstart);
+            targetAngle.azimuth = nextPass.azstart - offsetAngle.azimuth;
+            targetAngle.elevation = EL_MIN_DEG;
+            ESP_LOGI(TAG, "NextPass - Az: %.2f [°], El: %.2f [°]", nextPass.azstart, EL_MIN_DEG);
+          }
+          else
+          {
+            nextPass_unix = 0;
+            ESP_LOGI(TAG, "No upcoming pass found above the horizon.");
+            targetAngle.azimuth = AZ_MIN_DEG;
+            targetAngle.elevation = EL_MAX_DEG;
+          }
+          flags.pred_done = true;
+        }
+    }else
+    {
+      nextPass_unix = 0;
+      flags.pred_done = false;
+      targetAngle.azimuth = sgp4TargetAngle.azimuth - offsetAngle.azimuth;
+      targetAngle.elevation = sgp4TargetAngle.elevation - offsetAngle.elevation;
+    }
+
     vTaskDelay(pdMS_TO_TICKS(SAMPLE_TIME_SGP4_MS));
   }
 }

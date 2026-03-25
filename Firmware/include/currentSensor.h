@@ -7,8 +7,6 @@
  * The measurement is performed through a **shunt resistor** and
  * **operational amplifiers (op-amps)** that condition the signal.
  *
- * @author Alfonso Mouton
- * @date 2025
  */
 
 #ifndef CURRENT_H
@@ -18,37 +16,31 @@
 #include "driver/adc.h"
 #include "driver/gpio.h"
 #include "esp_err.h"
+#include "configurations.h"
 
-/** @name ADC Configuration
+/** * @name ADC Configuration
  * Constants for configuring the ESP32's ADC unit.
+ * @{
  */
-///@{
 /** @brief ADC attenuation (range of 100 mV to 950 mV) for high precision. */
-#define ADC_ATTEN ADC_ATTEN_DB_0
-
+#define ADC_ATTEN           ADC_ATTEN_DB_0
 /** @brief ADC unit used (ADC1). */
-#define ADC_NUM_1 ADC_UNIT_1
-
+#define ADC_NUM_1           ADC_UNIT_1
 /** @brief ADC resolution (12 bits = 4096 levels). */
-#define ADC_WIDTH ADC_WIDTH_BIT_12
-
+#define ADC_WIDTH           ADC_WIDTH_BIT_12
 /** @brief Default value of the internal ADC reference voltage (in mV). */
-#define ADC_DEFAULT_VREF 1100
+#define ADC_DEFAULT_VREF    1100
+/** @} */
 
-/** @brief Number of samples to take for averaging during measurement. */
-#define ADC_MEASURE_SAMPLES 128
-///@}
-
-/** @name Current Measurement Constants
+/** * @name Current Measurement Constants
  * Constants specific to the current measurement circuit.
+ * @{
  */
-///@{
 /** @brief Shunt resistor value in Ohms. */
 #define DEFAULT_SHUNT_VALUE_OHM 0.22f
-
 /** @brief Operational amplifier gain. */
-#define DEFAULT_OPAMP_GAIN 2.12f
-///@}
+#define DEFAULT_OPAMP_GAIN      2.12f
+/** @} */
 
 /**
  * @class CurrentSensor
@@ -61,11 +53,20 @@
 class CurrentSensor
 {
 private:
-    adc1_channel_t channel; 			 /**< @brief Configured ADC channel for measurement. */
+    adc1_channel_t channel;                  /**< @brief Configured ADC channel for measurement. */
     esp_adc_cal_characteristics_t adc_chars; /**< @brief ADC calibration characteristics structure. */
-    uint32_t offset_mV = 0;			 /**< @brief Voltage offset (in mV) measured under zero current condition. */
+    uint32_t offset_mV = 0;                  /**< @brief Voltage offset (in mV) measured under zero current condition. */
     float shunt_ohm = DEFAULT_SHUNT_VALUE_OHM; /**< @brief Shunt resistor value in Ohms. */
     float opamp_gain = DEFAULT_OPAMP_GAIN;   /**< @brief Operational amplifier gain. */
+
+    /**
+     * @brief Performs multiple ADC readings and returns the average.
+     * * Used to reduce electrical noise in the analog signal.
+     * @param samples Number of samples to collect.
+     * @return Averaged raw ADC value.
+     */
+    uint32_t multisample(uint8_t samples);
+
 public:
     /**
      * @brief Constructor for the CurrentSensor class.
@@ -82,17 +83,17 @@ public:
      *
      * Reads the analog value, applies calibration and offset, and calculates the current
      * using Ohm's Law and the amplifier gain:
-     * $I_{mA} = V_{Shunt, mV} / (G \cdot R_{Shunt, \Omega})$
+     * * @f[ I_{mA} = \frac{V_{Shunt, mV}}{G \cdot R_{Shunt, \Omega}} @f]
      *
-     * @return Measured current in milliamperes (mA). Returns float for precision.
+     * @return Measured current in milliamperes (mA).
      */
     float getCurrent_mA();
 
     /**
      * @brief Gets the shunt resistor voltage in millivolts.
      *
-     * Takes an average of \ref ADC_MEASURE_SAMPLES raw ADC readings,
-     * converts it to voltage using calibration, and subtracts the calibrated offset.
+     * Takes an average of raw ADC readings, converts it to voltage using 
+     * calibration, and subtracts the calibrated offset.
      *
      * @return Shunt voltage in millivolts (mV).
      */
@@ -102,29 +103,25 @@ public:
      * @brief Calibrates the sensor's voltage offset.
      *
      * Measures the voltage of the ADC pin when the input current is zero (0)
-     * to establish the `offset_mV` value. **Must be called with no current applied.**
-     *
-     * @param samples Number of samples to average for a more stable calibration.
+     * to establish the `offset_mV` value. 
+     * @warning Must be called with no current applied to the motor.
      */
-    void calibrateOffset(uint8_t samples);
+    void calibrateOffset();
 
     /**
      * @brief Gets the calibrated voltage offset value.
-     *
      * @return The offset value in millivolts (mV).
      */
     uint32_t getOffset_mV();
 
     /**
      * @brief Sets a new shunt resistor value.
-     *
      * @param shunt_ohm New shunt resistor value in Ohms.
      */
     void setShuntValue(float shunt_ohm);
     
     /**
      * @brief Sets a new operational amplifier gain.
-     *
      * @param gain New operational amplifier gain.
      */
     void setOpAmpGain(float gain);
