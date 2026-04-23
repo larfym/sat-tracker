@@ -6,7 +6,7 @@ var searchData=
   ['adc_5fatten_3',['ADC_ATTEN',['../current_sensor_8h.html#a9851d7403086e8d8ce491625b0f8863d',1,'currentSensor.h']]],
   ['adc_5fchars_4',['adc_chars',['../class_current_sensor.html#acad693f0e83b428794877a86cace4e8b',1,'CurrentSensor']]],
   ['adc_5fdefault_5fvref_5',['ADC_DEFAULT_VREF',['../current_sensor_8h.html#a60a309e5f8aedc2bd1244ff2ccbd6aef',1,'currentSensor.h']]],
-  ['adc_5fmeasure_5fsamples_6',['ADC_MEASURE_SAMPLES',['../current_sensor_8h.html#a8a4220fddcc006052f5142591343b76b',1,'currentSensor.h']]],
+  ['adc_5fmeasure_5fsamples_6',['ADC_MEASURE_SAMPLES',['../configurations_8h.html#a8a4220fddcc006052f5142591343b76b',1,'configurations.h']]],
   ['adc_5fnum_5f1_7',['ADC_NUM_1',['../current_sensor_8h.html#a7274e11e5026e6364ff703661611b25e',1,'currentSensor.h']]],
   ['adc_5fwidth_8',['ADC_WIDTH',['../current_sensor_8h.html#ae7be6136584e673152582baf499d6a6c',1,'currentSensor.h']]],
   ['angle_5fstep_9',['ANGLE_STEP',['../utils_8h.html#ad555d21ae860f085552c7eb68b600cd9',1,'utils.h']]],

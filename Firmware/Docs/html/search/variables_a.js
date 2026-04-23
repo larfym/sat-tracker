@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['next_5fpass_5funix_0',['next_pass_unix',['../main_8cpp.html#a2d6f596dfb29d9d1f9a0e92bc547ebea',1,'next_pass_unix:&#160;main.cpp'],['../server_8h.html#a2d6f596dfb29d9d1f9a0e92bc547ebea',1,'next_pass_unix:&#160;main.cpp']]]
+  ['nextpass_5funix_0',['nextPass_unix',['../main_8cpp.html#a46e1484ba8c7792f044d44dc3e9594c4',1,'nextPass_unix:&#160;main.cpp'],['../server_8h.html#a46e1484ba8c7792f044d44dc3e9594c4',1,'nextPass_unix:&#160;main.cpp']]]
 ];

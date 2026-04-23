@@ -27,7 +27,7 @@ var utils_8h =
     [ "elevation_deg_from_mm_lut", "utils_8h.html#afc00f5f63690bee3e235a9f7be532376", null ],
     [ "elevation_mm_from_deg", "utils_8h.html#a81de41623d708a4bbbe5f33630d13cf8", null ],
     [ "elevation_mm_from_deg_lut", "utils_8h.html#ac9b39096fcead1abd4f373deb01d3b42", null ],
-    [ "getSavedOffsets", "utils_8h.html#a62dde60c7ccbfdf2485f766d6b6d5922", null ],
+    [ "getSavedOffsets", "utils_8h.html#a452caf9c3390017052504bb51ae174a3", null ],
     [ "getUnixTimeFromGPS", "utils_8h.html#a7db34d0acfcfc9f7997160c378606503", null ],
     [ "init_elevation_lut", "utils_8h.html#af214a00ea6b069c59001e2d6a1370063", null ],
     [ "jdToUnix", "utils_8h.html#a920af668a5907f81c684537724aab31d", null ],
@@ -35,7 +35,7 @@ var utils_8h =
     [ "saveTLE", "utils_8h.html#a9337eb14ab020193580abd312d1fbb50", null ],
     [ "setTime", "utils_8h.html#acc2313d78818323e2d30ed5226c4d7c0", null ],
     [ "config", "utils_8h.html#a95d592edb81dd40b1f9085628e7698a8", null ],
-    [ "esfericalAngles_t", "utils_8h.html#a157fd63fdcfa478d39372dec5744a3d2", null ],
     [ "mountFlags_t", "utils_8h.html#a4e531e11ab017aad416f0432e33e1a31", null ],
+    [ "sphericalAngles_t", "utils_8h.html#aa27ea2fa6386a731820fdc8ed72ab361", null ],
     [ "trackerStatus_t", "utils_8h.html#af8a35661022926a438bb0e33cf4e84d2", null ]
 ];

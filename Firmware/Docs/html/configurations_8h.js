@@ -1,6 +1,7 @@
 var configurations_8h =
 [
     [ "A_ANT", "configurations_8h.html#a39a4aef518070719f955536fb18f6636", null ],
+    [ "ADC_MEASURE_SAMPLES", "configurations_8h.html#a8a4220fddcc006052f5142591343b76b", null ],
     [ "AZ_MAX_DEG", "configurations_8h.html#a9ca2a700dc3c9463ffec3c3e49d919d1", null ],
     [ "AZ_MIN_DEG", "configurations_8h.html#aa9c6275c5b158a9c5367abcc0a1a51d1", null ],
     [ "AZIMUTH_RESOLUTION_angle", "configurations_8h.html#a618a262e13ca80c7900729cce273a2ac", null ],
@@ -11,7 +12,6 @@ var configurations_8h =
     [ "CURRENT_GAIN_AZ", "configurations_8h.html#ab363ea10e9d0da7012f8f6cbdcee7882", null ],
     [ "CURRENT_GAIN_EL", "configurations_8h.html#a62b33caa3a185c31056a204f70eba631", null ],
     [ "CURRENT_HOMING_mA", "configurations_8h.html#ada73a694caa3cc91084dd186c39d41e1", null ],
-    [ "CURRENT_OFFSETS_SAMPLES", "configurations_8h.html#ab1c010192107735bc198c55953da3ef6", null ],
     [ "D_ANT", "configurations_8h.html#a2ac51fcc017948d66c75b95473b426c4", null ],
     [ "DEFAULT_SAMPLE_TIME_US", "configurations_8h.html#a4b801f5bec6966fa50dbca2c4fd789eb", null ],
     [ "DEFAULT_SERVER_PORT", "configurations_8h.html#af257e2a3e091629829857a2eb8931a7a", null ],
@@ -46,6 +46,7 @@ var configurations_8h =
     [ "M_EL_V_TO_START", "configurations_8h.html#afd517c26a46c866b3e18cf00c0e9b24b", null ],
     [ "M_MAX_DUTY", "configurations_8h.html#ac37c3874949285db365830a0af9ba6f0", null ],
     [ "M_STOP_DUTY", "configurations_8h.html#adf6dcd893480852d7a468e561027c267", null ],
+    [ "M_STOPPED_CHECK_INTERVAL_MS", "configurations_8h.html#aa33b361d28f2f88e6bfd400a945594f5", null ],
     [ "M_V_NOMINAL", "configurations_8h.html#a114551a5238cb0c6d988e55ba1d563c1", null ],
     [ "MAX_STACK_SIZE", "configurations_8h.html#accbb358028675c83675d8b34c386268d", null ],
     [ "MDNS_SERVICE_NAME", "configurations_8h.html#a2597be4e15dcb4d93d323730f9ac2838", null ],

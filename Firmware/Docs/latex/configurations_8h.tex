@@ -57,15 +57,15 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_a39a4aef518070719f955536fb18f6636}{A\+\_\+\+ANT}}~50.\+0f
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}{BP\+\_\+\+ANT}}~230.\+66f
+\+\#define \doxymbox{\hyperlink{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b}{BP\+\_\+\+ANT}}~220.\+11f
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}~260.\+00f
+\+\#define \doxymbox{\hyperlink{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}{C\+\_\+\+ANT}}~276.\+00f
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}}~156.\+0f
+\+\#define \doxymbox{\hyperlink{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}{D\+\_\+\+ANT}}~145.\+0f
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_aed5df61912c8c1b1f45d597496d14625}{E\+\_\+\+ANT}}~80.\+0f
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}}~255.\+00f
+\+\#define \doxymbox{\hyperlink{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5}{F\+\_\+\+ANT}}~258.\+00f
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Wi\+Fi Configuration}\par
@@ -101,15 +101,17 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_af612d680313c8e405272d106245d0fe6}{M\+\_\+\+AZ\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}~15.\+5
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}~8
+\+\#define \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}~9
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_adf6dcd893480852d7a468e561027c267}{M\+\_\+\+STOP\+\_\+\+DUTY}}~25
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_ac37c3874949285db365830a0af9ba6f0}{M\+\_\+\+MAX\+\_\+\+DUTY}}~100
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0}{M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~80
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0}{M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~65
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a}{M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~150
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a}{M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS}}~100
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa33b361d28f2f88e6bfd400a945594f5}{M\+\_\+\+STOPPED\+\_\+\+CHECK\+\_\+\+INTERVAL\+\_\+\+MS}}~10
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Actuator pulses resolution}\par
@@ -128,8 +130,6 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 \+\#define \doxymbox{\hyperlink{configurations_8h_a23704dd1aa5111b43de738b89232a9e2}{CURRENT\+\_\+\+ELEVATION\+\_\+\+MAX\+\_\+mA}}~1000.\+0
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_ada73a694caa3cc91084dd186c39d41e1}{CURRENT\+\_\+\+HOMING\+\_\+mA}}~10.\+0
-\item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_ab1c010192107735bc198c55953da3ef6}{CURRENT\+\_\+\+OFFSETS\+\_\+\+SAMPLES}}~100
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Timing Parameters}\par
@@ -157,7 +157,7 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 \begin{Indent}\textbf{ PID Gains — Elevation}\par
 {\em Gains for the Elevation axis PI controller. }\begin{DoxyCompactItemize}
 \item 
-\+\#define \doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}~10.\+0
+\+\#define \doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}~7.\+0
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}~0.\+5
 \end{DoxyCompactItemize}
@@ -196,6 +196,8 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 \+\#define \doxymbox{\hyperlink{configurations_8h_afd090c34883b15dab99c6ff746a4af76}{SHUNT\+\_\+\+EL\+\_\+\+OHM}}~0.\+09
 \item 
 \+\#define \doxymbox{\hyperlink{configurations_8h_a62b33caa3a185c31056a204f70eba631}{CURRENT\+\_\+\+GAIN\+\_\+\+EL}}~7.\+07773
+\item 
+\+\#define \doxymbox{\hyperlink{configurations_8h_a8a4220fddcc006052f5142591343b76b}{ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES}}~128
 \end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Task Priorities}\par
@@ -251,7 +253,13 @@ See ./\+\+Hardware/\+\+Dimensiones.png for reference. All dimensions are in mill
 {\footnotesize\ttfamily \label{configurations_8h_a39a4aef518070719f955536fb18f6636} 
 \+\#define A\+\_\+\+ANT~50.\+0f}
 
-\Hypertarget{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1}\index{configurations.h@{configurations.h}!AZ\_MAX\_DEG@{AZ\_MAX\_DEG}}
+\Hypertarget{configurations_8h_a8a4220fddcc006052f5142591343b76b}\index{configurations.h@{configurations.h}!ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}}
+\index{ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_MEASURE\_SAMPLES}{ADC\_MEASURE\_SAMPLES}}
+{\footnotesize\ttfamily \label{configurations_8h_a8a4220fddcc006052f5142591343b76b} 
+\+\#define ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES~128}
+
+Number of samples to take for averaging during measurement. \Hypertarget{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1}\index{configurations.h@{configurations.h}!AZ\_MAX\_DEG@{AZ\_MAX\_DEG}}
 \index{AZ\_MAX\_DEG@{AZ\_MAX\_DEG}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{AZ\_MAX\_DEG}{AZ\_MAX\_DEG}}
 {\footnotesize\ttfamily \label{configurations_8h_a9ca2a700dc3c9463ffec3c3e49d919d1} 
@@ -273,13 +281,13 @@ Degrees per reed pulse for Azimuth. \Hypertarget{configurations_8h_a034c4b2e2cf4
 \index{BP\_ANT@{BP\_ANT}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{BP\_ANT}{BP\_ANT}}
 {\footnotesize\ttfamily \label{configurations_8h_a034c4b2e2cf4a02e546516bea24d038b} 
-\+\#define BP\+\_\+\+ANT~230.\+66f}
+\+\#define BP\+\_\+\+ANT~220.\+11f}
 
 \Hypertarget{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a}\index{configurations.h@{configurations.h}!C\_ANT@{C\_ANT}}
 \index{C\_ANT@{C\_ANT}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{C\_ANT}{C\_ANT}}
 {\footnotesize\ttfamily \label{configurations_8h_a149b23fbb2b8ad13b0ad21dbecd1059a} 
-\+\#define C\+\_\+\+ANT~260.\+00f}
+\+\#define C\+\_\+\+ANT~276.\+00f}
 
 \Hypertarget{configurations_8h_a53f290d4e302a2bc20466bea8c913956}\index{configurations.h@{configurations.h}!CURRENT\_AZIMUTH\_MAX\_mA@{CURRENT\_AZIMUTH\_MAX\_mA}}
 \index{CURRENT\_AZIMUTH\_MAX\_mA@{CURRENT\_AZIMUTH\_MAX\_mA}!configurations.h@{configurations.h}}
@@ -311,17 +319,11 @@ Signal Adaptation gain for Elevation current sensing. \Hypertarget{configuration
 {\footnotesize\ttfamily \label{configurations_8h_ada73a694caa3cc91084dd186c39d41e1} 
 \+\#define CURRENT\+\_\+\+HOMING\+\_\+mA~10.\+0}
 
-Max current for considering the motor turned off. \Hypertarget{configurations_8h_ab1c010192107735bc198c55953da3ef6}\index{configurations.h@{configurations.h}!CURRENT\_OFFSETS\_SAMPLES@{CURRENT\_OFFSETS\_SAMPLES}}
-\index{CURRENT\_OFFSETS\_SAMPLES@{CURRENT\_OFFSETS\_SAMPLES}!configurations.h@{configurations.h}}
-\doxysubsubsection{\texorpdfstring{CURRENT\_OFFSETS\_SAMPLES}{CURRENT\_OFFSETS\_SAMPLES}}
-{\footnotesize\ttfamily \label{configurations_8h_ab1c010192107735bc198c55953da3ef6} 
-\+\#define CURRENT\+\_\+\+OFFSETS\+\_\+\+SAMPLES~100}
-
-Number of samples for averaging measurements. \Hypertarget{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}\index{configurations.h@{configurations.h}!D\_ANT@{D\_ANT}}
+Max current for considering the motor turned off. \Hypertarget{configurations_8h_a2ac51fcc017948d66c75b95473b426c4}\index{configurations.h@{configurations.h}!D\_ANT@{D\_ANT}}
 \index{D\_ANT@{D\_ANT}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{D\_ANT}{D\_ANT}}
 {\footnotesize\ttfamily \label{configurations_8h_a2ac51fcc017948d66c75b95473b426c4} 
-\+\#define D\+\_\+\+ANT~156.\+0f}
+\+\#define D\+\_\+\+ANT~145.\+0f}
 
 \Hypertarget{configurations_8h_a4b801f5bec6966fa50dbca2c4fd789eb}\index{configurations.h@{configurations.h}!DEFAULT\_SAMPLE\_TIME\_US@{DEFAULT\_SAMPLE\_TIME\_US}}
 \index{DEFAULT\_SAMPLE\_TIME\_US@{DEFAULT\_SAMPLE\_TIME\_US}!configurations.h@{configurations.h}}
@@ -387,7 +389,7 @@ Enable/\+\+PWM pin for Elevation motor. \Hypertarget{configurations_8h_accf0d3a1
 \index{F\_ANT@{F\_ANT}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{F\_ANT}{F\_ANT}}
 {\footnotesize\ttfamily \label{configurations_8h_accf0d3a1b60705451b9e5a78e37f82c5} 
-\+\#define F\+\_\+\+ANT~255.\+00f}
+\+\#define F\+\_\+\+ANT~258.\+00f}
 
 \Hypertarget{configurations_8h_ac81ef7244c62ee5ea3a9a637a07ac921}\index{configurations.h@{configurations.h}!GPS\_BAUDRATE@{GPS\_BAUDRATE}}
 \index{GPS\_BAUDRATE@{GPS\_BAUDRATE}!configurations.h@{configurations.h}}
@@ -483,13 +485,13 @@ Proportional gain (AZ). 10 \Hypertarget{configurations_8h_aa837cea21a670725c8482
 \index{KP\_ELEVATION@{KP\_ELEVATION}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{KP\_ELEVATION}{KP\_ELEVATION}}
 {\footnotesize\ttfamily \label{configurations_8h_aa837cea21a670725c8482e7379c50b84} 
-\+\#define KP\+\_\+\+ELEVATION~10.\+0}
+\+\#define KP\+\_\+\+ELEVATION~7.\+0}
 
 Proportional gain (EL). 5 \Hypertarget{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0}\index{configurations.h@{configurations.h}!M\_AZ\_SETTLING\_TIME\_MS@{M\_AZ\_SETTLING\_TIME\_MS}}
 \index{M\_AZ\_SETTLING\_TIME\_MS@{M\_AZ\_SETTLING\_TIME\_MS}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{M\_AZ\_SETTLING\_TIME\_MS}{M\_AZ\_SETTLING\_TIME\_MS}}
 {\footnotesize\ttfamily \label{configurations_8h_aa9fc601eb8b6247f0e9a63ba560190d0} 
-\+\#define M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~80}
+\+\#define M\+\_\+\+AZ\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~65}
 
 Settling time for Azimuth motor (ms). \Hypertarget{configurations_8h_af612d680313c8e405272d106245d0fe6}\index{configurations.h@{configurations.h}!M\_AZ\_V\_TO\_START@{M\_AZ\_V\_TO\_START}}
 \index{M\_AZ\_V\_TO\_START@{M\_AZ\_V\_TO\_START}!configurations.h@{configurations.h}}
@@ -501,13 +503,13 @@ Minimum voltage to overcome static friction (Azimuth). Note:\+ Values from PWM m
 \index{M\_EL\_SETTLING\_TIME\_MS@{M\_EL\_SETTLING\_TIME\_MS}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{M\_EL\_SETTLING\_TIME\_MS}{M\_EL\_SETTLING\_TIME\_MS}}
 {\footnotesize\ttfamily \label{configurations_8h_aa2ff7abced059abb3e126b9e24d8b31a} 
-\+\#define M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~150}
+\+\#define M\+\_\+\+EL\+\_\+\+SETTLING\+\_\+\+TIME\+\_\+\+MS~100}
 
 Settling time for Elevation motor (ms). \Hypertarget{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}\index{configurations.h@{configurations.h}!M\_EL\_V\_TO\_START@{M\_EL\_V\_TO\_START}}
 \index{M\_EL\_V\_TO\_START@{M\_EL\_V\_TO\_START}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{M\_EL\_V\_TO\_START}{M\_EL\_V\_TO\_START}}
 {\footnotesize\ttfamily \label{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b} 
-\+\#define M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START~8}
+\+\#define M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START~9}
 
 Minimum voltage to overcome static friction (Elevation). Note:\+ Values from PWM modulation \Hypertarget{configurations_8h_ac37c3874949285db365830a0af9ba6f0}\index{configurations.h@{configurations.h}!M\_MAX\_DUTY@{M\_MAX\_DUTY}}
 \index{M\_MAX\_DUTY@{M\_MAX\_DUTY}!configurations.h@{configurations.h}}
@@ -521,7 +523,13 @@ Maximum duty cycle for motors (0-\/100\%). \Hypertarget{configurations_8h_adf6dc
 {\footnotesize\ttfamily \label{configurations_8h_adf6dcd893480852d7a468e561027c267} 
 \+\#define M\+\_\+\+STOP\+\_\+\+DUTY~25}
 
-Duty cycle to apply for stopping the motors (0-\/100\%). \Hypertarget{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}\index{configurations.h@{configurations.h}!M\_V\_NOMINAL@{M\_V\_NOMINAL}}
+Duty cycle to apply for stopping the motors (0-\/100\%). \Hypertarget{configurations_8h_aa33b361d28f2f88e6bfd400a945594f5}\index{configurations.h@{configurations.h}!M\_STOPPED\_CHECK\_INTERVAL\_MS@{M\_STOPPED\_CHECK\_INTERVAL\_MS}}
+\index{M\_STOPPED\_CHECK\_INTERVAL\_MS@{M\_STOPPED\_CHECK\_INTERVAL\_MS}!configurations.h@{configurations.h}}
+\doxysubsubsection{\texorpdfstring{M\_STOPPED\_CHECK\_INTERVAL\_MS}{M\_STOPPED\_CHECK\_INTERVAL\_MS}}
+{\footnotesize\ttfamily \label{configurations_8h_aa33b361d28f2f88e6bfd400a945594f5} 
+\+\#define M\+\_\+\+STOPPED\+\_\+\+CHECK\+\_\+\+INTERVAL\+\_\+\+MS~10}
+
+Checking time interval (ms) \Hypertarget{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}\index{configurations.h@{configurations.h}!M\_V\_NOMINAL@{M\_V\_NOMINAL}}
 \index{M\_V\_NOMINAL@{M\_V\_NOMINAL}!configurations.h@{configurations.h}}
 \doxysubsubsection{\texorpdfstring{M\_V\_NOMINAL}{M\_V\_NOMINAL}}
 {\footnotesize\ttfamily \label{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1} 

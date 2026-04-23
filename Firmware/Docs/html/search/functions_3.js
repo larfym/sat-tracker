@@ -5,7 +5,7 @@ var searchData=
   ['getcurrent_5fma_2',['getCurrent_mA',['../class_current_sensor.html#aeb622e3e92cc15b0bc03af867df0d6c8',1,'CurrentSensor']]],
   ['getdirection_3',['getDirection',['../class_motor_driver.html#abd6167f1bfb974aab47cc0ca52a0d635',1,'MotorDriver']]],
   ['getoffset_5fmv_4',['getOffset_mV',['../class_current_sensor.html#a1c11f880b95ae27ecf7dc2a8357f7178',1,'CurrentSensor']]],
-  ['getsavedoffsets_5',['getSavedOffsets',['../utils_8cpp.html#a62dde60c7ccbfdf2485f766d6b6d5922',1,'getSavedOffsets(void):&#160;utils.cpp'],['../utils_8h.html#a62dde60c7ccbfdf2485f766d6b6d5922',1,'getSavedOffsets(void):&#160;utils.cpp']]],
+  ['getsavedoffsets_5',['getSavedOffsets',['../utils_8cpp.html#a452caf9c3390017052504bb51ae174a3',1,'getSavedOffsets(void):&#160;utils.cpp'],['../utils_8h.html#a452caf9c3390017052504bb51ae174a3',1,'getSavedOffsets(void):&#160;utils.cpp']]],
   ['getshuntvoltage_5fmv_6',['getShuntVoltage_mV',['../class_current_sensor.html#ab6064868042388af7b1b384943487d06',1,'CurrentSensor']]],
   ['getunit_7',['getUnit',['../class_reed_switch.html#ad320a2716e1d6ba64d8d4f55f43bebb2',1,'ReedSwitch']]],
   ['getunixtimefromgps_8',['getUnixTimeFromGPS',['../utils_8cpp.html#a7db34d0acfcfc9f7997160c378606503',1,'getUnixTimeFromGPS(TinyGPSPlus *gps):&#160;utils.cpp'],['../utils_8h.html#a7db34d0acfcfc9f7997160c378606503',1,'getUnixTimeFromGPS(TinyGPSPlus *gps):&#160;utils.cpp']]],

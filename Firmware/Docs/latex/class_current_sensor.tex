@@ -18,7 +18,7 @@ float \doxymbox{\hyperlink{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c
 \begin{DoxyCompactList}\small\item\em Gets the measured current in milliamperes (mA). \end{DoxyCompactList}\item 
 uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_ab6064868042388af7b1b384943487d06}{get\+Shunt\+Voltage\+\_\+mV}} ()
 \begin{DoxyCompactList}\small\item\em Gets the shunt resistor voltage in millivolts. \end{DoxyCompactList}\item 
-void \doxymbox{\hyperlink{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec}{calibrate\+Offset}} (uint8\+\_\+t samples)
+void \doxymbox{\hyperlink{class_current_sensor_ac58c640607e8be98331b20bae3464f07}{calibrate\+Offset}} ()
 \begin{DoxyCompactList}\small\item\em Calibrates the sensor\textquotesingle{}s voltage offset. \end{DoxyCompactList}\item 
 uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}{get\+Offset\+\_\+mV}} ()
 \begin{DoxyCompactList}\small\item\em Gets the calibrated voltage offset value. \end{DoxyCompactList}\item 
@@ -26,6 +26,11 @@ void \doxymbox{\hyperlink{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1
 \begin{DoxyCompactList}\small\item\em Sets a new shunt resistor value. \end{DoxyCompactList}\item 
 void \doxymbox{\hyperlink{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}{set\+Op\+Amp\+Gain}} (float gain)
 \begin{DoxyCompactList}\small\item\em Sets a new operational amplifier gain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{class_current_sensor_a25264c716d01a1a6051e6d10cc628768}{multisample}} (uint8\+\_\+t samples)
+\begin{DoxyCompactList}\small\item\em Performs multiple ADC readings and returns the average. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -71,23 +76,19 @@ Configures the ADC width and attenuation, and performs characterization to obtai
 \label{doc-func-members}
 \Hypertarget{class_current_sensor_doc-func-members}
 \doxysubsection{Member Function Documentation}
-\Hypertarget{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec}\index{CurrentSensor@{CurrentSensor}!calibrateOffset@{calibrateOffset}}
+\Hypertarget{class_current_sensor_ac58c640607e8be98331b20bae3464f07}\index{CurrentSensor@{CurrentSensor}!calibrateOffset@{calibrateOffset}}
 \index{calibrateOffset@{calibrateOffset}!CurrentSensor@{CurrentSensor}}
 \doxysubsubsection{\texorpdfstring{calibrateOffset()}{calibrateOffset()}}
-{\footnotesize\ttfamily \label{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec} 
-void Current\+Sensor::\+calibrate\+Offset (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{samples}{}\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{class_current_sensor_ac58c640607e8be98331b20bae3464f07} 
+void Current\+Sensor::\+calibrate\+Offset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
 
 
 Calibrates the sensor\textquotesingle{}s voltage offset. 
 
-Measures the voltage of the ADC pin when the input current is zero (0) to establish the {\ttfamily \doxylink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\+\_\+mV}} value. {\bfseries{Must be called with no current applied.}}
-
-
-\begin{DoxyParams}{Parameters}
-{\em samples} & Number of samples to average for a more stable calibration. \\
-\hline
-\end{DoxyParams}
+Measures the voltage of the ADC pin when the input current is zero (0) to establish the {\ttfamily \doxylink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\+\_\+mV}} value. \begin{DoxyWarning}{Warning}
+Must be called with no current applied to the motor. 
+\end{DoxyWarning}
 \Hypertarget{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8}\index{CurrentSensor@{CurrentSensor}!getCurrent\_mA@{getCurrent\_mA}}
 \index{getCurrent\_mA@{getCurrent\_mA}!CurrentSensor@{CurrentSensor}}
 \doxysubsubsection{\texorpdfstring{getCurrent\_mA()}{getCurrent\_mA()}}
@@ -98,10 +99,13 @@ float Current\+Sensor::\+get\+Current\+\_\+mA (\begin{DoxyParamCaption}{}{}\end{
 
 Gets the measured current in milliamperes (mA). 
 
-Reads the analog value, applies calibration and offset, and calculates the current using Ohm\textquotesingle{}s Law and the amplifier gain:\+ \$\+I\+\_\+\{mA\} = V\+\_\+\{Shunt, mV\} /\+ (G \textbackslash{}cdot R\+\_\+\{Shunt, \textbackslash{}\+Omega\})\$
+Reads the analog value, applies calibration and offset, and calculates the current using Ohm\textquotesingle{}s Law and the amplifier gain:\+
+\begin{DoxyItemize}
+\item \[ I_{mA} = \frac{V_{Shunt, mV}}{G \cdot R_{Shunt, \Omega}} \]
+\end{DoxyItemize}
 
 \begin{DoxyReturn}{Returns}
-Measured current in milliamperes (mA). Returns float for precision. 
+Measured current in milliamperes (mA). 
 \end{DoxyReturn}
 \Hypertarget{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}\index{CurrentSensor@{CurrentSensor}!getOffset\_mV@{getOffset\_mV}}
 \index{getOffset\_mV@{getOffset\_mV}!CurrentSensor@{CurrentSensor}}
@@ -126,12 +130,33 @@ uint32\+\_\+t Current\+Sensor::\+get\+Shunt\+Voltage\+\_\+mV (\begin{DoxyParamCa
 
 Gets the shunt resistor voltage in millivolts. 
 
-Takes an average of \doxylink{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}{ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES} raw ADC readings, converts it to voltage using calibration, and subtracts the calibrated offset.
+Takes an average of raw ADC readings, converts it to voltage using calibration, and subtracts the calibrated offset.
 
 \begin{DoxyReturn}{Returns}
 Shunt voltage in millivolts (mV). 
 \end{DoxyReturn}
-\Hypertarget{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}\index{CurrentSensor@{CurrentSensor}!setOpAmpGain@{setOpAmpGain}}
+\Hypertarget{class_current_sensor_a25264c716d01a1a6051e6d10cc628768}\index{CurrentSensor@{CurrentSensor}!multisample@{multisample}}
+\index{multisample@{multisample}!CurrentSensor@{CurrentSensor}}
+\doxysubsubsection{\texorpdfstring{multisample()}{multisample()}}
+{\footnotesize\ttfamily \label{class_current_sensor_a25264c716d01a1a6051e6d10cc628768} 
+uint32\+\_\+t Current\+Sensor::\+multisample (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{samples}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Performs multiple ADC readings and returns the average. 
+
+
+\begin{DoxyItemize}
+\item Used to reduce electrical noise in the analog signal. 
+\begin{DoxyParams}{Parameters}
+{\em samples} & Number of samples to collect. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Averaged raw ADC value. 
+\end{DoxyReturn}
+
+\end{DoxyItemize}\Hypertarget{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}\index{CurrentSensor@{CurrentSensor}!setOpAmpGain@{setOpAmpGain}}
 \index{setOpAmpGain@{setOpAmpGain}!CurrentSensor@{CurrentSensor}}
 \doxysubsubsection{\texorpdfstring{setOpAmpGain()}{setOpAmpGain()}}
 {\footnotesize\ttfamily \label{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89} 

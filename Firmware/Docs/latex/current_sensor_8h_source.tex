@@ -3,55 +3,51 @@
 \doxymbox{\hyperlink{current_sensor_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ }
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifndef\ CURRENT\_H}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ CURRENT\_H}}
-\DoxyCodeLine{00016\ }
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}esp\_adc\_cal.h"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}driver/adc.h"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ ADC\_ATTEN\ ADC\_ATTEN\_DB\_0}}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ ADC\_NUM\_1\ ADC\_UNIT\_1}}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ ADC\_WIDTH\ ADC\_WIDTH\_BIT\_12}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifndef\ CURRENT\_H}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ CURRENT\_H}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}esp\_adc\_cal.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}driver/adc.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}driver/gpio.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}esp\_err.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{configurations_8h}{configurations.h}}"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ ADC\_ATTEN\ \ \ \ \ \ \ \ \ \ \ ADC\_ATTEN\_DB\_0}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ ADC\_NUM\_1\ \ \ \ \ \ \ \ \ \ \ ADC\_UNIT\_1}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ ADC\_WIDTH\ \ \ \ \ \ \ \ \ \ \ ADC\_WIDTH\_BIT\_12}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ ADC\_DEFAULT\_VREF\ \ \ \ 1100}\textcolor{preprocessor}{}}
 \DoxyCodeLine{00034\ }
-\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ ADC\_DEFAULT\_VREF\ 1100}}
-\DoxyCodeLine{00037\ }
-\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ ADC\_MEASURE\_SAMPLES\ 128}}
-\DoxyCodeLine{00041\ }
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ DEFAULT\_SHUNT\_VALUE\_OHM\ 0.22f}}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ DEFAULT\_OPAMP\_GAIN\ 2.12f}}
-\DoxyCodeLine{00052\ }
-\DoxyCodeLine{00061\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}{CurrentSensor}}}
-\DoxyCodeLine{00062\ \{}
-\DoxyCodeLine{00063\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00064\ \ \ \ \ adc1\_channel\_t\ \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00065\ \ \ \ \ esp\_adc\_cal\_characteristics\_t\ \doxymbox{\hyperlink{class_current_sensor_acad693f0e83b428794877a86cace4e8b}{adc\_chars}};\ }
-\DoxyCodeLine{00066\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\_mV}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\_ohm}}\ =\ \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\_SHUNT\_VALUE\_OHM}};\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_acc6cb6dce83074c330c43ef33d8a28ff}{opamp\_gain}}\ =\ \doxymbox{\hyperlink{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}{DEFAULT\_OPAMP\_GAIN}};\ \ \ }
-\DoxyCodeLine{00069\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00078\ \ \ \ \ \doxymbox{\hyperlink{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}{CurrentSensor}}(adc1\_channel\_t\ \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}});}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8}{getCurrent\_mA}}();}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00099\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_ab6064868042388af7b1b384943487d06}{getShuntVoltage\_mV}}();}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_a2c128b98b2d479108cf603d6f5aa64ec}{calibrateOffset}}(uint8\_t\ samples);}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ DEFAULT\_SHUNT\_VALUE\_OHM\ 0.22f}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ DEFAULT\_OPAMP\_GAIN\ \ \ \ \ \ 2.12f}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}{CurrentSensor}}}
+\DoxyCodeLine{00054\ \{}
+\DoxyCodeLine{00055\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00056\ \ \ \ \ adc1\_channel\_t\ \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00057\ \ \ \ \ esp\_adc\_cal\_characteristics\_t\ \doxymbox{\hyperlink{class_current_sensor_acad693f0e83b428794877a86cace4e8b}{adc\_chars}};\ }
+\DoxyCodeLine{00058\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_a9df470ef7d32b668732aad55bce142a2}{offset\_mV}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\_ohm}}\ =\ \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\_SHUNT\_VALUE\_OHM}};\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_acc6cb6dce83074c330c43ef33d8a28ff}{opamp\_gain}}\ =\ \doxymbox{\hyperlink{current_sensor_8h_a52d0c7ade9b2a1f9ef105779021763b8}{DEFAULT\_OPAMP\_GAIN}};\ \ \ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00068\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_a25264c716d01a1a6051e6d10cc628768}{multisample}}(uint8\_t\ samples);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00079\ \ \ \ \ \doxymbox{\hyperlink{class_current_sensor_ac5f9b3a18305619e5c668141896a5bd8}{CurrentSensor}}(adc1\_channel\_t\ \doxymbox{\hyperlink{class_current_sensor_a7d8f28a1e11b027c2a30812dbf2daceb}{channel}});}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_aeb622e3e92cc15b0bc03af867df0d6c8}{getCurrent\_mA}}();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00100\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_ab6064868042388af7b1b384943487d06}{getShuntVoltage\_mV}}();}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_ac58c640607e8be98331b20bae3464f07}{calibrateOffset}}();}
 \DoxyCodeLine{00110\ }
-\DoxyCodeLine{00116\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}{getOffset\_mV}}();}
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1}{setShuntValue}}(\textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\_ohm}});}
-\DoxyCodeLine{00124\ \ \ \ \ }
-\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}{setOpAmpGain}}(\textcolor{keywordtype}{float}\ gain);}
-\DoxyCodeLine{00131\ \};}
-\DoxyCodeLine{00132\ }
-\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CURRENT\_H}}
+\DoxyCodeLine{00115\ \ \ \ \ uint32\_t\ \doxymbox{\hyperlink{class_current_sensor_a1c11f880b95ae27ecf7dc2a8357f7178}{getOffset\_mV}}();}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_a2a3d752e19552d7f8be02ee02e75ecb1}{setShuntValue}}(\textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_current_sensor_a696410e1f762478481cd91931841dc08}{shunt\_ohm}});}
+\DoxyCodeLine{00122\ \ \ \ \ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_current_sensor_aea8c65c5f8f5e04583b446393a0aaa89}{setOpAmpGain}}(\textcolor{keywordtype}{float}\ gain);}
+\DoxyCodeLine{00128\ \};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CURRENT\_H}}
 
 \end{DoxyCode}

@@ -95,6 +95,7 @@ $(function(){initNavTree('current_sensor_8h.html','',''); });
 <code>#include &quot;driver/adc.h&quot;</code><br />
 <code>#include &quot;driver/gpio.h&quot;</code><br />
 <code>#include &quot;esp_err.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="configurations_8h_source.html">configurations.h</a>&quot;</code><br />
 </div>
 <p><a href="current_sensor_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -106,7 +107,9 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr id="define-members-0" class="groupHeader"><td colspan="2"><div class="groupHeader">ADC Configuration</div></td></tr>
-<tr><td colspan="2" class="ititle"><div class="groupText"><p>Constants for configuring the ESP32's ADC unit. </p>
+<tr><td colspan="2" class="ititle"><div class="groupText"><ul>
+<li>Constants for configuring the ESP32's ADC unit. </li>
+</ul>
 </div></td></tr>
 <tr class="memitem:a9851d7403086e8d8ce491625b0f8863d" id="r_a9851d7403086e8d8ce491625b0f8863d"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a9851d7403086e8d8ce491625b0f8863d">ADC_ATTEN</a>&#160;&#160;&#160;ADC_ATTEN_DB_0</td></tr>
 <tr class="memdesc:a9851d7403086e8d8ce491625b0f8863d"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC attenuation (range of 100 mV to 950 mV) for high precision.  <br /></td></tr>
@@ -116,10 +119,10 @@ Macros</h2></td></tr>
 <tr class="memdesc:ae7be6136584e673152582baf499d6a6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC resolution (12 bits = 4096 levels).  <br /></td></tr>
 <tr class="memitem:a60a309e5f8aedc2bd1244ff2ccbd6aef" id="r_a60a309e5f8aedc2bd1244ff2ccbd6aef"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a60a309e5f8aedc2bd1244ff2ccbd6aef">ADC_DEFAULT_VREF</a>&#160;&#160;&#160;1100</td></tr>
 <tr class="memdesc:a60a309e5f8aedc2bd1244ff2ccbd6aef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default value of the internal ADC reference voltage (in mV).  <br /></td></tr>
-<tr class="memitem:a8a4220fddcc006052f5142591343b76b" id="r_a8a4220fddcc006052f5142591343b76b"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a8a4220fddcc006052f5142591343b76b">ADC_MEASURE_SAMPLES</a>&#160;&#160;&#160;128</td></tr>
-<tr class="memdesc:a8a4220fddcc006052f5142591343b76b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of samples to take for averaging during measurement.  <br /></td></tr>
 <tr id="define-members-1" class="groupHeader"><td colspan="2"><div class="groupHeader">Current Measurement Constants</div></td></tr>
-<tr><td colspan="2" class="ititle"><div class="groupText"><p>Constants specific to the current measurement circuit. </p>
+<tr><td colspan="2" class="ititle"><div class="groupText"><ul>
+<li>Constants specific to the current measurement circuit. </li>
+</ul>
 </div></td></tr>
 <tr class="memitem:a346a50287e4a12724a4a2a39fd2f0896" id="r_a346a50287e4a12724a4a2a39fd2f0896"><td class="memItemLeft">#define&#160;</td><td class="memItemRight"><a class="el" href="#a346a50287e4a12724a4a2a39fd2f0896">DEFAULT_SHUNT_VALUE_OHM</a>&#160;&#160;&#160;0.22f</td></tr>
 <tr class="memdesc:a346a50287e4a12724a4a2a39fd2f0896"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shunt resistor value in Ohms.  <br /></td></tr>
@@ -156,22 +159,6 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default value of the internal ADC reference voltage (in mV). </p>
-
-</div>
-</div>
-<a id="a8a4220fddcc006052f5142591343b76b" name="a8a4220fddcc006052f5142591343b76b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a4220fddcc006052f5142591343b76b">&#9670;&#160;</a></span>ADC_MEASURE_SAMPLES</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ADC_MEASURE_SAMPLES&#160;&#160;&#160;128</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Number of samples to take for averaging during measurement. </p>
 
 </div>
 </div>

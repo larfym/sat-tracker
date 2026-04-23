@@ -4,6 +4,7 @@
 {\ttfamily \+\#include "{}driver/\+adc.\+h"{}}\newline
 {\ttfamily \+\#include "{}driver/\+gpio.\+h"{}}\newline
 {\ttfamily \+\#include "{}esp\+\_\+err.\+h"{}}\newline
+{\ttfamily \+\#include "{}configurations.\+h"{}}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -11,7 +12,10 @@ class \doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}}
 \begin{DoxyCompactList}\small\item\em Class for current reading using an ESP32 ADC channel. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Macros}
 \begin{Indent}\textbf{ ADC Configuration}\par
-{\em Constants for configuring the ESP32\textquotesingle{}s ADC unit. }\begin{DoxyCompactItemize}
+{\em 
+\begin{DoxyItemize}
+\item Constants for configuring the ESP32\textquotesingle{}s ADC unit. 
+\end{DoxyItemize}}\begin{DoxyCompactItemize}
 \item 
 \+\#define \doxymbox{\hyperlink{current_sensor_8h_a9851d7403086e8d8ce491625b0f8863d}{ADC\+\_\+\+ATTEN}}~ADC\+\_\+\+ATTEN\+\_\+\+DB\+\_\+0
 \begin{DoxyCompactList}\small\item\em ADC attenuation (range of 100 mV to 950 mV) for high precision. \end{DoxyCompactList}\item 
@@ -20,12 +24,13 @@ class \doxymbox{\hyperlink{class_current_sensor}{Current\+Sensor}}
 \+\#define \doxymbox{\hyperlink{current_sensor_8h_ae7be6136584e673152582baf499d6a6c}{ADC\+\_\+\+WIDTH}}~ADC\+\_\+\+WIDTH\+\_\+\+BIT\+\_\+12
 \begin{DoxyCompactList}\small\item\em ADC resolution (12 bits = 4096 levels). \end{DoxyCompactList}\item 
 \+\#define \doxymbox{\hyperlink{current_sensor_8h_a60a309e5f8aedc2bd1244ff2ccbd6aef}{ADC\+\_\+\+DEFAULT\+\_\+\+VREF}}~1100
-\begin{DoxyCompactList}\small\item\em Default value of the internal ADC reference voltage (in mV). \end{DoxyCompactList}\item 
-\+\#define \doxymbox{\hyperlink{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}{ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES}}~128
-\begin{DoxyCompactList}\small\item\em Number of samples to take for averaging during measurement. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Default value of the internal ADC reference voltage (in mV). \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Current Measurement Constants}\par
-{\em Constants specific to the current measurement circuit. }\begin{DoxyCompactItemize}
+{\em 
+\begin{DoxyItemize}
+\item Constants specific to the current measurement circuit. 
+\end{DoxyItemize}}\begin{DoxyCompactItemize}
 \item 
 \+\#define \doxymbox{\hyperlink{current_sensor_8h_a346a50287e4a12724a4a2a39fd2f0896}{DEFAULT\+\_\+\+SHUNT\+\_\+\+VALUE\+\_\+\+OHM}}~0.\+22f
 \begin{DoxyCompactList}\small\item\em Shunt resistor value in Ohms. \end{DoxyCompactList}\item 
@@ -56,16 +61,6 @@ ADC attenuation (range of 100 mV to 950 mV) for high precision.
 
 
 Default value of the internal ADC reference voltage (in mV). 
-
-\Hypertarget{current_sensor_8h_a8a4220fddcc006052f5142591343b76b}\index{currentSensor.h@{currentSensor.h}!ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}}
-\index{ADC\_MEASURE\_SAMPLES@{ADC\_MEASURE\_SAMPLES}!currentSensor.h@{currentSensor.h}}
-\doxysubsubsection{\texorpdfstring{ADC\_MEASURE\_SAMPLES}{ADC\_MEASURE\_SAMPLES}}
-{\footnotesize\ttfamily \label{current_sensor_8h_a8a4220fddcc006052f5142591343b76b} 
-\+\#define ADC\+\_\+\+MEASURE\+\_\+\+SAMPLES~128}
-
-
-
-Number of samples to take for averaging during measurement. 
 
 \Hypertarget{current_sensor_8h_a7274e11e5026e6364ff703661611b25e}\index{currentSensor.h@{currentSensor.h}!ADC\_NUM\_1@{ADC\_NUM\_1}}
 \index{ADC\_NUM\_1@{ADC\_NUM\_1}!currentSensor.h@{currentSensor.h}}

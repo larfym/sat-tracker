@@ -6,7 +6,7 @@ var utils_8cpp =
     [ "elevation_deg_from_mm_lut", "utils_8cpp.html#afc00f5f63690bee3e235a9f7be532376", null ],
     [ "elevation_mm_from_deg", "utils_8cpp.html#a81de41623d708a4bbbe5f33630d13cf8", null ],
     [ "elevation_mm_from_deg_lut", "utils_8cpp.html#ac9b39096fcead1abd4f373deb01d3b42", null ],
-    [ "getSavedOffsets", "utils_8cpp.html#a62dde60c7ccbfdf2485f766d6b6d5922", null ],
+    [ "getSavedOffsets", "utils_8cpp.html#a452caf9c3390017052504bb51ae174a3", null ],
     [ "getUnixTimeFromGPS", "utils_8cpp.html#a7db34d0acfcfc9f7997160c378606503", null ],
     [ "init_elevation_lut", "utils_8cpp.html#af214a00ea6b069c59001e2d6a1370063", null ],
     [ "jdToUnix", "utils_8cpp.html#a920af668a5907f81c684537724aab31d", null ],

@@ -75,21 +75,23 @@ Task\+Handle\+\_\+t \doxymbox{\hyperlink{main_8cpp_a5f8db47b664833fcd348f6d72d7f
 \item 
 static const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{main_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c}{TAG}} = "{}MAIN"{}
 \item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_aa1640530e67e212dcb768554b678353b}{target}} = \{0\}
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a00ee04c34be775944fa477ad9d975031}{target\+Angle}} = \{0\}
+\item 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_abb195f07774e5b37386632d27be9fcfd}{sgp4\+Target\+Angle}} = \{0\}
 \begin{DoxyCompactList}\small\item\em Global structure for the target (commanded) antenna position. \end{DoxyCompactList}\item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a86d01031f56184d375fc9279c4c34a72}{manual\+\_\+target}} = \{0\}
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a128fc44694041af0e517137708eb73fb}{manual\+Target\+Angle}} = \{0\}
 \item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_ae943811bd5317049756e8b65016b27c3}{current}} = \{0\}
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a47f50d5a92efa4cb35b7c0e5e247cb27}{set\+Point\+Angle}} = \{0\}
+\item 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a7612bbada92b5c10ddfcd3e5251e258b}{mount\+Angle}} = \{0\}
 \begin{DoxyCompactList}\small\item\em Global structure for the current (measured) antenna position. \end{DoxyCompactList}\item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a90109f2113f530203eb0317caf3bd744}{offsets\+\_\+ant}} = \{0\}
-\item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a913f412e93da307b5b28dfe6926b8574}{set\+\_\+angle}} = \{0\}
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a64f04e683eecc9224b4e930d088f89fb}{offset\+Angle}} = \{0\}
 \item 
 \doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_a13242e46cf88322a36d0a21f463814d6}{flags}}
 \begin{DoxyCompactList}\small\item\em Global structure holding the current mount flags. \end{DoxyCompactList}\item 
 \doxymbox{\hyperlink{utils_8h_af8a35661022926a438bb0e33cf4e84d2}{tracker\+Status\+\_\+t}} \doxymbox{\hyperlink{main_8cpp_ae231754aa856e7e4956e423e1b308ee9}{status}}
 \begin{DoxyCompactList}\small\item\em Global structure holding the current operational status of the tracker. \end{DoxyCompactList}\item 
-unsigned long \doxymbox{\hyperlink{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea}{next\+\_\+pass\+\_\+unix}} = 0
+unsigned long \doxymbox{\hyperlink{main_8cpp_a46e1484ba8c7792f044d44dc3e9594c4}{next\+Pass\+\_\+unix}} = 0
 \begin{DoxyCompactList}\small\item\em Next pass start time in unix. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -207,16 +209,6 @@ External reference to the global Preferences storage handler. \Hypertarget{main_
 {\footnotesize\ttfamily \label{main_8cpp_a5373cc9382078d0e12734ddfe3d352c2} 
 \doxymbox{\hyperlink{class_p_i___controller}{PI\+\_\+\+Controller}} controller\+El(\doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}, \doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}, \doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}, \doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_aa837cea21a670725c8482e7379c50b84}{KP\+\_\+\+ELEVATION}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a9f3f39cf87464e2b698790a8d22894d4}{KI\+\_\+\+ELEVATION}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a048e4fab329b80f602ac97b6aed12979}{SAMPLE\+\_\+\+TIME\+\_\+S}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_afd517c26a46c866b3e18cf00c0e9b24b}{M\+\_\+\+EL\+\_\+\+V\+\_\+\+TO\+\_\+\+START}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a114551a5238cb0c6d988e55ba1d563c1}{M\+\_\+\+V\+\_\+\+NOMINAL}}}]{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_ae943811bd5317049756e8b65016b27c3}\index{main.cpp@{main.cpp}!current@{current}}
-\index{current@{current}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{current}{current}}
-{\footnotesize\ttfamily \label{main_8cpp_ae943811bd5317049756e8b65016b27c3} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} current = \{0\}}
-
-
-
-Global structure for the current (measured) antenna position. 
-
 \Hypertarget{main_8cpp_a4bc81131529c2d9516c48205ad81ab20}\index{main.cpp@{main.cpp}!currentAz@{currentAz}}
 \index{currentAz@{currentAz}!main.cpp@{main.cpp}}
 \doxysubsubsection{\texorpdfstring{currentAz}{currentAz}}
@@ -251,11 +243,11 @@ Tiny\+GPSPlus gps}
 {\footnotesize\ttfamily \label{main_8cpp_a31044d4fc6e109ea0df731c5e5c559ea} 
 Task\+Handle\+\_\+t GPS\+\_\+\+Task\+Handle = NULL}
 
-\Hypertarget{main_8cpp_a86d01031f56184d375fc9279c4c34a72}\index{main.cpp@{main.cpp}!manual\_target@{manual\_target}}
-\index{manual\_target@{manual\_target}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{manual\_target}{manual\_target}}
-{\footnotesize\ttfamily \label{main_8cpp_a86d01031f56184d375fc9279c4c34a72} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} manual\+\_\+target = \{0\}}
+\Hypertarget{main_8cpp_a128fc44694041af0e517137708eb73fb}\index{main.cpp@{main.cpp}!manualTargetAngle@{manualTargetAngle}}
+\index{manualTargetAngle@{manualTargetAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{manualTargetAngle}{manualTargetAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_a128fc44694041af0e517137708eb73fb} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} manual\+Target\+Angle = \{0\}}
 
 \Hypertarget{main_8cpp_aee44830b05e02ea9dd8829f08f3fbb8e}\index{main.cpp@{main.cpp}!MotionControl\_TaskHandle@{MotionControl\_TaskHandle}}
 \index{MotionControl\_TaskHandle@{MotionControl\_TaskHandle}!main.cpp@{main.cpp}}
@@ -275,21 +267,31 @@ Task\+Handle\+\_\+t Motion\+Control\+\_\+\+Task\+Handle = NULL}
 {\footnotesize\ttfamily \label{main_8cpp_a75ce768f93f1fd4332896623d2635209} 
 \doxymbox{\hyperlink{class_motor_driver}{Motor\+Driver}} motor\+El(\doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}, \doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}, LEDC\+\_\+\+TIMER\+\_\+0, LEDC\+\_\+\+CHANNEL\+\_\+1, \doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_a2f5dd98516c40e68c6da603ddcab8698}{IN1\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a3c8358b42b349a816f9ef990377fd98b}{IN2\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a48348f346a55b4cdd6249e8d8491242d}{EN\+\_\+\+EL\+\_\+\+PIN}}}]{}{, }\item[{LEDC\+\_\+\+TIMER\+\_\+0}]{}{, }\item[{LEDC\+\_\+\+CHANNEL\+\_\+1}]{}{, }\item[{\doxymbox{\hyperlink{configurations_8h_a56e165627f596c2f42f843ae6571de0e}{PWM\+\_\+\+FREQ\+\_\+\+HZ}}}]{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea}\index{main.cpp@{main.cpp}!next\_pass\_unix@{next\_pass\_unix}}
-\index{next\_pass\_unix@{next\_pass\_unix}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{next\_pass\_unix}{next\_pass\_unix}}
-{\footnotesize\ttfamily \label{main_8cpp_a2d6f596dfb29d9d1f9a0e92bc547ebea} 
-unsigned long next\+\_\+pass\+\_\+unix = 0}
+\Hypertarget{main_8cpp_a7612bbada92b5c10ddfcd3e5251e258b}\index{main.cpp@{main.cpp}!mountAngle@{mountAngle}}
+\index{mountAngle@{mountAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{mountAngle}{mountAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_a7612bbada92b5c10ddfcd3e5251e258b} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} mount\+Angle = \{0\}}
+
+
+
+Global structure for the current (measured) antenna position. 
+
+\Hypertarget{main_8cpp_a46e1484ba8c7792f044d44dc3e9594c4}\index{main.cpp@{main.cpp}!nextPass\_unix@{nextPass\_unix}}
+\index{nextPass\_unix@{nextPass\_unix}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{nextPass\_unix}{nextPass\_unix}}
+{\footnotesize\ttfamily \label{main_8cpp_a46e1484ba8c7792f044d44dc3e9594c4} 
+unsigned long next\+Pass\+\_\+unix = 0}
 
 
 
 Next pass start time in unix. 
 
-\Hypertarget{main_8cpp_a90109f2113f530203eb0317caf3bd744}\index{main.cpp@{main.cpp}!offsets\_ant@{offsets\_ant}}
-\index{offsets\_ant@{offsets\_ant}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{offsets\_ant}{offsets\_ant}}
-{\footnotesize\ttfamily \label{main_8cpp_a90109f2113f530203eb0317caf3bd744} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} offsets\+\_\+ant = \{0\}}
+\Hypertarget{main_8cpp_a64f04e683eecc9224b4e930d088f89fb}\index{main.cpp@{main.cpp}!offsetAngle@{offsetAngle}}
+\index{offsetAngle@{offsetAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{offsetAngle}{offsetAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_a64f04e683eecc9224b4e930d088f89fb} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} offset\+Angle = \{0\}}
 
 \Hypertarget{main_8cpp_a2c5a73a4c30d5441190eb5440c7d971b}\index{main.cpp@{main.cpp}!reedAz@{reedAz}}
 \index{reedAz@{reedAz}!main.cpp@{main.cpp}}
@@ -319,11 +321,21 @@ Global SGP4 object for satellite orbit prediction.
 {\footnotesize\ttfamily \label{main_8cpp_a30f0d942420b66dee65de9c062b2466b} 
 \doxymbox{\hyperlink{class_server_handler}{Server\+Handler}} server\+Handler(\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}) (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{configurations_8h_af257e2a3e091629829857a2eb8931a7a}{DEFAULT\+\_\+\+SERVER\+\_\+\+PORT}}}]{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_a913f412e93da307b5b28dfe6926b8574}\index{main.cpp@{main.cpp}!set\_angle@{set\_angle}}
-\index{set\_angle@{set\_angle}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{set\_angle}{set\_angle}}
-{\footnotesize\ttfamily \label{main_8cpp_a913f412e93da307b5b28dfe6926b8574} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} set\+\_\+angle = \{0\}}
+\Hypertarget{main_8cpp_a47f50d5a92efa4cb35b7c0e5e247cb27}\index{main.cpp@{main.cpp}!setPointAngle@{setPointAngle}}
+\index{setPointAngle@{setPointAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{setPointAngle}{setPointAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_a47f50d5a92efa4cb35b7c0e5e247cb27} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} set\+Point\+Angle = \{0\}}
+
+\Hypertarget{main_8cpp_abb195f07774e5b37386632d27be9fcfd}\index{main.cpp@{main.cpp}!sgp4TargetAngle@{sgp4TargetAngle}}
+\index{sgp4TargetAngle@{sgp4TargetAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{sgp4TargetAngle}{sgp4TargetAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_abb195f07774e5b37386632d27be9fcfd} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} sgp4\+Target\+Angle = \{0\}}
+
+
+
+Global structure for the target (commanded) antenna position. 
 
 \Hypertarget{main_8cpp_ae231754aa856e7e4956e423e1b308ee9}\index{main.cpp@{main.cpp}!status@{status}}
 \index{status@{status}!main.cpp@{main.cpp}}
@@ -347,15 +359,11 @@ Task\+Handle\+\_\+t Stop\+Motion\+\_\+\+Task\+Handle = NULL}
 {\footnotesize\ttfamily \label{main_8cpp_a5a85b9c772bbeb480b209a3e6ea92b4c} 
 const char\texorpdfstring{$\ast$}{*} TAG = "{}MAIN"{}\hspace{0.3cm}{\ttfamily [static]}}
 
-\Hypertarget{main_8cpp_aa1640530e67e212dcb768554b678353b}\index{main.cpp@{main.cpp}!target@{target}}
-\index{target@{target}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{target}{target}}
-{\footnotesize\ttfamily \label{main_8cpp_aa1640530e67e212dcb768554b678353b} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} target = \{0\}}
-
-
-
-Global structure for the target (commanded) antenna position. 
+\Hypertarget{main_8cpp_a00ee04c34be775944fa477ad9d975031}\index{main.cpp@{main.cpp}!targetAngle@{targetAngle}}
+\index{targetAngle@{targetAngle}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{targetAngle}{targetAngle}}
+{\footnotesize\ttfamily \label{main_8cpp_a00ee04c34be775944fa477ad9d975031} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} target\+Angle = \{0\}}
 
 \Hypertarget{main_8cpp_abefc65e0e269b258dd4ed3f4c340658a}\index{main.cpp@{main.cpp}!TrackingPredictor\_TaskHandle@{TrackingPredictor\_TaskHandle}}
 \index{TrackingPredictor\_TaskHandle@{TrackingPredictor\_TaskHandle}!main.cpp@{main.cpp}}

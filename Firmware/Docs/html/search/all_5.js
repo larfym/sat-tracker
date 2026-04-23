@@ -14,6 +14,5 @@ var searchData=
   ['en_5faz_5fpin_11',['EN_AZ_PIN',['../configurations_8h.html#ab18abfaf88f25a5ba352779defd5b333',1,'configurations.h']]],
   ['en_5fel_5fpin_12',['EN_EL_PIN',['../configurations_8h.html#a48348f346a55b4cdd6249e8d8491242d',1,'configurations.h']]],
   ['errorcode_5ft_13',['errorCode_t',['../utils_8h.html#a124755c819bc8940253539ec67404eac',1,'utils.h']]],
-  ['esfericalangles_5ft_14',['esfericalAngles_t',['../utils_8h.html#a157fd63fdcfa478d39372dec5744a3d2',1,'utils.h']]],
-  ['events_15',['events',['../class_server_handler.html#a610f92f089c9773f99e0b7901af69de2',1,'ServerHandler']]]
+  ['events_14',['events',['../class_server_handler.html#a610f92f089c9773f99e0b7901af69de2',1,'ServerHandler']]]
 ];

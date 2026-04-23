@@ -105,14 +105,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aeb622e3e92cc15b0bc03af867df0d6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the measured current in milliamperes (mA).  <br /></td></tr>
 <tr class="memitem:ab6064868042388af7b1b384943487d06" id="r_ab6064868042388af7b1b384943487d06"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#ab6064868042388af7b1b384943487d06">getShuntVoltage_mV</a> ()</td></tr>
 <tr class="memdesc:ab6064868042388af7b1b384943487d06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the shunt resistor voltage in millivolts.  <br /></td></tr>
-<tr class="memitem:a2c128b98b2d479108cf603d6f5aa64ec" id="r_a2c128b98b2d479108cf603d6f5aa64ec"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2c128b98b2d479108cf603d6f5aa64ec">calibrateOffset</a> (uint8_t samples)</td></tr>
-<tr class="memdesc:a2c128b98b2d479108cf603d6f5aa64ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrates the sensor's voltage offset.  <br /></td></tr>
+<tr class="memitem:ac58c640607e8be98331b20bae3464f07" id="r_ac58c640607e8be98331b20bae3464f07"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac58c640607e8be98331b20bae3464f07">calibrateOffset</a> ()</td></tr>
+<tr class="memdesc:ac58c640607e8be98331b20bae3464f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrates the sensor's voltage offset.  <br /></td></tr>
 <tr class="memitem:a1c11f880b95ae27ecf7dc2a8357f7178" id="r_a1c11f880b95ae27ecf7dc2a8357f7178"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a1c11f880b95ae27ecf7dc2a8357f7178">getOffset_mV</a> ()</td></tr>
 <tr class="memdesc:a1c11f880b95ae27ecf7dc2a8357f7178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the calibrated voltage offset value.  <br /></td></tr>
 <tr class="memitem:a2a3d752e19552d7f8be02ee02e75ecb1" id="r_a2a3d752e19552d7f8be02ee02e75ecb1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2a3d752e19552d7f8be02ee02e75ecb1">setShuntValue</a> (float <a class="el" href="#a696410e1f762478481cd91931841dc08">shunt_ohm</a>)</td></tr>
 <tr class="memdesc:a2a3d752e19552d7f8be02ee02e75ecb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new shunt resistor value.  <br /></td></tr>
 <tr class="memitem:aea8c65c5f8f5e04583b446393a0aaa89" id="r_aea8c65c5f8f5e04583b446393a0aaa89"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aea8c65c5f8f5e04583b446393a0aaa89">setOpAmpGain</a> (float gain)</td></tr>
 <tr class="memdesc:aea8c65c5f8f5e04583b446393a0aaa89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new operational amplifier gain.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a25264c716d01a1a6051e6d10cc628768" id="r_a25264c716d01a1a6051e6d10cc628768"><td class="memItemLeft">uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a25264c716d01a1a6051e6d10cc628768">multisample</a> (uint8_t samples)</td></tr>
+<tr class="memdesc:a25264c716d01a1a6051e6d10cc628768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs multiple ADC readings and returns the average.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -158,8 +163,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a2c128b98b2d479108cf603d6f5aa64ec" name="a2c128b98b2d479108cf603d6f5aa64ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c128b98b2d479108cf603d6f5aa64ec">&#9670;&#160;</a></span>calibrateOffset()</h2>
+<a id="ac58c640607e8be98331b20bae3464f07" name="ac58c640607e8be98331b20bae3464f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac58c640607e8be98331b20bae3464f07">&#9670;&#160;</a></span>calibrateOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -167,20 +172,14 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void CurrentSensor::calibrateOffset </td>
           <td>(</td>
-          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>samples</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Calibrates the sensor's voltage offset. </p>
-<p>Measures the voltage of the ADC pin when the input current is zero (0) to establish the <span class="tt"><a class="el" href="#a9df470ef7d32b668732aad55bce142a2" title="Voltage offset (in mV) measured under zero current condition.">offset_mV</a></span> value. <b>Must be called with no current applied.</b></p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">samples</td><td>Number of samples to average for a more stable calibration. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Measures the voltage of the ADC pin when the input current is zero (0) to establish the <span class="tt"><a class="el" href="#a9df470ef7d32b668732aad55bce142a2" title="Voltage offset (in mV) measured under zero current condition.">offset_mV</a></span> value. </p><dl class="section warning"><dt>Warning</dt><dd>Must be called with no current applied to the motor. </dd></dl>
 
 </div>
 </div>
@@ -200,8 +199,13 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the measured current in milliamperes (mA). </p>
-<p>Reads the analog value, applies calibration and offset, and calculates the current using Ohm's Law and the amplifier gain: $I_{mA} = V_{Shunt, mV} / (G \cdot R_{Shunt, \Omega})$</p>
-<dl class="section return"><dt>Returns</dt><dd>Measured current in milliamperes (mA). Returns float for precision. </dd></dl>
+<p>Reads the analog value, applies calibration and offset, and calculates the current using Ohm's Law and the amplifier gain:</p><ul>
+<li><p class="formulaDsp">
+<picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[ I_{mA} = \frac{V_{Shunt, mV}}{G \cdot R_{Shunt, \Omega}} \&zwj;]" src="form_0.png"/></picture>
+</p>
+</li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd>Measured current in milliamperes (mA). </dd></dl>
 
 </div>
 </div>
@@ -241,8 +245,45 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the shunt resistor voltage in millivolts. </p>
-<p>Takes an average of <a class="el" href="current_sensor_8h.html#a8a4220fddcc006052f5142591343b76b" title="ADC_MEASURE_SAMPLES">ADC_MEASURE_SAMPLES</a> raw ADC readings, converts it to voltage using calibration, and subtracts the calibrated offset.</p>
+<p>Takes an average of raw ADC readings, converts it to voltage using calibration, and subtracts the calibrated offset.</p>
 <dl class="section return"><dt>Returns</dt><dd>Shunt voltage in millivolts (mV). </dd></dl>
+
+</div>
+</div>
+<a id="a25264c716d01a1a6051e6d10cc628768" name="a25264c716d01a1a6051e6d10cc628768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25264c716d01a1a6051e6d10cc628768">&#9670;&#160;</a></span>multisample()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t CurrentSensor::multisample </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>samples</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs multiple ADC readings and returns the average. </p>
+<ul>
+<li>Used to reduce electrical noise in the analog signal. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">samples</td><td>Number of samples to collect. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Averaged raw ADC value. </dd></dl>
+</li>
+</ul>
 
 </div>
 </div>

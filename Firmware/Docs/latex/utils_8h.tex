@@ -54,7 +54,7 @@ struct \doxymbox{\hyperlink{utils_8h_ab898071398b359603a35c202e9c65f3b}{\+\_\+\+
 \begin{DoxyCompactList}\small\item\em Status flags for the satellite tracking system. \end{DoxyCompactList}\item 
 bool \doxymbox{\hyperlink{utils_8h_a3f98e11f168e7ebded2d2875dcc53d15}{config\+Satellite}} (Sgp4 \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a7a8e6488a647b64ac7902070f7d3a373}{satellite}})
 \begin{DoxyCompactList}\small\item\em Loads TLE data from NVS and configures the given Sgp4 object. \end{DoxyCompactList}\item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} \doxymbox{\hyperlink{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922}{get\+Saved\+Offsets}} (void)
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} \doxymbox{\hyperlink{utils_8h_a452caf9c3390017052504bb51ae174a3}{get\+Saved\+Offsets}} (void)
 \begin{DoxyCompactList}\small\item\em Reads saved azimuth and elevation offsets from NVS. \end{DoxyCompactList}\item 
 unsigned long \doxymbox{\hyperlink{utils_8h_a7db34d0acfcfc9f7997160c378606503}{get\+Unix\+Time\+From\+GPS}} (Tiny\+GPSPlus \texorpdfstring{$\ast$}{*}\doxymbox{\hyperlink{main_8cpp_a169c53997a7da1d0fb99aec1b4675ce8}{gps}})
 \begin{DoxyCompactList}\small\item\em Extracts the current Unix timestamp from a Tiny\+GPSPlus instance. \end{DoxyCompactList}\item 
@@ -87,7 +87,7 @@ Preferences \doxymbox{\hyperlink{utils_8h_a95d592edb81dd40b1f9085628e7698a8}{con
 \item 
 \doxymbox{\hyperlink{utils_8h_a4e531e11ab017aad416f0432e33e1a31}{mount\+Flags\+\_\+t}}
 \item 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}}
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}}
 \end{DoxyCompactItemize}
 
 
@@ -399,11 +399,11 @@ Retrieves a distance value from the LUT based on the input angle.
 \begin{DoxyReturn}{Returns}
 Interpolated distance from the LUT. 
 \end{DoxyReturn}
-\Hypertarget{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922}\index{utils.h@{utils.h}!getSavedOffsets@{getSavedOffsets}}
+\Hypertarget{utils_8h_a452caf9c3390017052504bb51ae174a3}\index{utils.h@{utils.h}!getSavedOffsets@{getSavedOffsets}}
 \index{getSavedOffsets@{getSavedOffsets}!utils.h@{utils.h}}
 \doxysubsubsection{\texorpdfstring{getSavedOffsets()}{getSavedOffsets()}}
-{\footnotesize\ttfamily \label{utils_8h_a62dde60c7ccbfdf2485f766d6b6d5922} 
-\doxymbox{\hyperlink{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}{esferical\+Angles\+\_\+t}} get\+Saved\+Offsets (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \label{utils_8h_a452caf9c3390017052504bb51ae174a3} 
+\doxymbox{\hyperlink{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}{spherical\+Angles\+\_\+t}} get\+Saved\+Offsets (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
 
 
 
@@ -503,17 +503,17 @@ Preferences config\hspace{0.3cm}{\ttfamily [extern]}}
 
 External reference to the global Preferences storage handler. 
 
-External reference to the global Preferences storage handler. \Hypertarget{utils_8h_a157fd63fdcfa478d39372dec5744a3d2}\index{utils.h@{utils.h}!esfericalAngles\_t@{esfericalAngles\_t}}
-\index{esfericalAngles\_t@{esfericalAngles\_t}!utils.h@{utils.h}}
-\doxysubsubsection{\texorpdfstring{esfericalAngles\_t}{esfericalAngles\_t}}
-{\footnotesize\ttfamily \label{utils_8h_a157fd63fdcfa478d39372dec5744a3d2} 
-esferical\+Angles\+\_\+t}
-
-\Hypertarget{utils_8h_a4e531e11ab017aad416f0432e33e1a31}\index{utils.h@{utils.h}!mountFlags\_t@{mountFlags\_t}}
+External reference to the global Preferences storage handler. \Hypertarget{utils_8h_a4e531e11ab017aad416f0432e33e1a31}\index{utils.h@{utils.h}!mountFlags\_t@{mountFlags\_t}}
 \index{mountFlags\_t@{mountFlags\_t}!utils.h@{utils.h}}
 \doxysubsubsection{\texorpdfstring{mountFlags\_t}{mountFlags\_t}}
 {\footnotesize\ttfamily \label{utils_8h_a4e531e11ab017aad416f0432e33e1a31} 
 mount\+Flags\+\_\+t}
+
+\Hypertarget{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361}\index{utils.h@{utils.h}!sphericalAngles\_t@{sphericalAngles\_t}}
+\index{sphericalAngles\_t@{sphericalAngles\_t}!utils.h@{utils.h}}
+\doxysubsubsection{\texorpdfstring{sphericalAngles\_t}{sphericalAngles\_t}}
+{\footnotesize\ttfamily \label{utils_8h_aa27ea2fa6386a731820fdc8ed72ab361} 
+spherical\+Angles\+\_\+t}
 
 \Hypertarget{utils_8h_af8a35661022926a438bb0e33cf4e84d2}\index{utils.h@{utils.h}!trackerStatus\_t@{trackerStatus\_t}}
 \index{trackerStatus\_t@{trackerStatus\_t}!utils.h@{utils.h}}

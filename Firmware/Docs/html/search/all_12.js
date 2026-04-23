@@ -1,7 +1,7 @@
 var searchData=
 [
   ['tag_0',['TAG',['../main_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;main.cpp'],['../motor_driver_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;motorDriver.cpp'],['../_p_i___controller_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;PI_Controller.cpp'],['../server_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;server.cpp'],['../utils_8cpp.html#a5a85b9c772bbeb480b209a3e6ea92b4c',1,'TAG:&#160;utils.cpp']]],
-  ['target_1',['target',['../main_8cpp.html#aa1640530e67e212dcb768554b678353b',1,'target:&#160;main.cpp'],['../server_8h.html#aa1640530e67e212dcb768554b678353b',1,'target:&#160;main.cpp']]],
+  ['targetangle_1',['targetAngle',['../main_8cpp.html#a00ee04c34be775944fa477ad9d975031',1,'main.cpp']]],
   ['task_5fcurrent_5fmonitor_5fdelay_2',['TASK_CURRENT_MONITOR_DELAY',['../configurations_8h.html#a21b4e7669d6c855ecc63462be14d163e',1,'configurations.h']]],
   ['task_5fcurrent_5fmonitor_5fpriority_3',['TASK_CURRENT_MONITOR_PRIORITY',['../configurations_8h.html#ac438e71fd931e96cd5d66b3a30630ad9',1,'configurations.h']]],
   ['task_5fgps_5fdelay_4',['TASK_GPS_DELAY',['../configurations_8h.html#a49fd20d40240fe22eaf939ab4d7f0ead',1,'configurations.h']]],

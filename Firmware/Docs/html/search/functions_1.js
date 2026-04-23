@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calibrateoffset_0',['calibrateOffset',['../class_current_sensor.html#a2c128b98b2d479108cf603d6f5aa64ec',1,'CurrentSensor']]],
+  ['calibrateoffset_0',['calibrateOffset',['../class_current_sensor.html#ac58c640607e8be98331b20bae3464f07',1,'CurrentSensor']]],
   ['calibration_5ftask_1',['Calibration_Task',['../main_8cpp.html#ae6d71ec394438a8016b4e129fdad483d',1,'main.cpp']]],
   ['configcontroltimer_2',['configControlTimer',['../utils_8cpp.html#a740ca551badb5dd0d8f5e32aee48b493',1,'configControlTimer(void(*timerISR)(void *), uint64_t sample_time_us):&#160;utils.cpp'],['../utils_8h.html#a189ac2192418b0a3dd09a2550cc6759a',1,'configControlTimer(void(*timerISR)(void *), uint64_t sample_time_us=DEFAULT_SAMPLE_TIME_US):&#160;utils.cpp']]],
   ['configsatellite_3',['configSatellite',['../utils_8cpp.html#a3f98e11f168e7ebded2d2875dcc53d15',1,'configSatellite(Sgp4 *satellite):&#160;utils.cpp'],['../utils_8h.html#a3f98e11f168e7ebded2d2875dcc53d15',1,'configSatellite(Sgp4 *satellite):&#160;utils.cpp']]],
