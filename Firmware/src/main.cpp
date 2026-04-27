@@ -209,12 +209,12 @@ void MotionControl_Task(void *pvParameters)
       setPointAngle.elevation = fmaxf(fminf(setPointAngle.elevation, EL_MAX_DEG), EL_MIN_DEG);
 
       el_mm = reedEl.getCount() * ELEVATION_RESOLUTION_mm;
-      mountAngle.elevation = elevation_deg_from_mm_lut(el_mm);
+      mountAngle.elevation = elevation_deg_from_mm(el_mm);
       mountAngle.azimuth = reedAz.getCount() * AZIMUTH_RESOLUTION_angle;
 
       // PID Controller
       output_az = controllerAz.output(mountAngle.azimuth, setPointAngle.azimuth);
-      output_el = controllerEl.output(el_mm, elevation_mm_from_deg_lut(setPointAngle.elevation));
+      output_el = controllerEl.output(el_mm, elevation_mm_from_deg(setPointAngle.elevation));
 
       // CONTROL ACTION
       new_dir_az = (output_az > 0) ? FORWARD : (output_az < 0) ? BACKWARD
@@ -332,14 +332,14 @@ void TrackingPredictor_Task(void *pvParameters)
     {
       if (!flags.pred_done)
       {
-        passinfo nextPass;
+        passinfo nextPass_info;
         satellite.initpredpoint((unsigned long)time(NULL), offsetAngle.elevation);
-        if (satellite.nextpass(&nextPass, search_iterations, false, offsetAngle.elevation))
+        if (satellite.nextpass(&nextPass_info, search_iterations, false, offsetAngle.elevation))
         {
-          nextPass_unix = jdToUnix(nextPass.jdstart);
-          targetAngle.azimuth = nextPass.azstart - offsetAngle.azimuth;
+          nextPass_unix = jdToUnix(nextPass_info.jdstart);
+          targetAngle.azimuth = nextPass_info.azstart - offsetAngle.azimuth;
           targetAngle.elevation = EL_MIN_DEG;
-          ESP_LOGI(TAG, "NextPass - Az: %.2f [°], El: %.2f [°]", nextPass.azstart, EL_MIN_DEG);
+          ESP_LOGI(TAG, "NextPass - Az: %.2f [°], El: %.2f [°]", nextPass_info.azstart, EL_MIN_DEG);
         }
         else
         {
